@@ -1,0 +1,75 @@
+/* App-Level Styles */
+.app-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: black;
+  color: white;
+  overflow-x: hidden;
+}
+
+/* Global smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: black;
+  color: white;
+  overflow-x: hidden;
+}
+
+/* Global text selection styles */
+::selection {
+  background-color: #10b981;
+  color: black;
+}
+
+::-moz-selection {
+  background-color: #10b981;
+  color: black;
+}
+
+/* Global scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #10b981;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0d9668;
+}
+
+/* Performance optimizations */
+.app-container {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
