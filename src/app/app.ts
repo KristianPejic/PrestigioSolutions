@@ -1,12 +1,15 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component } from '@angular/core';
+import { TileDropAnimationComponent } from './components/tile-drop-animation/tile-drop-animation';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
+  standalone: true,
+  imports: [TileDropAnimationComponent],
+  template: `
+    <app-tile-drop-animation></app-tile-drop-animation>
+  `,
   styleUrl: './app.css'
 })
-export class App {
-  protected readonly title = signal('PrestigioSolutions');
+export class AppComponent {
+  title = 'PrestigioSolutions';
 }

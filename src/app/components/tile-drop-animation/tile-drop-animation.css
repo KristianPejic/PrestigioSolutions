@@ -1,0 +1,114 @@
+/* White Tiles */
+.white-tile {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  transform: translateY(-100%);
+  transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Phase 1: Tiles drop down to cover screen */
+.white-tile.tile-covering {
+  transform: translateY(0);
+}
+
+/* Phase 2: Tiles drop down to uncover content */
+.white-tile.tile-uncovering {
+  transform: translateY(100%);
+}
+
+/* Smooth covering delays - 100ms apart */
+.white-tile:nth-child(1).tile-covering {
+  transition-delay: 0ms;
+}
+
+.white-tile:nth-child(2).tile-covering {
+  transition-delay: 100ms;
+}
+
+.white-tile:nth-child(3).tile-covering {
+  transition-delay: 200ms;
+}
+
+.white-tile:nth-child(4).tile-covering {
+  transition-delay: 300ms;
+}
+
+/* Smooth uncovering delays - 100ms apart */
+.white-tile:nth-child(1).tile-uncovering {
+  transition-delay: 0ms;
+}
+
+.white-tile:nth-child(2).tile-uncovering {
+  transition-delay: 100ms;
+}
+
+.white-tile:nth-child(3).tile-uncovering {
+  transition-delay: 200ms;
+}
+
+.white-tile:nth-child(4).tile-uncovering {
+  transition-delay: 300ms;
+}
+
+/* Content transitions - no re-rendering */
+.opacity-0 {
+  opacity: 0;
+}
+
+.opacity-100 {
+  opacity: 1;
+}
+
+.transition-opacity {
+  transition-property: opacity;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.duration-600 {
+  transition-duration: 600ms;
+}
+
+.ease-in-out {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth content animations without re-rendering */
+.translate-y-10 {
+  transform: translateY(2.5rem);
+}
+
+.translate-y-0 {
+  transform: translateY(0);
+}
+
+.duration-1000 {
+  transition-duration: 1000ms;
+}
+
+.delay-200 {
+  transition-delay: 200ms;
+}
+
+.delay-400 {
+  transition-delay: 400ms;
+}
+
+.ease-out {
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* Performance optimization */
+.white-tile {
+  will-change: transform;
+}
+
+/* Content elements optimization */
+h1, p, div {
+  will-change: transform, opacity;
+}
+
+/* No gaps between tiles */
+.grid-cols-4 {
+  gap: 0;
+}
