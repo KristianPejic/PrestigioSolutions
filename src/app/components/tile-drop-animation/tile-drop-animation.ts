@@ -70,15 +70,4 @@ export class TileDropAnimationComponent implements OnInit {
       }, uncoverStartDelay + tile.uncoverDelay);
     });
   }
-
-  resetAnimation(): void {
-    this.tiles.forEach(tile => {
-      tile.isCovering = false;
-      tile.isUncovering = false;
-    });
-
-    setTimeout(() => {
-      this.startTileAnimation();
-    }, 50);
-  }
 }
