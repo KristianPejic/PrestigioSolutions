@@ -1,0 +1,32 @@
+<div class="relative w-full h-screen overflow-hidden bg-black">
+
+  <!-- WHITE TILES (Cover then uncover) -->
+  <div class="absolute inset-0 z-20">
+    <div class="grid grid-cols-4 h-full w-full gap-0">
+
+      <!-- Tile 1 -->
+      <div class="white-tile"
+           [class.tile-covering]="tiles[0].isCovering && !tiles[0].isUncovering"
+           [class.tile-uncovering]="tiles[0].isUncovering">
+      </div>
+
+      <!-- Tile 2 -->
+      <div class="white-tile"
+           [class.tile-covering]="tiles[1].isCovering && !tiles[1].isUncovering"
+           [class.tile-uncovering]="tiles[1].isUncovering">
+      </div>
+
+      <!-- Tile 3 -->
+      <div class="white-tile"
+           [class.tile-covering]="tiles[2].isCovering && !tiles[2].isUncovering"
+           [class.tile-uncovering]="tiles[2].isUncovering">
+      </div>
+
+      <!-- Tile 4 -->
+      <div class="white-tile"
+           [class.tile-covering]="tiles[3].isCovering && !tiles[3].isUncovering"
+           [class.tile-uncovering]="tiles[3].isUncovering">
+      </div>
+    </div>
+  </div>
+</div>
