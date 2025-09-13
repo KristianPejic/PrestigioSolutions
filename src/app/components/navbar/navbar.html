@@ -1,0 +1,34 @@
+<nav class="navbar"
+     [class.show-navbar]="showNavbar">
+  <div class="navbar-container">
+
+    <!-- Logo (Left Side) -->
+    <div class="navbar-logo">
+      <a href="#" class="logo-link">
+        <span class="logo-text">PRESTIGIO</span>
+      </a>
+    </div>
+
+    <!-- Hamburger menu (Right Side) -->
+    <div class="hamburger-container" [class.show]="showNavbar">
+      <button class="menu__icon" id="menu-btn" (click)="toggleMenu()" [class.active]="isMenuOpen">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Menu overlay -->
+<div class="menu-overlay" [class.open]="isMenuOpen">
+  <div class="menu-content">
+    <div class="menu-link" *ngFor="let link of navigationLinks; let i = index"
+         [class.show]="isMenuOpen"
+         [style.transition-delay.ms]="isMenuOpen ? (100 + i * 100) : 0">
+      <div class="nav-text">{{ String(i + 1).padStart(2, '0') }}</div>
+      <div class="link-line"></div>
+      <a href="#" class="nav-link" (click)="onLinkClick(link); $event.preventDefault()">
+        {{ link.name }}
+      </a>
+    </div>
+  </div>
+</div>

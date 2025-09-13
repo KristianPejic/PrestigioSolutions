@@ -1,0 +1,189 @@
+/* Content layer under curtain */
+.z-15 {
+  z-index: 10; /* Changed from 15 to 150 to be above tiles */
+}
+
+/* Make sure text has pointer-events: none */
+.scrolling-text-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  pointer-events: none;
+}
+
+/* Text starts animating when first wave covers (but hidden behind white tiles) */
+.show-scrolling-text .scrolling-text-wrapper {
+  opacity: 1;
+}
+
+/* Text becomes visible when second wave reveals it */
+.reveal-text .scrolling-text-wrapper {
+  opacity: 1;
+}
+
+.scrolling-text {
+  font-size: clamp(16rem, 50vw, 80rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: transparent;
+  -webkit-text-stroke: 6px rgba(255, 255, 255, 0.4);
+  text-stroke: 6px rgba(255, 255, 255, 0.4);
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+  animation: scrollText 300s linear infinite;
+  transform: translateX(100vw);
+  animation-play-state: paused; /* Start paused */
+}
+
+/* Start animation when text is shown */
+.show-scrolling-text .scrolling-text {
+  animation-play-state: running;
+}
+
+/* Ultra slow scrolling animation */
+@keyframes scrollText {
+  from {
+    transform: translateX(100vw);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+/* Speed options */
+.scrolling-text.glacial {
+  animation: scrollText 600s linear infinite;
+}
+
+.scrolling-text.snail-pace {
+  animation: scrollText 480s linear infinite;
+}
+
+.scrolling-text.turtle-slow {
+  animation: scrollText 360s linear infinite;
+}
+
+/* Hero Content Overlay Styles */
+/* Initially hidden - no animations */
+.hero-content-hidden .hero-content-wrapper,
+.hero-content-hidden .hero-button {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Visible when second wave reveals content */
+.hero-content-visible .hero-content-wrapper,
+.hero-content-visible .hero-button {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Hero title styling */
+.hero-title {
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+.hero-subtitle {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Button styling */
+.hero-button {
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+  cursor: pointer;
+}
+
+.hero-button:hover {
+  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
+}
+
+.hero-button:active {
+  transform: scale(0.98);
+}
+
+.hero-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.5);
+}
+
+/* Responsive adjustments for scrolling text */
+@media (max-width: 1200px) {
+  .scrolling-text {
+    font-size: clamp(12rem, 45vw, 60rem);
+    -webkit-text-stroke: 5px rgba(255, 255, 255, 0.4);
+    text-stroke: 5px rgba(255, 255, 255, 0.4);
+  }
+}
+
+@media (max-width: 768px) {
+  .scrolling-text {
+    font-size: clamp(8rem, 40vw, 24rem);
+    -webkit-text-stroke: 4px rgba(255, 255, 255, 0.4);
+    text-stroke: 4px rgba(255, 255, 255, 0.4);
+  }
+
+  .hero-title {
+    font-size: 3rem !important;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem !important;
+  }
+
+  .hero-button {
+    padding: 12px 24px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .scrolling-text {
+    font-size: clamp(6rem, 30vw, 16rem);
+    -webkit-text-stroke: 3px rgba(255, 255, 255, 0.4);
+    text-stroke: 3px rgba(255, 255, 255, 0.4);
+  }
+
+  .hero-title {
+    font-size: 2.5rem !important;
+  }
+
+  .hero-subtitle {
+    font-size: 0.875rem !important;
+  }
+
+  .hero-button {
+    padding: 10px 20px;
+    font-size: 0.875rem;
+  }
+}
+
+/* Performance optimization */
+.scrolling-text {
+  will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Ensure proper stacking and interaction */
+.z-10 {
+  z-index: 100;
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .scrolling-text {
+    animation: none;
+  }
+
+  .hero-content-wrapper,
+  .hero-button {
+    transition: opacity 0.2s ease;
+    transform: none;
+  }
+}

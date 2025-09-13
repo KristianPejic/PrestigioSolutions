@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { TileDropAnimationComponent } from './components/tile-drop-animation/tile-drop-animation';
+import { HeroComponent } from './components/hero/hero';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [TileDropAnimationComponent],
+  imports: [HeroComponent],
   template: `
-    <app-tile-drop-animation></app-tile-drop-animation>
+    <app-hero></app-hero>
   `,
   styleUrl: './app.css'
 })
