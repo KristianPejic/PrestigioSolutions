@@ -17,15 +17,17 @@ interface Tile {
   styleUrls: ['./tile-drop-animation.css']
 })
 export class TileDropAnimationComponent implements OnInit {
-  @Output() firstWaveComplete = new EventEmitter<void>();  // New event for first wave
+  @Output() firstWaveComplete = new EventEmitter<void>();
   @Output() animationComplete = new EventEmitter<void>();
   @Output() animationReset = new EventEmitter<void>();
 
+  showTiles = true; // controls DOM removal after uncover
+
   tiles: Tile[] = [
     { id: 1, isCovering: false, isUncovering: false, coverDelay: 0, uncoverDelay: 0 },
-    { id: 2, isCovering: false, isUncovering: false, coverDelay: 80, uncoverDelay: 80 },
-    { id: 3, isCovering: false, isUncovering: false, coverDelay: 160, uncoverDelay: 240 },
-    { id: 4, isCovering: false, isUncovering: false, coverDelay: 240, uncoverDelay: 160 }
+    { id: 2, isCovering: false, isUncovering: false, coverDelay: 100, uncoverDelay: 100 },
+    { id: 3, isCovering: false, isUncovering: false, coverDelay: 200, uncoverDelay: 200 },
+    { id: 4, isCovering: false, isUncovering: false, coverDelay: 300, uncoverDelay: 300 }
   ];
 
   ngOnInit(): void {
@@ -33,43 +35,36 @@ export class TileDropAnimationComponent implements OnInit {
   }
 
   startTileAnimation(): void {
-    // Phase 1: Tiles drop to cover
-    this.tiles.forEach((tile) => {
-      setTimeout(() => {
-        tile.isCovering = true;
-      }, tile.coverDelay);
+    // Phase 1: Cover
+    this.tiles.forEach(tile => {
+      setTimeout(() => tile.isCovering = true, tile.coverDelay);
     });
 
-    // Emit first wave complete (when screen is fully covered)
-    setTimeout(() => {
-      this.firstWaveComplete.emit();
-    }, 800); // After all tiles have covered (last tile delay 240ms + animation time)
+    // Emit first wave complete (after cover)
+    setTimeout(() => this.firstWaveComplete.emit(), 800); // animation duration still 0.8s
 
-    // Phase 2: Tiles drop to uncover
-    const uncoverStartDelay = 1200;
-
-    this.tiles.forEach((tile) => {
-      setTimeout(() => {
-        tile.isUncovering = true;
-      }, uncoverStartDelay + tile.uncoverDelay);
+    // Phase 2: Uncover (longer duration)
+    const uncoverStartDelay = 2000; // <-- increase delay before uncover
+    this.tiles.forEach(tile => {
+      setTimeout(() => tile.isUncovering = true, uncoverStartDelay + tile.uncoverDelay);
     });
 
-    // Emit animation complete event (when content is revealed)
+    // Emit animation complete after second wave finishes
     setTimeout(() => {
       this.animationComplete.emit();
-    }, uncoverStartDelay + 600);
+      // Remove tiles from DOM so they don’t block clicks
+      this.showTiles = false;
+    }, uncoverStartDelay + 1200); // <-- increase uncover animation duration if needed
   }
 
   resetAnimation(): void {
+    this.showTiles = true;
     this.tiles.forEach(tile => {
       tile.isCovering = false;
       tile.isUncovering = false;
     });
-
     this.animationReset.emit();
 
-    setTimeout(() => {
-      this.startTileAnimation();
-    }, 50);
+    setTimeout(() => this.startTileAnimation(), 50);
   }
 }

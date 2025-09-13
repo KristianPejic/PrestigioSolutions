@@ -1,32 +1,17 @@
-<div class="absolute inset-0 z-20">
+<!-- Tile Drop Animation Component -->
+<div class="absolute inset-0 z-20" *ngIf="showTiles">
   <div class="grid grid-cols-4 h-full w-full gap-0">
-
-    <!-- Tile 1 -->
-    <div class="white-tile"
-         [class.tile-covering]="tiles[0]?.isCovering && !tiles[0]?.isUncovering"
-         [class.tile-uncovering]="tiles[0]?.isUncovering"
-         [style.transition-delay.ms]="tiles[0]?.isCovering && !tiles[0]?.isUncovering ? tiles[0]?.coverDelay : (tiles[0]?.isUncovering ? tiles[0]?.uncoverDelay : 0)">
-    </div>
-
-    <!-- Tile 2 -->
-    <div class="white-tile"
-         [class.tile-covering]="tiles[1]?.isCovering && !tiles[1]?.isUncovering"
-         [class.tile-uncovering]="tiles[1]?.isUncovering"
-         [style.transition-delay.ms]="tiles[1]?.isCovering && !tiles[1]?.isUncovering ? tiles[1]?.coverDelay : (tiles[1]?.isUncovering ? tiles[1]?.uncoverDelay : 0)">
-    </div>
-
-    <!-- Tile 3 -->
-    <div class="white-tile"
-         [class.tile-covering]="tiles[2]?.isCovering && !tiles[2]?.isUncovering"
-         [class.tile-uncovering]="tiles[2]?.isUncovering"
-         [style.transition-delay.ms]="tiles[2]?.isCovering && !tiles[2]?.isUncovering ? tiles[2]?.coverDelay : (tiles[2]?.isUncovering ? tiles[2]?.uncoverDelay : 0)">
-    </div>
-
-    <!-- Tile 4 -->
-    <div class="white-tile"
-         [class.tile-covering]="tiles[3]?.isCovering && !tiles[3]?.isUncovering"
-         [class.tile-uncovering]="tiles[3]?.isUncovering"
-         [style.transition-delay.ms]="tiles[3]?.isCovering && !tiles[3]?.isUncovering ? tiles[3]?.coverDelay : (tiles[3]?.isUncovering ? tiles[3]?.uncoverDelay : 0)">
+    <div *ngFor="let tile of tiles"
+         class="white-tile"
+         [class.tile-covering]="tile.isCovering && !tile.isUncovering"
+         [class.tile-uncovering]="tile.isUncovering"
+         [style.transition-delay.ms]="
+           tile.isCovering && !tile.isUncovering
+             ? tile.coverDelay
+             : tile.isUncovering
+             ? tile.uncoverDelay
+             : 0
+         ">
     </div>
   </div>
 </div>
