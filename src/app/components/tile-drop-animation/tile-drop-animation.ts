@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 interface Tile {
@@ -17,51 +17,35 @@ interface Tile {
   styleUrls: ['./tile-drop-animation.css']
 })
 export class TileDropAnimationComponent implements OnInit {
+  @Output() firstWaveComplete = new EventEmitter<void>();  // New event for first wave
+  @Output() animationComplete = new EventEmitter<void>();
+  @Output() animationReset = new EventEmitter<void>();
+
   tiles: Tile[] = [
-    {
-      id: 1,
-      isCovering: false,
-      isUncovering: false,
-      coverDelay: 0,     // 1st - drops first when covering
-      uncoverDelay: 0    // 1st - drops first when uncovering
-    },
-    {
-      id: 2,
-      isCovering: false,
-      isUncovering: false,
-      coverDelay: 80,    // 2nd - drops second when covering
-      uncoverDelay: 80   // 2nd - drops second when uncovering
-    },
-    {
-      id: 3,
-      isCovering: false,
-      isUncovering: false,
-      coverDelay: 160,   // 3rd - drops third when covering
-      uncoverDelay: 240  // 4th - drops LAST when uncovering (3rd and 4th switched)
-    },
-    {
-      id: 4,
-      isCovering: false,
-      isUncovering: false,
-      coverDelay: 240,   // 4th - drops fourth when covering
-      uncoverDelay: 160  // 3rd - drops THIRD when uncovering (3rd and 4th switched)
-    }
+    { id: 1, isCovering: false, isUncovering: false, coverDelay: 0, uncoverDelay: 0 },
+    { id: 2, isCovering: false, isUncovering: false, coverDelay: 80, uncoverDelay: 80 },
+    { id: 3, isCovering: false, isUncovering: false, coverDelay: 160, uncoverDelay: 240 },
+    { id: 4, isCovering: false, isUncovering: false, coverDelay: 240, uncoverDelay: 160 }
   ];
 
   ngOnInit(): void {
-    // Start animation immediately
     this.startTileAnimation();
   }
 
   startTileAnimation(): void {
-    // Phase 1: Tiles drop to cover in regular order (1, 2, 3, 4)
+    // Phase 1: Tiles drop to cover
     this.tiles.forEach((tile) => {
       setTimeout(() => {
         tile.isCovering = true;
       }, tile.coverDelay);
     });
 
-    // Phase 2: Tiles drop to uncover in mixed order (1, 2, 4, 3)
+    // Emit first wave complete (when screen is fully covered)
+    setTimeout(() => {
+      this.firstWaveComplete.emit();
+    }, 800); // After all tiles have covered (last tile delay 240ms + animation time)
+
+    // Phase 2: Tiles drop to uncover
     const uncoverStartDelay = 1200;
 
     this.tiles.forEach((tile) => {
@@ -69,5 +53,23 @@ export class TileDropAnimationComponent implements OnInit {
         tile.isUncovering = true;
       }, uncoverStartDelay + tile.uncoverDelay);
     });
+
+    // Emit animation complete event (when content is revealed)
+    setTimeout(() => {
+      this.animationComplete.emit();
+    }, uncoverStartDelay + 600);
+  }
+
+  resetAnimation(): void {
+    this.tiles.forEach(tile => {
+      tile.isCovering = false;
+      tile.isUncovering = false;
+    });
+
+    this.animationReset.emit();
+
+    setTimeout(() => {
+      this.startTileAnimation();
+    }, 50);
   }
 }

@@ -1,0 +1,29 @@
+<div class="relative w-full h-screen overflow-hidden bg-black">
+
+  <!-- CONTENT LAYER (Under the curtain - gets revealed) -->
+  <div class="absolute inset-0 z-15">
+
+    <!-- NAVBAR (under curtain, gets revealed) -->
+    <app-navbar [showNavbar]="showNavbar"></app-navbar>
+
+    <!-- SCROLLING TEXT OVERLAY -->
+    <div class="flex items-center pointer-events-none h-full"
+         [class.show-scrolling-text]="showScrollingText"
+         [class.reveal-text]="revealText">
+
+      <!-- Scrolling Text Container -->
+      <div class="scrolling-text-wrapper">
+        <div class="scrolling-text">
+          LOREM IPSUM DOLOR SIT AMET CONSECTETUR ADIPISCING ELIT SED DO EIUSMOD TEMPOR INCIDIDUNT UT LABORE ET DOLORE MAGNA ALIQUA UT ENIM AD MINIM VENIAM QUIS NOSTRUD EXERCITATION ULLAMCO
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TILE DROP ANIMATION COMPONENT (Curtain layer) -->
+  <app-tile-drop-animation
+    (firstWaveComplete)="onFirstWaveComplete()"
+    (animationComplete)="onTileAnimationComplete()"
+    (animationReset)="onHeroReset()">
+  </app-tile-drop-animation>
+</div>

@@ -1,0 +1,100 @@
+/* Content layer under curtain */
+.z-15 {
+  z-index: 150; /* Changed from 15 to 150 to be above tiles */
+}
+/* Make sure text has pointer-events: none */
+.scrolling-text-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  pointer-events: none;
+}
+
+/* Text starts animating when first wave covers (but hidden behind white tiles) */
+.show-scrolling-text .scrolling-text-wrapper {
+  opacity: 1;
+}
+
+/* Text becomes visible when second wave reveals it */
+.reveal-text .scrolling-text-wrapper {
+  opacity: 1;
+}
+
+.scrolling-text {
+  font-size: clamp(16rem, 50vw, 80rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: transparent;
+  -webkit-text-stroke: 6px rgba(255, 255, 255, 0.4);
+  text-stroke: 6px rgba(255, 255, 255, 0.4);
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+  animation: scrollText 300s linear infinite;
+  transform: translateX(100vw);
+  animation-play-state: paused; /* Start paused */
+}
+
+/* Start animation when text is shown */
+.show-scrolling-text .scrolling-text {
+  animation-play-state: running;
+}
+
+/* Ultra slow scrolling animation */
+@keyframes scrollText {
+  from {
+    transform: translateX(100vw);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+/* Speed options */
+.scrolling-text.glacial {
+  animation: scrollText 600s linear infinite;
+}
+
+.scrolling-text.snail-pace {
+  animation: scrollText 480s linear infinite;
+}
+
+.scrolling-text.turtle-slow {
+  animation: scrollText 360s linear infinite;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .scrolling-text {
+    font-size: clamp(12rem, 45vw, 60rem);
+    -webkit-text-stroke: 5px rgba(255, 255, 255, 0.4);
+    text-stroke: 5px rgba(255, 255, 255, 0.4);
+  }
+}
+
+@media (max-width: 768px) {
+  .scrolling-text {
+    font-size: clamp(8rem, 40vw, 24rem);
+    -webkit-text-stroke: 4px rgba(255, 255, 255, 0.4);
+    text-stroke: 4px rgba(255, 255, 255, 0.4);
+  }
+}
+
+@media (max-width: 480px) {
+  .scrolling-text {
+    font-size: clamp(6rem, 30vw, 16rem);
+    -webkit-text-stroke: 3px rgba(255, 255, 255, 0.4);
+    text-stroke: 3px rgba(255, 255, 255, 0.4);
+  }
+}
+
+/* Performance optimization */
+.scrolling-text {
+  will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
