@@ -1,0 +1,32 @@
+<div class="container">
+  <!-- Vertical lines -->
+  <div
+    *ngFor="let line of lines"
+    class="line"
+    [style.left]="line.position">
+  </div>
+
+  <!-- Text container -->
+  <div class="text-container">
+    <!-- WER -->
+    <div class="text-center">
+      <div class="overflow">
+        <h3 class="portfolio-heading">WER</h3>
+      </div>
+    </div>
+
+    <!-- WIR -->
+    <div class="text-right">
+      <div class="overflow">
+        <h3 class="portfolio-heading">WIR</h3>
+      </div>
+    </div>
+
+    <!-- SIND -->
+    <div class="text-center">
+      <div class="overflow">
+        <h3 class="portfolio-heading">SIND</h3>
+      </div>
+    </div>
+  </div>
+</div>
