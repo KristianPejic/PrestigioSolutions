@@ -22,11 +22,11 @@
     </div>
 
     <!-- HERO CONTENT OVERLAY (Below tile animation) -->
-    <!-- Hidden during first wave, visible during second wave -->
+    <!-- Show during animation (after first wave) instead of waiting for completion -->
     <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10"
          [ngClass]="{
-           'hero-content-hidden': !revealText,
-           'hero-content-visible': revealText
+           'hero-content-hidden': !showHeroContent,
+           'hero-content-visible': showHeroContent
          }">
 
       <!-- Hero Heading -->

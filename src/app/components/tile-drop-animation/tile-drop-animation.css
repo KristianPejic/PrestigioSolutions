@@ -4,7 +4,8 @@
   height: 100%;
   background-color: white;
   transform: translateY(-100%);
-  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Faster: 0.8s instead of 1.2s */
+  transition: transform 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  opacity: 1;
 }
 
 /* Phase 1: Tiles drop down to cover screen */
@@ -15,6 +16,10 @@
 /* Phase 2: Tiles drop down to uncover content */
 .white-tile.tile-uncovering {
   transform: translateY(100%);
+  /* Add opacity fade for smoother disappearance */
+  opacity: 0;
+  transition: transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+  opacity 0.5s ease-out 1s; /* Fade out near the end */
 }
 
 /* Remove static delays - now handled dynamically */
@@ -34,10 +39,17 @@
 
 /* Performance optimization */
 .white-tile {
-  will-change: transform;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
 }
 
 /* No gaps between tiles */
 .grid-cols-4 {
   gap: 0;
+}
+
+/* Smooth fade out for the entire tile container */
+.tile-container-fade-out {
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
 }

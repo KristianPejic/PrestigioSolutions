@@ -13,36 +13,34 @@ import { NavbarComponent } from '../navbar/navbar';
 })
 export class HeroComponent {
   showScrollingText = false;
-  showNavbar = false;  // Control navbar visibility
+  showNavbar = false;
   revealText = false;
+  showHeroContent = false; // New property for hero content timing
 
   constructor(private router: Router) {}
 
   onFirstWaveComplete(): void {
     this.showScrollingText = true;
-    this.showNavbar = true;  // Show navbar at same time as text
+    this.showNavbar = true;
+    // Show hero content during the animation (after first wave)
+    this.showHeroContent = true;
   }
 
   onTileAnimationComplete(): void {
     this.revealText = true;
+    // Ensure hero content is visible after animation completes
+    this.showHeroContent = true;
   }
 
   onHeroReset(): void {
     this.showScrollingText = false;
-    this.showNavbar = false;  // Hide navbar on reset
+    this.showNavbar = false;
     this.revealText = false;
+    this.showHeroContent = false; // Reset hero content
   }
 
   onDiscoverClick(): void {
-    // Add your navigation logic here
-    // Example: this.router.navigate(['/services']);
     console.log('Jetzt entdecken clicked!');
-
-    // You can add smooth scrolling to a section
-    // const element = document.getElementById('services');
-    // element?.scrollIntoView({ behavior: 'smooth' });
-
-    // Or navigate to another route
-    // this.router.navigate(['/discover']);
+    // Add your navigation logic here
   }
 }

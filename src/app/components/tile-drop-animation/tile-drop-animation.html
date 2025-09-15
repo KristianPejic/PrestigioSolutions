@@ -1,17 +1,20 @@
 <!-- Tile Drop Animation Component -->
-<div class="absolute inset-0 z-20" *ngIf="showTiles">
-  <div class="grid grid-cols-4 h-full w-full gap-0">
-    <div *ngFor="let tile of tiles"
-         class="white-tile"
-         [class.tile-covering]="tile.isCovering && !tile.isUncovering"
-         [class.tile-uncovering]="tile.isUncovering"
-         [style.transition-delay.ms]="
-           tile.isCovering && !tile.isUncovering
-             ? tile.coverDelay
-             : tile.isUncovering
-             ? tile.uncoverDelay
-             : 0
-         ">
+<!-- Completely remove entire container when animation is finished -->
+<ng-container *ngIf="showTiles && !animationFinished">
+  <div class="absolute inset-0 z-20">
+    <div class="grid grid-cols-4 h-full w-full gap-0">
+      <div *ngFor="let tile of tiles"
+           class="white-tile"
+           [class.tile-covering]="tile.isCovering && !tile.isUncovering"
+           [class.tile-uncovering]="tile.isUncovering"
+           [style.transition-delay.ms]="
+             tile.isCovering && !tile.isUncovering
+               ? tile.coverDelay
+               : tile.isUncovering
+               ? tile.uncoverDelay
+               : 0
+           ">
+      </div>
     </div>
   </div>
-</div>
+</ng-container>

@@ -34,7 +34,7 @@
 
 /* Logo Styles */
 .navbar-logo {
-  z-index: 260;
+  z-index: 9999; /* Ensure logo stays visible */
 }
 
 .logo-link {
@@ -50,9 +50,9 @@
   letter-spacing: -0.02em;
 }
 
-/* Hamburger Container */
+/* Hamburger Container - CRITICAL: High z-index */
 .hamburger-container {
-  z-index: 260; /* Above menu overlay */
+  z-index: 9999; /* Must be above menu overlay */
   position: relative;
 }
 
@@ -66,12 +66,13 @@
   border: none;
   outline: none;
   transition: all 0.3s ease;
+  z-index: 9999; /* Ensure button stays clickable */
 }
 
 .menu__icon span {
   display: block;
   position: absolute;
-  height: 2px;
+  height: 3px; /* Slightly thicker for better visibility */
   width: 100%;
   background: white;
   border-radius: 1px;
@@ -91,10 +92,11 @@
   top: 22px;
 }
 
-/* Active hamburger animation */
+/* Active hamburger animation - ENSURE VISIBILITY */
 .menu__icon.active span:nth-child(1) {
   transform: rotate(45deg);
   top: 14px;
+  background: white; /* Ensure white color */
 }
 
 .menu__icon.active span:nth-child(2) {
@@ -104,9 +106,10 @@
 .menu__icon.active span:nth-child(3) {
   transform: rotate(-45deg);
   top: 14px;
+  background: white; /* Ensure white color */
 }
 
-/* Menu Overlay */
+/* Menu Overlay - LOWER z-index than navbar/hamburger */
 .menu-overlay {
   position: fixed;
   top: 0;
@@ -116,15 +119,17 @@
   background: rgba(0, 0, 0, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  z-index: 9998; /* Below hamburger button but above tiles */
+  z-index: 10001; /* Below hamburger and navbar */
   opacity: 0;
   visibility: hidden;
   transition: all 0.4s ease;
+  pointer-events: none; /* Prevent interference when closed */
 }
 
 .menu-overlay.open {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto; /* Allow interaction when open */
 }
 
 .menu-content {
@@ -134,9 +139,10 @@
   align-items: center;
   height: 100%;
   gap: 2rem;
+  padding: 2rem;
 }
 
-/* Menu Links */
+/* Menu Links - SIMPLIFIED AND FIXED */
 .menu-link {
   display: flex;
   align-items: center;
@@ -144,9 +150,13 @@
   opacity: 0;
   transform: translateX(-50px);
   transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  width: 100%;
+  max-width: 400px;
+  justify-content: center;
 }
 
-.menu-link.show {
+/* CRITICAL: Show menu links when overlay is open */
+.menu-overlay.open .menu-link {
   opacity: 1;
   transform: translateX(0);
 }
@@ -156,6 +166,7 @@
   color: rgba(255, 255, 255, 0.5);
   font-weight: 300;
   min-width: 30px;
+  text-align: right;
 }
 
 .link-line {
@@ -163,6 +174,7 @@
   height: 1px;
   background: rgba(255, 255, 255, 0.3);
   transition: all 0.3s ease;
+  flex-shrink: 0;
 }
 
 .nav-link {
@@ -173,6 +185,7 @@
   letter-spacing: 2px;
   transition: all 0.3s ease;
   position: relative;
+  white-space: nowrap;
 }
 
 .nav-link:hover {
@@ -180,10 +193,34 @@
   transform: translateX(10px);
 }
 
-.nav-link:hover + .link-line,
 .menu-link:hover .link-line {
   background: #10b981;
   width: 80px;
+}
+
+/* Staggered animation for menu links */
+.menu-overlay.open .menu-link:nth-child(1) {
+  transition-delay: 0.1s;
+}
+
+.menu-overlay.open .menu-link:nth-child(2) {
+  transition-delay: 0.2s;
+}
+
+.menu-overlay.open .menu-link:nth-child(3) {
+  transition-delay: 0.3s;
+}
+
+.menu-overlay.open .menu-link:nth-child(4) {
+  transition-delay: 0.4s;
+}
+
+.menu-overlay.open .menu-link:nth-child(5) {
+  transition-delay: 0.5s;
+}
+
+.menu-overlay.open .menu-link:nth-child(6) {
+  transition-delay: 0.6s;
 }
 
 /* Responsive */
@@ -202,5 +239,25 @@
 
   .menu-content {
     gap: 1.5rem;
+    padding: 1rem;
+  }
+
+  .menu-link {
+    gap: 1rem;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-link {
+    font-size: 1.25rem;
+  }
+
+  .link-line {
+    width: 30px;
+  }
+
+  .menu-link:hover .link-line {
+    width: 50px;
   }
 }

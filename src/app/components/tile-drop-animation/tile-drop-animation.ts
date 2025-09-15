@@ -21,7 +21,8 @@ export class TileDropAnimationComponent implements OnInit {
   @Output() animationComplete = new EventEmitter<void>();
   @Output() animationReset = new EventEmitter<void>();
 
-  showTiles = true; // controls DOM removal after uncover
+  showTiles = true; // Controls if tiles are shown in DOM
+  animationFinished = false; // Track if animation is completely done
 
   tiles: Tile[] = [
     { id: 1, isCovering: false, isUncovering: false, coverDelay: 0, uncoverDelay: 0 },
@@ -35,36 +36,32 @@ export class TileDropAnimationComponent implements OnInit {
   }
 
   startTileAnimation(): void {
+    // Reset states
+    this.showTiles = true;
+    this.animationFinished = false;
+
     // Phase 1: Cover
     this.tiles.forEach(tile => {
       setTimeout(() => tile.isCovering = true, tile.coverDelay);
     });
 
     // Emit first wave complete (after cover)
-    setTimeout(() => this.firstWaveComplete.emit(), 800); // animation duration still 0.8s
+    setTimeout(() => this.firstWaveComplete.emit(), 800);
 
     // Phase 2: Uncover (longer duration)
-    const uncoverStartDelay = 2000; // <-- increase delay before uncover
+    const uncoverStartDelay = 2000;
     this.tiles.forEach(tile => {
       setTimeout(() => tile.isUncovering = true, uncoverStartDelay + tile.uncoverDelay);
     });
 
-    // Emit animation complete after second wave finishes
+    // Complete removal after animation finishes
     setTimeout(() => {
       this.animationComplete.emit();
-      // Remove tiles from DOM so they don’t block clicks
+
+      // Immediately mark as finished and remove from DOM
+      this.animationFinished = true;
       this.showTiles = false;
-    }, uncoverStartDelay + 1200); // <-- increase uncover animation duration if needed
-  }
 
-  resetAnimation(): void {
-    this.showTiles = true;
-    this.tiles.forEach(tile => {
-      tile.isCovering = false;
-      tile.isUncovering = false;
-    });
-    this.animationReset.emit();
-
-    setTimeout(() => this.startTileAnimation(), 50);
+    }, uncoverStartDelay + 1000); // Reduced delay for faster removal
   }
 }
