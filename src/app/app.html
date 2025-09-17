@@ -1,16 +1,14 @@
-<!-- Main App Container -->
 <div class="app-container">
 
-  <!-- Hero Section (includes tile animation and navbar) -->
-  <app-hero></app-hero>
+  <!-- Hero Section -->
+  <app-hero
+    (animationComplete)="showWerWirSind = true"
+    (menuToggle)="isMenuOpen = $event">
+  </app-hero>
 
-  <!-- Wer Wir Sind Section (Large Text Section) -->
-  <app-wer-wir-sind></app-wer-wir-sind>
-
-  <!-- Future sections can be added here -->
-  <!-- <app-services-section></app-services-section> -->
-  <!-- <app-portfolio-section></app-portfolio-section> -->
-  <!-- <app-contact-section></app-contact-section> -->
-  <!-- <app-footer></app-footer> -->
+  <!-- Wer Wir Sind Section -->
+  <app-wer-wir-sind
+    *ngIf="showWerWirSind && !isMenuOpen">
+  </app-wer-wir-sind>
 
 </div>
