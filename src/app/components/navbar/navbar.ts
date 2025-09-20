@@ -12,7 +12,7 @@ export class NavbarComponent {
   @Input() showNavbar = false;
   isMenuOpen = false;
 
-  navigationLinks = [
+  menuLinks = [
     { name: 'Home', href: '#home' },
     { name: 'About Us', href: '#about' },
     { name: 'Services', href: '#services' },
@@ -23,18 +23,25 @@ export class NavbarComponent {
 
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
-    console.log('Menu toggled:', this.isMenuOpen); // Debug log
+    console.log('Menu toggled:', this.isMenuOpen);
+
+    // Prevent body scroll when menu is open
+    if (this.isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }
+
+  handleMenuClick(link: any, event: Event): void {
+    event.preventDefault();
+    console.log('Menu item clicked:', link.name);
+    this.closeMenu();
+    // Add your navigation logic here
   }
 
   closeMenu(): void {
     this.isMenuOpen = false;
+    document.body.style.overflow = '';
   }
-
-  onLinkClick(link: any): void {
-    console.log('Navigating to:', link.name);
-    this.closeMenu();
-    // Add navigation logic here
-  }
-
-  protected readonly String = String;
 }

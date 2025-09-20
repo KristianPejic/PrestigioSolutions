@@ -1,11 +1,29 @@
+/* Tile animation container - ensure it doesn't affect document flow */
+.tile-animation-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 50; /* Lower z-index - below navbar */
+  pointer-events: none; /* Don't block interactions by default */
+  overflow: hidden;
+}
+
+/* Only tiles themselves can have pointer events during animation */
+.tile-animation-container.animation-active {
+  pointer-events: auto;
+}
+
 /* White Tiles - Much faster animation */
 .white-tile {
   width: 100%;
   height: 100%;
   background-color: white;
   transform: translateY(-100%);
-  transition: transform 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   opacity: 1;
+  pointer-events: auto; /* Tiles can block during animation */
 }
 
 /* Phase 1: Tiles drop down to cover screen */
@@ -18,8 +36,9 @@
   transform: translateY(100%);
   /* Add opacity fade for smoother disappearance */
   opacity: 0;
-  transition: transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-  opacity 0.5s ease-out 1s; /* Fade out near the end */
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+  opacity 0.3s ease-out 0.5s; /* Fade out near the end */
+  pointer-events: none; /* Don't block when uncovering */
 }
 
 /* Remove static delays - now handled dynamically */

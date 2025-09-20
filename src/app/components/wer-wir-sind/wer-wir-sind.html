@@ -1,29 +1,30 @@
 <div class="container">
-  <!-- Vertical lines -->
+  <!-- 3 Strategic vertical lines -->
   <div
-    *ngFor="let line of lines"
+    *ngFor="let line of lines; let i = index"
     class="line"
+    [class.highlight-line]="line.highlight"
     [style.left]="line.position">
   </div>
 
-  <!-- Text container -->
+  <!-- Text container with WIR highlighted -->
   <div class="text-container">
-    <!-- WER -->
-    <div class="text-center">
+    <!-- WER - Left aligned -->
+    <div class="text-section text-left">
       <div class="overflow">
         <h3 class="portfolio-heading">WER</h3>
       </div>
     </div>
 
-    <!-- WIR -->
-    <div class="text-right">
+    <!-- WIR - Center aligned and highlighted green -->
+    <div class="text-section text-center wir-highlighted">
       <div class="overflow">
-        <h3 class="portfolio-heading">WIR</h3>
+        <h3 class="portfolio-heading highlight-text">WIR</h3>
       </div>
     </div>
 
-    <!-- SIND -->
-    <div class="text-center">
+    <!-- SIND - Right aligned -->
+    <div class="text-section text-right">
       <div class="overflow">
         <h3 class="portfolio-heading">SIND</h3>
       </div>

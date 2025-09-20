@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 interface Tile {
@@ -16,13 +16,13 @@ interface Tile {
   templateUrl: './tile-drop-animation.html',
   styleUrls: ['./tile-drop-animation.css']
 })
-export class TileDropAnimationComponent implements OnInit {
+export class TileDropAnimationComponent implements OnInit, OnDestroy {
   @Output() firstWaveComplete = new EventEmitter<void>();
   @Output() animationComplete = new EventEmitter<void>();
   @Output() animationReset = new EventEmitter<void>();
 
-  showTiles = true; // Controls if tiles are shown in DOM
-  animationFinished = false; // Track if animation is completely done
+  showTiles = true;
+  animationFinished = false;
 
   tiles: Tile[] = [
     { id: 1, isCovering: false, isUncovering: false, coverDelay: 0, uncoverDelay: 0 },
@@ -33,35 +33,52 @@ export class TileDropAnimationComponent implements OnInit {
 
   ngOnInit(): void {
     this.startTileAnimation();
+    this.preventScrolling();
+  }
+
+  ngOnDestroy(): void {
+    // Properly implemented - restore scrolling when component is destroyed
+    this.allowScrolling();
   }
 
   startTileAnimation(): void {
-    // Reset states
     this.showTiles = true;
     this.animationFinished = false;
+    this.preventScrolling();
 
     // Phase 1: Cover
     this.tiles.forEach(tile => {
       setTimeout(() => tile.isCovering = true, tile.coverDelay);
     });
 
-    // Emit first wave complete (after cover)
+    // Emit first wave complete
     setTimeout(() => this.firstWaveComplete.emit(), 800);
 
-    // Phase 2: Uncover (longer duration)
+    // Phase 2: Uncover
     const uncoverStartDelay = 2000;
     this.tiles.forEach(tile => {
       setTimeout(() => tile.isUncovering = true, uncoverStartDelay + tile.uncoverDelay);
     });
 
-    // Complete removal after animation finishes
+    // Complete removal
     setTimeout(() => {
       this.animationComplete.emit();
-
-      // Immediately mark as finished and remove from DOM
       this.animationFinished = true;
       this.showTiles = false;
+      this.allowScrolling();
+    }, uncoverStartDelay + 750);
+  }
+  private preventScrolling(): void {
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+    }
+  }
 
-    }, uncoverStartDelay + 1000); // Reduced delay for faster removal
+  private allowScrolling(): void {
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    }
   }
 }

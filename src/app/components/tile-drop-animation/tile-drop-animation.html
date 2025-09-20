@@ -1,7 +1,7 @@
 <!-- Tile Drop Animation Component -->
-<!-- Completely remove entire container when animation is finished -->
+<!-- Fixed position to cover entire viewport and prevent scrolling -->
 <ng-container *ngIf="showTiles && !animationFinished">
-  <div class="absolute inset-0 z-20">
+  <div class="fixed inset-0 z-50 overflow-hidden">
     <div class="grid grid-cols-4 h-full w-full gap-0">
       <div *ngFor="let tile of tiles"
            class="white-tile"

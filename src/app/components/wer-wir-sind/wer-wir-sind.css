@@ -1,6 +1,6 @@
 .container {
   position: relative;
-  height: 200vh; /* scrollable page */
+  height: 200vh;
   background: black;
   overflow-x: hidden;
   display: flex;
@@ -8,16 +8,25 @@
   justify-content: center;
 }
 
+/* Strategic vertical lines */
 .line {
   position: absolute;
   top: 0;
-  width: 1px; /* thinner lines */
+  width: 4px;
   background: white;
-  height: 50vh; /* visible from start */
-  transition: height 0.1s ease-out;
-  z-index: 999;
+  height: 50vh;
+  transition: all 2s ease-out;
+  z-index: 1;
 }
 
+/* Special highlight line (middle one over WIR) */
+.line.highlight-line {
+  background: white; /* Start white */
+  width: 2px;
+  transition: all 2s ease-out;
+}
+
+/* Text container */
 .text-container {
   position: absolute;
   top: 50%;
@@ -25,8 +34,24 @@
   width: 100%;
   z-index: 10;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 18%;
+}
+
+.text-section {
+  flex: 1;
+  display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  justify-content: center;
+}
+
+/* All text sections centered */
+.text-left,
+.text-center,
+.text-right {
+  text-align: center; /* Center all text */
+  padding: 0 1rem; /* Small padding for spacing */
 }
 
 .overflow {
@@ -36,47 +61,111 @@
 
 .portfolio-heading {
   font-weight: 800;
-  font-size: 10vw;
-  line-height: 0.9;
+  font-size: clamp(4rem, 8vw, 10rem);
+  line-height: 0.8;
   text-transform: uppercase;
   color: white;
   display: inline-block;
+  letter-spacing: -0.05em;
+  margin: 0;
+  transition: all 0.5s ease;
 }
 
-.text-center {
-  text-align: center;
+/* WIR starts white, turns green when animated */
+.highlight-text {
+  color: white;
+  transition: all 0.5s ease;
 }
 
-.text-right {
-  text-align: right;
-  padding-right: 27%;
+/* Animation triggered by JavaScript */
+.container.animate-lines .line {
+  height: 100vh;
 }
 
-/* Animation for lines on scroll */
-@keyframes extendLine {
-  from {
-    height: 50vh;
+.container.animate-lines .line.highlight-line {
+  background: #10b981; /* Completely green, no gradient */
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+}
+
+.container.animate-lines .highlight-text {
+  color: #10b981;
+  text-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
+}
+
+/* Reset animation when scrolling back up - lines go back to 0 */
+.container:not(.animate-lines) .line {
+  height: 0; /* Reset to 0 instead of 50vh */
+  transition: all 0.5s ease-out;
+}
+
+.container:not(.animate-lines) .line.highlight-line {
+  background: white; /* Back to white */
+  box-shadow: none;
+  transition: all 0.5s ease-out;
+}
+
+.container:not(.animate-lines) .highlight-text {
+  color: white; /* Back to white */
+  text-shadow: none;
+  transition: all 0.5s ease-out;
+}
+
+/* Enhanced visual effects */
+.portfolio-heading:not(.highlight-text) {
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+/* Hover effects */
+.text-left:hover .portfolio-heading:not(.highlight-text),
+.text-right:hover .portfolio-heading:not(.highlight-text) {
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
+}
+
+.wir-highlighted:hover .highlight-text {
+  color: #0d9668;
+  text-shadow: 0 0 40px rgba(16, 185, 129, 0.6);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .text-container {
+    padding: 0 5%;
   }
-  to {
-    height: 100vh;
+
+  .portfolio-heading {
+    font-size: clamp(3rem, 7vw, 8rem);
+  }
+
+  .text-left {
+    padding-left: 1%;
+  }
+
+  .text-right {
+    padding-right: 1%;
   }
 }
 
-/* Scroll animation for lines */
-.container:has(.line) {
-  view-timeline-name: --scroll-tracking;
-}
+@media (max-width: 768px) {
+  .text-container {
+    flex-direction: column;
+    gap: 3rem;
+    padding: 0 2rem;
+  }
 
-.line {
-  animation: extendLine linear;
-  animation-timeline: --scroll-tracking;
-  animation-range: exit-crossing 0% exit-crossing 100%;
-}
+  .text-left,
+  .text-center,
+  .text-right {
+    align-items: center;
+    text-align: center;
+    padding: 0;
+  }
 
-/* Fallback for browsers that don't support scroll-driven animations */
-@supports not (animation-timeline: view()) {
+  .portfolio-heading {
+    font-size: clamp(2rem, 12vw, 6rem);
+  }
+
   .line {
-    animation: none;
-    height: 50vh; /* Fixed height for unsupported browsers */
+    display: none;
   }
 }

@@ -1,29 +1,26 @@
-/* Navbar Styles - Z-index between tiles and content */
-.navbar {
+/* Navbar Wrapper - Clean start with maximum z-index */
+.navbar-wrapper {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 250; /* Above tiles (z-20 = 200) but below nothing */
+  z-index: 999999;
   background: rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding: 1rem 0;
-
-  /* Initially hidden */
   opacity: 0;
   visibility: hidden;
-  transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease;
 }
 
-/* Show navbar when triggered */
-.navbar.show-navbar {
+.navbar-wrapper.visible {
   opacity: 1;
   visibility: visible;
 }
 
-.navbar-container {
+.navbar-content {
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
@@ -33,199 +30,146 @@
 }
 
 /* Logo Styles */
-.navbar-logo {
-  z-index: 9999; /* Ensure logo stays visible */
+.logo a {
+  text-decoration: none;
+  color: white;
+  transition: color 0.3s ease;
 }
 
-.logo-link {
-  text-decoration: none;
-  display: flex;
-  align-items: center;
+.logo a:hover {
+  color: #10b981;
 }
 
 .logo-text {
   font-size: 1.5rem;
   font-weight: 900;
-  color: white;
+  color: inherit;
   letter-spacing: -0.02em;
 }
 
-/* Hamburger Container - CRITICAL: High z-index */
-.hamburger-container {
-  z-index: 9999; /* Must be above menu overlay */
-  position: relative;
-}
-
-/* Hamburger Button Styles */
-.menu__icon {
-  width: 30px;
-  height: 30px;
-  position: relative;
-  cursor: pointer;
-  background: transparent;
+/* Hamburger Button - Simple and clean */
+.hamburger-btn {
+  width: 40px;
+  height: 40px;
+  background: none;
   border: none;
-  outline: none;
-  transition: all 0.3s ease;
-  z-index: 9999; /* Ensure button stays clickable */
+  cursor: pointer;
+  position: relative;
+  z-index: 9999999; /* Above everything */
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
 }
 
-.menu__icon span {
+.line {
   display: block;
-  position: absolute;
-  height: 3px; /* Slightly thicker for better visibility */
-  width: 100%;
+  width: 24px;
+  height: 2px;
   background: white;
-  border-radius: 1px;
-  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  left: 0;
+  transition: all 0.3s ease;
+  transform-origin: center;
 }
 
-.menu__icon span:nth-child(1) {
-  top: 6px;
+/* Hamburger animation to X */
+.hamburger-btn.open .line1 {
+  transform: rotate(45deg) translate(6px, 6px);
 }
 
-.menu__icon span:nth-child(2) {
-  top: 14px;
-}
-
-.menu__icon span:nth-child(3) {
-  top: 22px;
-}
-
-/* Active hamburger animation - ENSURE VISIBILITY */
-.menu__icon.active span:nth-child(1) {
-  transform: rotate(45deg);
-  top: 14px;
-  background: white; /* Ensure white color */
-}
-
-.menu__icon.active span:nth-child(2) {
+.hamburger-btn.open .line2 {
   opacity: 0;
 }
 
-.menu__icon.active span:nth-child(3) {
-  transform: rotate(-45deg);
-  top: 14px;
-  background: white; /* Ensure white color */
+.hamburger-btn.open .line3 {
+  transform: rotate(-45deg) translate(6px, -6px);
 }
 
-/* Menu Overlay - LOWER z-index than navbar/hamburger */
-.menu-overlay {
+/* Full Screen Menu - High z-index but below hamburger */
+.fullscreen-menu {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.95);
+  background: rgba(0, 0, 0, 0.98);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  z-index: 10001; /* Below hamburger and navbar */
+  z-index: 9999998; /* Below hamburger button */
   opacity: 0;
   visibility: hidden;
   transition: all 0.4s ease;
-  pointer-events: none; /* Prevent interference when closed */
 }
 
-.menu-overlay.open {
+.fullscreen-menu.active {
   opacity: 1;
   visibility: visible;
-  pointer-events: auto; /* Allow interaction when open */
 }
 
-.menu-content {
+.menu-inner {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   height: 100%;
-  gap: 2rem;
   padding: 2rem;
 }
 
-/* Menu Links - SIMPLIFIED AND FIXED */
-.menu-link {
+.menu-nav {
+  text-align: center;
+}
+
+/* Menu Items - Clean without debug styles */
+.menu-item {
   display: flex;
   align-items: center;
-  gap: 2rem;
-  opacity: 0;
-  transform: translateX(-50px);
-  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  width: 100%;
-  max-width: 400px;
   justify-content: center;
-}
-
-/* CRITICAL: Show menu links when overlay is open */
-.menu-overlay.open .menu-link {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.nav-text {
-  font-size: 1rem;
-  color: rgba(255, 255, 255, 0.5);
-  font-weight: 300;
-  min-width: 30px;
-  text-align: right;
-}
-
-.link-line {
-  width: 50px;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.3);
-  transition: all 0.3s ease;
-  flex-shrink: 0;
-}
-
-.nav-link {
-  font-size: 2rem;
+  gap: 2rem;
   color: white;
   text-decoration: none;
+  font-size: 2.5rem;
   font-weight: 300;
   letter-spacing: 2px;
-  transition: all 0.3s ease;
+  margin: 1.5rem 0;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transition-delay: calc(var(--delay) * 0.1s);
   position: relative;
-  white-space: nowrap;
+  padding: 1rem;
+  border-radius: 8px;
 }
 
-.nav-link:hover {
+.fullscreen-menu.active .menu-item {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.menu-item:hover {
   color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.menu-number {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.5);
+  min-width: 30px;
+  text-align: right;
+  font-weight: 300;
+}
+
+.menu-text {
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.menu-item:hover .menu-text {
   transform: translateX(10px);
 }
 
-.menu-link:hover .link-line {
-  background: #10b981;
-  width: 80px;
-}
-
-/* Staggered animation for menu links */
-.menu-overlay.open .menu-link:nth-child(1) {
-  transition-delay: 0.1s;
-}
-
-.menu-overlay.open .menu-link:nth-child(2) {
-  transition-delay: 0.2s;
-}
-
-.menu-overlay.open .menu-link:nth-child(3) {
-  transition-delay: 0.3s;
-}
-
-.menu-overlay.open .menu-link:nth-child(4) {
-  transition-delay: 0.4s;
-}
-
-.menu-overlay.open .menu-link:nth-child(5) {
-  transition-delay: 0.5s;
-}
-
-.menu-overlay.open .menu-link:nth-child(6) {
-  transition-delay: 0.6s;
-}
-
-/* Responsive */
+/* Responsive Design */
 @media (max-width: 768px) {
-  .navbar-container {
+  .navbar-content {
     padding: 0 1rem;
   }
 
@@ -233,31 +177,46 @@
     font-size: 1.25rem;
   }
 
-  .nav-link {
-    font-size: 1.5rem;
-  }
-
-  .menu-content {
-    gap: 1.5rem;
-    padding: 1rem;
-  }
-
-  .menu-link {
+  .menu-item {
+    font-size: 2rem;
+    margin: 1rem 0;
     gap: 1rem;
-    max-width: 300px;
+  }
+
+  .hamburger-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .line {
+    width: 20px;
   }
 }
 
 @media (max-width: 480px) {
-  .nav-link {
-    font-size: 1.25rem;
+  .menu-item {
+    font-size: 1.5rem;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
-  .link-line {
-    width: 30px;
+  .menu-number {
+    font-size: 0.875rem;
   }
+}
 
-  .menu-link:hover .link-line {
-    width: 50px;
-  }
+/* Ensure smooth animations */
+* {
+  box-sizing: border-box;
+}
+
+/* Focus states for accessibility */
+.hamburger-btn:focus {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
+.menu-item:focus {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
 }
