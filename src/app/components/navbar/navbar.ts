@@ -23,9 +23,7 @@ export class NavbarComponent {
 
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
-    console.log('Menu toggled:', this.isMenuOpen);
 
-    // Prevent body scroll when menu is open
     if (this.isMenuOpen) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -35,9 +33,8 @@ export class NavbarComponent {
 
   handleMenuClick(link: any, event: Event): void {
     event.preventDefault();
-    console.log('Menu item clicked:', link.name);
     this.closeMenu();
-    // Add your navigation logic here
+    // Add your routing logic if needed
   }
 
   closeMenu(): void {

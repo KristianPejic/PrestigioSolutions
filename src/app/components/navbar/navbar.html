@@ -11,7 +11,6 @@
     <!-- Hamburger Button -->
     <button
       class="hamburger-btn"
-      [class.open]="isMenuOpen"
       (click)="toggleMenu()"
       type="button"
       aria-label="Toggle navigation menu">
@@ -25,6 +24,10 @@
 <!-- Full Screen Menu -->
 <div class="fullscreen-menu" [class.active]="isMenuOpen" (click)="closeMenu()">
   <div class="menu-inner" (click)="$event.stopPropagation()">
+
+    <!-- BIG CLOSE X -->
+    <button class="close-btn" (click)="closeMenu()" aria-label="Close menu">✕</button>
+
     <nav class="menu-nav">
       <a
         *ngFor="let link of menuLinks; let i = index"
