@@ -21,7 +21,6 @@
   height: 100%;
   background-color: white;
   transform: translateY(-100%);
-  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   opacity: 1;
   pointer-events: auto; /* Tiles can block during animation */
 }
@@ -33,27 +32,9 @@
 
 /* Phase 2: Tiles drop down to uncover content */
 .white-tile.tile-uncovering {
-  transform: translateY(100%);
+  transform: translateY(-100%);
   /* Add opacity fade for smoother disappearance */
-  opacity: 0;
-  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-  opacity 0.3s ease-out 0.5s; /* Fade out near the end */
   pointer-events: none; /* Don't block when uncovering */
-}
-
-/* Remove static delays - now handled dynamically */
-.white-tile:nth-child(1).tile-covering,
-.white-tile:nth-child(2).tile-covering,
-.white-tile:nth-child(3).tile-covering,
-.white-tile:nth-child(4).tile-covering {
-  transition-delay: 0ms; /* Overridden by inline styles */
-}
-
-.white-tile:nth-child(1).tile-uncovering,
-.white-tile:nth-child(2).tile-uncovering,
-.white-tile:nth-child(3).tile-uncovering,
-.white-tile:nth-child(4).tile-uncovering {
-  transition-delay: 0ms; /* Overridden by inline styles */
 }
 
 /* Performance optimization */

@@ -3,10 +3,8 @@ import { CommonModule } from '@angular/common';
 
 interface Tile {
   id: number;
-  isCovering: boolean;
-  isUncovering: boolean;
-  coverDelay: number;
-  uncoverDelay: number;
+  isCovering?: boolean;
+  isUncovering?: boolean;
 }
 
 @Component({
@@ -25,10 +23,12 @@ export class TileDropAnimationComponent implements OnInit, OnDestroy {
   animationFinished = false;
 
   tiles: Tile[] = [
-    { id: 1, isCovering: false, isUncovering: false, coverDelay: 0, uncoverDelay: 0 },
-    { id: 2, isCovering: false, isUncovering: false, coverDelay: 100, uncoverDelay: 100 },
-    { id: 3, isCovering: false, isUncovering: false, coverDelay: 200, uncoverDelay: 200 },
-    { id: 4, isCovering: false, isUncovering: false, coverDelay: 300, uncoverDelay: 300 }
+    { id: 1},
+    { id: 2 },
+    { id: 3 },
+    { id: 4 },
+    { id: 5 },
+    { id: 6 },
   ];
 
   ngOnInit(): void {
@@ -48,17 +48,21 @@ export class TileDropAnimationComponent implements OnInit, OnDestroy {
 
     // Phase 1: Cover
     this.tiles.forEach(tile => {
-      setTimeout(() => tile.isCovering = true, tile.coverDelay);
+      setTimeout(() => tile.isCovering = true , tile.id);
     });
 
     // Emit first wave complete
-    setTimeout(() => this.firstWaveComplete.emit(), 800);
+    setTimeout(() => {
+      this.firstWaveComplete.emit();
+    this.tiles =this.tiles.reverse();
+    }, 1400);
 
     // Phase 2: Uncover
-    const uncoverStartDelay = 2000;
+    const uncoverStartDelay = 1400;
     this.tiles.forEach(tile => {
-      setTimeout(() => tile.isUncovering = true, uncoverStartDelay + tile.uncoverDelay);
+      setTimeout(() => tile.isUncovering = true, uncoverStartDelay + tile.id);
     });
+
 
     // Complete removal
     setTimeout(() => {
@@ -66,7 +70,11 @@ export class TileDropAnimationComponent implements OnInit, OnDestroy {
       this.animationFinished = true;
       this.showTiles = false;
       this.allowScrolling();
-    }, uncoverStartDelay + 750);
+    }, uncoverStartDelay * 3);
+  }
+
+  get animationSpeed(){
+    return Math.random() * (2.5 - 1) + 1;
   }
   private preventScrolling(): void {
     if (typeof document !== 'undefined') {
