@@ -1,19 +1,12 @@
 <!-- Tile Drop Animation Component -->
-<!-- Fixed position to cover entire viewport and prevent scrolling -->
 <ng-container *ngIf="showTiles && !animationFinished">
-  <div class="fixed inset-0 z-50 overflow-hidden">
-    <div class="grid grid-cols-4 h-full w-full gap-0">
-      <div *ngFor="let tile of tiles"
+  <div class="tile-animation-fixed-container">
+    <div class="tile-grid">
+      <div *ngFor="let tile of tiles; trackBy: trackByTileId"
            class="white-tile"
            [class.tile-covering]="tile.isCovering && !tile.isUncovering"
            [class.tile-uncovering]="tile.isUncovering"
-           [style.transition-delay.ms]="
-             tile.isCovering && !tile.isUncovering
-               ? tile.coverDelay
-               : tile.isUncovering
-               ? tile.uncoverDelay
-               : 0
-           ">
+           [style.transition-delay]="getTransitionDelay(tile) + 'ms'">
       </div>
     </div>
   </div>
