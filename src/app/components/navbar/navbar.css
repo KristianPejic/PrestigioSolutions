@@ -1,10 +1,10 @@
-/* Navbar Wrapper - Clean start with maximum z-index */
+/* ================= Navbar Wrapper ================= */
 .navbar-wrapper {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 999999;
+  z-index: 999998;
   background: rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -29,7 +29,6 @@
   padding: 0 2rem;
 }
 
-/* Logo Styles */
 .logo a {
   text-decoration: none;
   color: white;
@@ -47,7 +46,7 @@
   letter-spacing: -0.02em;
 }
 
-/* Hamburger Button - Simple and clean */
+/* ================= Hamburger Button ================= */
 .hamburger-btn {
   width: 40px;
   height: 40px;
@@ -55,7 +54,7 @@
   border: none;
   cursor: pointer;
   position: relative;
-  z-index: 9999999; /* Above everything */
+  z-index: 9999998;
   padding: 8px;
   display: flex;
   flex-direction: column;
@@ -69,24 +68,15 @@
   width: 24px;
   height: 2px;
   background: white;
-  transition: all 0.3s ease;
+  transition: background 0.3s ease;
   transform-origin: center;
 }
 
-/* Hamburger animation to X */
-.hamburger-btn.open .line1 {
-  transform: rotate(45deg) translate(6px, 6px);
+.hamburger-btn:hover .line {
+  background: #10b981;
 }
 
-.hamburger-btn.open .line2 {
-  opacity: 0;
-}
-
-.hamburger-btn.open .line3 {
-  transform: rotate(-45deg) translate(6px, -6px);
-}
-
-/* Full Screen Menu - High z-index but below hamburger */
+/* ================= Fullscreen Menu ================= */
 .fullscreen-menu {
   position: fixed;
   top: 0;
@@ -96,30 +86,57 @@
   background: rgba(0, 0, 0, 0.98);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  z-index: 9999998; /* Below hamburger button */
+  z-index: 999999;
   opacity: 0;
   visibility: hidden;
-  transition: all 0.4s ease;
+  transform: translate(-100%, 100%) rotate(-10deg) scale(0.95);
+  transition: transform 0.7s cubic-bezier(0.77, 0, 0.175, 1),
+  opacity 0.5s ease,
+  visibility 0s linear 0.7s;
 }
 
 .fullscreen-menu.active {
   opacity: 1;
   visibility: visible;
+  transform: translate(0, 0) rotate(0deg) scale(1);
+  transition: transform 0.7s cubic-bezier(0.77, 0, 0.175, 1),
+  opacity 0.5s ease,
+  visibility 0s;
 }
 
 .menu-inner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   height: 100%;
   padding: 2rem;
-}
-
-.menu-nav {
   text-align: center;
+  position: relative;
+  padding-top: 1rem; /* Minimal top padding */
 }
 
-/* Menu Items - Clean without debug styles */
+/* ================= Close Button ================= */
+.close-btn {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  font-size: 4rem;
+  font-weight: 900;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 10000;
+  transition: color 0.3s ease, transform 0.4s ease;
+}
+
+.close-btn:hover {
+  color: #10b981;
+  transform: scale(1.25) rotate(90deg);
+}
+
+/* ================= Menu Items ================= */
+.menu-nav {
+  margin-top: 0; /* Keep no extra margin */
+}
+
 .menu-item {
   display: flex;
   align-items: center;
@@ -127,22 +144,22 @@
   gap: 2rem;
   color: white;
   text-decoration: none;
-  font-size: 2.5rem;
+  font-size: 2rem; /* Reduced from 2.5rem */
   font-weight: 300;
   letter-spacing: 2px;
-  margin: 1.5rem 0;
+  margin: 0.5rem 0; /* Reduced margin */
   opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transform: translateY(50px) scale(0.95);
+  transition: transform 0.7s cubic-bezier(0.77, 0, 0.175, 1),
+  opacity 0.5s ease;
   transition-delay: calc(var(--delay) * 0.1s);
-  position: relative;
-  padding: 1rem;
+  padding: 0.8rem; /* Reduced padding */
   border-radius: 8px;
 }
 
 .fullscreen-menu.active .menu-item {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
 .menu-item:hover {
@@ -159,7 +176,6 @@
 }
 
 .menu-text {
-  position: relative;
   transition: transform 0.3s ease;
 }
 
@@ -167,7 +183,7 @@
   transform: translateX(10px);
 }
 
-/* Responsive Design */
+/* ================= Responsive ================= */
 @media (max-width: 768px) {
   .navbar-content {
     padding: 0 1rem;
@@ -191,6 +207,10 @@
   .line {
     width: 20px;
   }
+
+  .menu-inner {
+    padding-top: 3rem; /* Moved up from 6rem */
+  }
 }
 
 @media (max-width: 480px) {
@@ -203,20 +223,26 @@
   .menu-number {
     font-size: 0.875rem;
   }
+
+  .close-btn {
+    font-size: 3.5rem;
+    top: 1.5rem;
+    right: 1.5rem;
+  }
+
+  .menu-inner {
+    padding-top: 2.5rem; /* Moved up from 5rem */
+  }
 }
 
-/* Ensure smooth animations */
+/* ================= Global Reset ================= */
 * {
   box-sizing: border-box;
 }
 
-/* Focus states for accessibility */
-.hamburger-btn:focus {
-  outline: 2px solid #10b981;
-  outline-offset: 2px;
-}
-
-.menu-item:focus {
+.hamburger-btn:focus,
+.menu-item:focus,
+.close-btn:focus {
   outline: 2px solid #10b981;
   outline-offset: 2px;
 }

@@ -1,10 +1,12 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 interface Tile {
   id: number;
-  isCovering?: boolean;
-  isUncovering?: boolean;
+  isCovering: boolean;
+  isUncovering: boolean;
+  coverDelay: number;
+  uncoverDelay: number;
 }
 
 @Component({
@@ -22,22 +24,20 @@ export class TileDropAnimationComponent implements OnInit, OnDestroy {
   showTiles = true;
   animationFinished = false;
 
-  tiles: Tile[] = [
-    { id: 1},
-    { id: 2 },
-    { id: 3 },
-    { id: 4 },
-    { id: 5 },
-    { id: 6 },
-  ];
+  tiles: Tile[] = [];
+
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private ngZone: NgZone
+  ) {}
 
   ngOnInit(): void {
+    this.generateRandomTileSequence();
     this.startTileAnimation();
     this.preventScrolling();
   }
 
   ngOnDestroy(): void {
-    // Properly implemented - restore scrolling when component is destroyed
     this.allowScrolling();
   }
 
@@ -46,36 +46,62 @@ export class TileDropAnimationComponent implements OnInit, OnDestroy {
     this.animationFinished = false;
     this.preventScrolling();
 
-    // Phase 1: Cover
+    // Reset all tiles
     this.tiles.forEach(tile => {
-      setTimeout(() => tile.isCovering = true , tile.id);
+      tile.isCovering = false;
+      tile.isUncovering = false;
     });
+    this.cdr.detectChanges();
 
-    // Emit first wave complete
-    setTimeout(() => {
-      this.firstWaveComplete.emit();
-    this.tiles =this.tiles.reverse();
-    }, 1400);
+    // Run animation outside Angular zone for better performance
+    this.ngZone.runOutsideAngular(() => {
+      // Phase 1: Cover tiles one by one
+      this.tiles.forEach((tile, index) => {
+        setTimeout(() => {
+          this.ngZone.run(() => {
+            tile.isCovering = true;
+            console.log(`Tile ${index + 1} covering`);
+            this.cdr.detectChanges();
+          });
+        }, tile.coverDelay);
+      });
 
-    // Phase 2: Uncover
-    const uncoverStartDelay = 1400;
-    this.tiles.forEach(tile => {
-      setTimeout(() => tile.isUncovering = true, uncoverStartDelay + tile.id);
+      // Wait for covering phase to complete
+      const maxCoverTime = Math.max(...this.tiles.map(t => t.coverDelay)) + 700; // Reduced for faster animation
+      setTimeout(() => {
+        this.ngZone.run(() => {
+          this.firstWaveComplete.emit();
+          console.log('First wave complete');
+        });
+      }, maxCoverTime);
+
+      // Phase 2: Uncover tiles (the second wave you're missing!)
+      const uncoverStartDelay = 2200; // Start uncovering after 2.2 seconds
+      this.tiles.forEach((tile, index) => {
+        setTimeout(() => {
+          this.ngZone.run(() => {
+            tile.isUncovering = true;
+            console.log(`Tile ${index + 1} uncovering`);
+            this.cdr.detectChanges();
+          });
+        }, uncoverStartDelay + tile.uncoverDelay);
+      });
+
+      // Complete the animation
+      const maxUncoverTime = uncoverStartDelay + Math.max(...this.tiles.map(t => t.uncoverDelay)) + 950; // Adjusted for faster animation
+      setTimeout(() => {
+        this.ngZone.run(() => {
+          this.animationComplete.emit();
+          this.animationFinished = true;
+          this.showTiles = false;
+          this.allowScrolling();
+          console.log('Animation complete');
+          this.cdr.detectChanges();
+        });
+      }, maxUncoverTime);
     });
-
-
-    // Complete removal
-    setTimeout(() => {
-      this.animationComplete.emit();
-      this.animationFinished = true;
-      this.showTiles = false;
-      this.allowScrolling();
-    }, uncoverStartDelay * 3);
   }
 
-  get animationSpeed(){
-    return Math.random() * (2.5 - 1) + 1;
-  }
   private preventScrolling(): void {
     if (typeof document !== 'undefined') {
       document.body.style.overflow = 'hidden';
@@ -88,5 +114,70 @@ export class TileDropAnimationComponent implements OnInit, OnDestroy {
       document.body.style.overflow = '';
       document.documentElement.style.overflow = '';
     }
+  }
+
+  private generateRandomTileSequence(): void {
+    // Create array of tile IDs
+    const tileIds = [1, 2, 3, 4];
+
+    // Define specific sequence: 2nd, 3rd, 4th, 1st (positions 1, 2, 3, 0)
+    const coverSequence = [1, 2, 3, 0]; // Index positions for tiles 2, 3, 4, 1
+    const uncoverSequence = [0, 3, 2, 1]; // Reverse: 1st, 4th, 3rd, 2nd (positions 0, 3, 2, 1)
+
+    // Generate delays based on sequence (60ms apart for faster stagger)
+    const baseDelay = 60;
+
+    // Create tiles with sequence-based delays
+    this.tiles = tileIds.map((id, index) => {
+      // Find position in cover sequence
+      const coverPosition = coverSequence.indexOf(index);
+      const uncoverPosition = uncoverSequence.indexOf(index);
+
+      return {
+        id,
+        isCovering: false,
+        isUncovering: false,
+        coverDelay: coverPosition * baseDelay,
+        uncoverDelay: uncoverPosition * baseDelay
+      };
+    });
+
+    console.log('Generated tile sequence:');
+    console.log('Cover order: Tile 2, Tile 3, Tile 4, Tile 1');
+    console.log('Uncover order: Tile 1, Tile 4, Tile 3, Tile 2');
+    this.tiles.forEach(tile => {
+      console.log(`Tile ${tile.id}: cover delay ${tile.coverDelay}ms, uncover delay ${tile.uncoverDelay}ms`);
+    });
+  }
+
+  private generateRandomDelays(count: number, minDelay: number, maxDelay: number): number[] {
+    const delays: number[] = [];
+
+    for (let i = 0; i < count; i++) {
+      const randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+      delays.push(randomDelay);
+    }
+
+    return delays.sort((a, b) => a - b); // Optional: sort to maintain some order
+  }
+
+  // Method to regenerate random sequence (useful for testing)
+  regenerateRandomSequence(): void {
+    this.generateRandomTileSequence();
+    console.log('Regenerated random sequence');
+  }
+
+  // Helper methods for template
+  trackByTileId(index: number, tile: Tile): number {
+    return tile.id;
+  }
+
+  getTransitionDelay(tile: Tile): number {
+    if (tile.isCovering && !tile.isUncovering) {
+      return tile.coverDelay;
+    } else if (tile.isUncovering) {
+      return tile.uncoverDelay;
+    }
+    return 0;
   }
 }
