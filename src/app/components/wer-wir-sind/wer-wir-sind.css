@@ -34,9 +34,10 @@
   width: 100%;
   z-index: 10;
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* Changed to center instead of space-between */
   align-items: center;
-  padding: 0 18%;
+  gap: 8%; /* Added gap between words for proper spacing */
+  padding: 0 10%; /* Reduced padding */
 }
 
 .text-section {

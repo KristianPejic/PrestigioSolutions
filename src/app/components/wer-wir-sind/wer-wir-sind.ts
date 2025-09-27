@@ -14,9 +14,9 @@ export class WerWirSindComponent implements OnInit {
 
   // 3 lines positioned to kiss the edges and go through middle
   lines: any[] = [
-    { position: '19%', highlight: false },    // Kiss the left edge of "WER"
+    { position: '22%', highlight: false },    // Kiss the left edge of "WER"
     { position: '50%', highlight: true },     // Through the middle of "WIR"
-    { position: '83.2%', highlight: false }  // Kiss the right edge of "SIND"
+    { position: '78%', highlight: false }     // Kiss the right edge of "SIND"
   ];
 
   constructor(private elementRef: ElementRef) {}
