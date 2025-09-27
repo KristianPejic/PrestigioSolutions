@@ -1,5 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+export type AnimationDirection = 'top-right-to-bottom-left' | 'top-left-to-bottom-right' | 'bottom-left-to-top-right' | 'bottom-right-to-top-left';
+export type EasingType = 'smooth' | 'bouncy' | 'sharp' | 'elastic';
 
 @Component({
   selector: 'app-navbar',
@@ -9,8 +12,21 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./navbar.css']
 })
 export class NavbarComponent {
-  @Input() showNavbar = false;
+  @Input() showNavbar = true; // Show navbar by default now
+  @Input() animationDirection: AnimationDirection = 'top-right-to-bottom-left';
+  @Input() animationEasing: EasingType = 'smooth';
+  @Input() animationDuration: number = 1400;
+  @Input() pauseDuration: number = 20;
+  @Input() maskBackground: string = '#87CEEB';
+  @Input() showLoadingIndicator: boolean = false;
+  @Input() loadingText: string = 'Loading Menu...';
+
+  // Menu and animation state
   isMenuOpen = false;
+  showMask = false;
+  isCovering = false;
+  isUncovering = false;
+  isAnimating = false;
 
   menuLinks = [
     { name: 'Home', href: '#home' },
@@ -21,24 +37,176 @@ export class NavbarComponent {
     { name: 'Socials', href: '#socials' }
   ];
 
-  toggleMenu(): void {
-    this.isMenuOpen = !this.isMenuOpen;
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private ngZone: NgZone
+  ) {}
 
-    if (this.isMenuOpen) {
-      document.body.style.overflow = 'hidden';
+  toggleMenu(): void {
+    if (this.isAnimating) return; // Prevent multiple clicks during animation
+
+    if (!this.isMenuOpen) {
+      // Opening menu - start animation
+      this.startMenuOpenAnimation();
     } else {
-      document.body.style.overflow = '';
+      // Closing menu - start close animation
+      this.startMenuCloseAnimation();
     }
   }
 
   handleMenuClick(link: any, event: Event): void {
     event.preventDefault();
+    console.log('Navigating to:', link.name);
     this.closeMenu();
-    // Add your routing logic if needed
+    // Add your routing logic here
+    // this.router.navigate([link.href]);
   }
 
   closeMenu(): void {
-    this.isMenuOpen = false;
-    document.body.style.overflow = '';
+    if (this.isAnimating) return;
+    this.startMenuCloseAnimation();
+  }
+
+  // Animation when opening menu
+  private startMenuOpenAnimation(): void {
+    this.isAnimating = true;
+    this.showMask = true;
+    this.isCovering = false;
+    this.isUncovering = false;
+
+    console.log('Starting menu open animation');
+
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
+
+    this.ngZone.runOutsideAngular(() => {
+      // Small delay then start covering
+      setTimeout(() => {
+        this.ngZone.run(() => {
+          this.isCovering = true;
+          this.cdr.detectChanges();
+        });
+      }, 50);
+
+      // After covering is complete, show menu
+      const coverCompleteTime = 50 + this.animationDuration + 100;
+      setTimeout(() => {
+        this.ngZone.run(() => {
+          console.log('Screen covered - showing menu');
+          this.isMenuOpen = true;
+          this.cdr.detectChanges();
+        });
+      }, coverCompleteTime);
+
+      // Start uncovering to reveal menu
+      const uncoverStartTime = coverCompleteTime + this.pauseDuration;
+      setTimeout(() => {
+        this.ngZone.run(() => {
+          this.isUncovering = true;
+          this.cdr.detectChanges();
+        });
+      }, uncoverStartTime);
+
+      // Animation complete
+      const totalTime = uncoverStartTime + this.animationDuration + 100;
+      setTimeout(() => {
+        this.ngZone.run(() => {
+          this.showMask = false;
+          this.isCovering = false;
+          this.isUncovering = false;
+          this.isAnimating = false;
+          console.log('Menu open animation complete');
+          this.cdr.detectChanges();
+        });
+      }, totalTime);
+    });
+  }
+
+  // Animation when closing menu
+  private startMenuCloseAnimation(): void {
+    this.isAnimating = true;
+    this.showMask = true;
+    this.isCovering = false;
+    this.isUncovering = false;
+
+    console.log('Starting menu close animation');
+
+    this.ngZone.runOutsideAngular(() => {
+      // Start covering to hide menu
+      setTimeout(() => {
+        this.ngZone.run(() => {
+          this.isCovering = true;
+          this.cdr.detectChanges();
+        });
+      }, 50);
+
+      // After covering, hide menu
+      const coverCompleteTime = 50 + this.animationDuration + 100;
+      setTimeout(() => {
+        this.ngZone.run(() => {
+          console.log('Screen covered - hiding menu');
+          this.isMenuOpen = false;
+          this.cdr.detectChanges();
+        });
+      }, coverCompleteTime);
+
+      // Start uncovering to reveal main content
+      const uncoverStartTime = coverCompleteTime + this.pauseDuration;
+      setTimeout(() => {
+        this.ngZone.run(() => {
+          this.isUncovering = true;
+          this.cdr.detectChanges();
+        });
+      }, uncoverStartTime);
+
+      // Animation complete
+      const totalTime = uncoverStartTime + this.animationDuration + 100;
+      setTimeout(() => {
+        this.ngZone.run(() => {
+          this.showMask = false;
+          this.isCovering = false;
+          this.isUncovering = false;
+          this.isAnimating = false;
+
+          // Restore body scroll
+          document.body.style.overflow = '';
+
+          console.log('Menu close animation complete');
+          this.cdr.detectChanges();
+        });
+      }, totalTime);
+    });
+  }
+
+  getMaskClasses(): string {
+    let classes = 'diagonal-mask';
+
+    // Add direction class
+    switch (this.animationDirection) {
+      case 'top-right-to-bottom-left':
+        classes += ' tr-bl';
+        break;
+      case 'top-left-to-bottom-right':
+        classes += ' tl-br';
+        break;
+      case 'bottom-left-to-top-right':
+        classes += ' bl-tr';
+        break;
+      case 'bottom-right-to-top-left':
+        classes += ' br-tl';
+        break;
+    }
+
+    // Add easing class
+    classes += ` ${this.animationEasing}`;
+
+    // Add state classes
+    if (this.isCovering && !this.isUncovering) {
+      classes += ' mask-covering';
+    } else if (this.isUncovering) {
+      classes += ' mask-uncovering';
+    }
+
+    return classes;
   }
 }

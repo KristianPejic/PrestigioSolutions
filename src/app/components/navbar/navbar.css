@@ -1,3 +1,124 @@
+/* ================= Diagonal Mask Animation ================= */
+.mask-animation-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999999; /* Above everything */
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+}
+
+.diagonal-mask {
+  position: absolute;
+  width: 300%; /* Much larger to ensure coverage */
+  height: 300%; /* Much larger to ensure coverage */
+  top: -100%; /* Start from way outside the viewport */
+  left: -100%; /* Start from way outside the viewport */
+  transform-origin: center center;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+/* Direction Classes - Completely redesigned for full coverage */
+.diagonal-mask.tr-bl {
+  transform: translateX(150%) translateY(-150%) scale(0) rotate(45deg) translateZ(0);
+}
+.diagonal-mask.tr-bl.mask-covering {
+  transform: translateX(0%) translateY(0%) scale(2) rotate(45deg) translateZ(0);
+}
+.diagonal-mask.tr-bl.mask-uncovering {
+  transform: translateX(-150%) translateY(150%) scale(0) rotate(45deg) translateZ(0);
+}
+
+.diagonal-mask.tl-br {
+  transform: translateX(-150%) translateY(-150%) scale(0) rotate(-45deg) translateZ(0);
+}
+.diagonal-mask.tl-br.mask-covering {
+  transform: translateX(0%) translateY(0%) scale(2) rotate(-45deg) translateZ(0);
+}
+.diagonal-mask.tl-br.mask-uncovering {
+  transform: translateX(150%) translateY(150%) scale(0) rotate(-45deg) translateZ(0);
+}
+
+.diagonal-mask.bl-tr {
+  transform: translateX(-150%) translateY(150%) scale(0) rotate(45deg) translateZ(0);
+}
+.diagonal-mask.bl-tr.mask-covering {
+  transform: translateX(0%) translateY(0%) scale(2) rotate(45deg) translateZ(0);
+}
+.diagonal-mask.bl-tr.mask-uncovering {
+  transform: translateX(150%) translateY(-150%) scale(0) rotate(45deg) translateZ(0);
+}
+
+.diagonal-mask.br-tl {
+  transform: translateX(150%) translateY(150%) scale(0) rotate(-45deg) translateZ(0);
+}
+.diagonal-mask.br-tl.mask-covering {
+  transform: translateX(0%) translateY(0%) scale(2) rotate(-45deg) translateZ(0);
+}
+.diagonal-mask.br-tl.mask-uncovering {
+  transform: translateX(-150%) translateY(-150%) scale(0) rotate(-45deg) translateZ(0);
+}
+
+/* Easing Types */
+.diagonal-mask.smooth {
+  transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+}
+.diagonal-mask.bouncy {
+  transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+.diagonal-mask.sharp {
+  transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.diagonal-mask.elastic {
+  transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Loading Indicator */
+.loading-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  z-index: 99999999;
+  pointer-events: none;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-left: 3px solid #10b981;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-text {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #374151;
+  margin: 0;
+  opacity: 0.9;
+  text-align: center;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 /* ================= Navbar Wrapper ================= */
 .navbar-wrapper {
   position: fixed;
@@ -61,6 +182,20 @@
   justify-content: center;
   align-items: center;
   gap: 4px;
+  transition: transform 0.3s ease;
+}
+
+.hamburger-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.hamburger-btn.animating {
+  pointer-events: none;
+}
+
+.hamburger-btn:hover:not(:disabled) {
+  transform: scale(1.1);
 }
 
 .line {
@@ -68,12 +203,25 @@
   width: 24px;
   height: 2px;
   background: white;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
   transform-origin: center;
 }
 
-.hamburger-btn:hover .line {
+.hamburger-btn:hover:not(:disabled) .line {
   background: #10b981;
+}
+
+/* Hamburger Animation States */
+.hamburger-btn.active .line1 {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger-btn.active .line2 {
+  opacity: 0;
+}
+
+.hamburger-btn.active .line3 {
+  transform: rotate(-45deg) translate(7px, -6px);
 }
 
 /* ================= Fullscreen Menu ================= */
@@ -89,19 +237,17 @@
   z-index: 999999;
   opacity: 0;
   visibility: hidden;
-  transform: translate(-100%, 100%) rotate(-10deg) scale(0.95);
-  transition: transform 0.7s cubic-bezier(0.77, 0, 0.175, 1),
-  opacity 0.5s ease,
-  visibility 0s linear 0.7s;
+  /* Removed the transform animations - menu will appear instantly */
 }
 
 .fullscreen-menu.active {
   opacity: 1;
   visibility: visible;
-  transform: translate(0, 0) rotate(0deg) scale(1);
-  transition: transform 0.7s cubic-bezier(0.77, 0, 0.175, 1),
-  opacity 0.5s ease,
-  visibility 0s;
+  /* No transform needed - just show/hide */
+}
+
+.fullscreen-menu.animating {
+  pointer-events: none;
 }
 
 .menu-inner {
@@ -109,7 +255,7 @@
   padding: 2rem;
   text-align: center;
   position: relative;
-  padding-top: 1rem; /* Minimal top padding */
+  padding-top: 1rem;
 }
 
 /* ================= Close Button ================= */
@@ -127,14 +273,19 @@
   transition: color 0.3s ease, transform 0.4s ease;
 }
 
-.close-btn:hover {
+.close-btn:hover:not(:disabled) {
   color: #10b981;
   transform: scale(1.25) rotate(90deg);
 }
 
+.close-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 /* ================= Menu Items ================= */
 .menu-nav {
-  margin-top: 0; /* Keep no extra margin */
+  margin-top: 0;
 }
 
 .menu-item {
@@ -144,27 +295,31 @@
   gap: 2rem;
   color: white;
   text-decoration: none;
-  font-size: 2rem; /* Reduced from 2.5rem */
+  font-size: 2rem;
   font-weight: 300;
   letter-spacing: 2px;
-  margin: 0.5rem 0; /* Reduced margin */
-  opacity: 0;
-  transform: translateY(50px) scale(0.95);
-  transition: transform 0.7s cubic-bezier(0.77, 0, 0.175, 1),
-  opacity 0.5s ease;
-  transition-delay: calc(var(--delay) * 0.1s);
-  padding: 0.8rem; /* Reduced padding */
+  margin: 0.5rem 0;
+  opacity: 1; /* Always visible when menu is active */
+  transform: translateY(0) scale(1); /* No initial transform */
+  transition: color 0.3s ease, background 0.3s ease;
+  padding: 0.8rem;
   border-radius: 8px;
 }
 
+/* Remove the delayed animation - items appear instantly */
 .fullscreen-menu.active .menu-item {
   opacity: 1;
   transform: translateY(0) scale(1);
 }
 
-.menu-item:hover {
+.menu-item:hover:not(.disabled) {
   color: #10b981;
   background: rgba(16, 185, 129, 0.1);
+}
+
+.menu-item.disabled {
+  pointer-events: none;
+  opacity: 0.5;
 }
 
 .menu-number {
@@ -179,7 +334,7 @@
   transition: transform 0.3s ease;
 }
 
-.menu-item:hover .menu-text {
+.menu-item:hover:not(.disabled) .menu-text {
   transform: translateX(10px);
 }
 
@@ -209,7 +364,18 @@
   }
 
   .menu-inner {
-    padding-top: 3rem; /* Moved up from 6rem */
+    padding-top: 3rem;
+  }
+
+  .diagonal-mask {
+    width: 350%; /* Even more coverage for mobile */
+    height: 350%;
+    top: -125%;
+    left: -125%;
+  }
+
+  .loading-text {
+    font-size: 1rem;
   }
 }
 
@@ -231,7 +397,24 @@
   }
 
   .menu-inner {
-    padding-top: 2.5rem; /* Moved up from 5rem */
+    padding-top: 2.5rem;
+  }
+
+  .diagonal-mask {
+    width: 400%; /* Maximum coverage for small screens */
+    height: 400%;
+    top: -150%;
+    left: -150%;
+  }
+
+  .spinner {
+    width: 32px;
+    height: 32px;
+    border-width: 2px;
+  }
+
+  .loading-text {
+    font-size: 0.9rem;
   }
 }
 
@@ -245,4 +428,39 @@
 .close-btn:focus {
   outline: 2px solid #10b981;
   outline-offset: 2px;
+}
+
+/* ================= Performance Optimizations ================= */
+.diagonal-mask {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  contain: layout style paint;
+}
+
+/* ================= Browser Compatibility ================= */
+@supports not (backdrop-filter: blur(10px)) {
+  .diagonal-mask {
+    background: #000000 !important;
+  }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .diagonal-mask {
+    transition-duration: 0.3s !important;
+  }
+
+  .spinner {
+    animation-duration: 2s;
+  }
+
+  .fullscreen-menu {
+    transition-duration: 0.3s !important;
+  }
+
+  .menu-item {
+    transition-duration: 0.2s !important;
+  }
 }

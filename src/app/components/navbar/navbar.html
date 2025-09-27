@@ -1,3 +1,20 @@
+<!-- Diagonal Mask Animation Overlay (shows when menu is toggled) -->
+<ng-container *ngIf="showMask">
+  <div class="mask-animation-container">
+    <div class="diagonal-mask"
+         [class]="getMaskClasses()"
+         [style.background]="maskBackground"
+         [style.transition-duration]="animationDuration + 'ms'">
+    </div>
+
+    <!-- Optional loading indicator -->
+    <div class="loading-indicator" *ngIf="showLoadingIndicator && isCovering && !isUncovering">
+      <div class="spinner"></div>
+      <p class="loading-text">{{ loadingText }}</p>
+    </div>
+  </div>
+</ng-container>
+
 <!-- Navbar Container -->
 <nav class="navbar-wrapper" [class.visible]="showNavbar">
   <div class="navbar-content">
@@ -11,9 +28,12 @@
     <!-- Hamburger Button -->
     <button
       class="hamburger-btn"
+      [class.active]="isMenuOpen"
+      [class.animating]="isAnimating"
       (click)="toggleMenu()"
       type="button"
-      aria-label="Toggle navigation menu">
+      aria-label="Toggle navigation menu"
+      [disabled]="isAnimating">
       <span class="line line1"></span>
       <span class="line line2"></span>
       <span class="line line3"></span>
@@ -22,18 +42,26 @@
 </nav>
 
 <!-- Full Screen Menu -->
-<div class="fullscreen-menu" [class.active]="isMenuOpen" (click)="closeMenu()">
+<div class="fullscreen-menu"
+     [class.active]="isMenuOpen"
+     [class.animating]="isAnimating"
+     (click)="closeMenu()">
   <div class="menu-inner" (click)="$event.stopPropagation()">
 
-    <!-- BIG CLOSE X -->
-    <button class="close-btn" (click)="closeMenu()" aria-label="Close menu">✕</button>
+    <!-- Close Button -->
+    <button class="close-btn"
+            (click)="closeMenu()"
+            [disabled]="isAnimating"
+            aria-label="Close menu">✕</button>
 
+    <!-- Menu Navigation -->
     <nav class="menu-nav">
       <a
         *ngFor="let link of menuLinks; let i = index"
         href="#"
         class="menu-item"
         [style.--delay]="i"
+        [class.disabled]="isAnimating"
         (click)="handleMenuClick(link, $event)">
         <span class="menu-number">{{ (i + 1).toString().padStart(2, '0') }}</span>
         <span class="menu-text">{{ link.name }}</span>
