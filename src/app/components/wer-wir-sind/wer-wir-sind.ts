@@ -65,61 +65,61 @@ export class WerWirSindComponent implements OnInit {
 
       if (this.isMobile) {
         this.startMobileSequentialAnimation();
+      } else {
+        this.startDesktopAnimation();
       }
     }
   }
 
-  private startMobileSequentialAnimation(): void {
-    const textSections = this.elementRef.nativeElement.querySelectorAll('.text-section');
+  private startDesktopAnimation(): void {
+    // For desktop, just make WIR blue when the middle line extends
+    const wirText = this.elementRef.nativeElement.querySelector('.highlight-text');
 
-    // Reset all word states
-    textSections.forEach((section: HTMLElement) => {
-      section.classList.remove('word-hit');
+    setTimeout(() => {
+      if (wirText) {
+        wirText.classList.add('line-active');
+      }
+    }, 1000); // Delay to match line extension
+  }
+
+  private startMobileSequentialAnimation(): void {
+    const textSections = this.elementRef.nativeElement.querySelectorAll('.portfolio-heading');
+
+    // Reset all text colors
+    textSections.forEach((heading: HTMLElement) => {
+      heading.classList.remove('line-active');
     });
 
-    // Sequential word hitting with circling animation
+    // Sequential text coloring based on faster line movement (4s total)
+    // Line hits WER first (at 12.5% of 4s = 0.5s)
     setTimeout(() => {
-      // Hit WER - when persistent line reaches WER position
-      textSections[0].classList.add('word-hit');
+      textSections[0].classList.add('line-active'); // WER turns blue
+    }, 500);
 
-      // Remove after circling animation completes
-      setTimeout(() => {
-        textSections[0].classList.remove('word-hit');
-      }, 2000);
-    }, 1000); // 12.5% of 8s animation
-
+    // Line leaves WER and hits WIR (at 50% of 4s = 2s)
     setTimeout(() => {
-      // Hit WIR - when persistent line reaches WIR position
-      textSections[1].classList.add('word-hit');
+      textSections[0].classList.remove('line-active'); // WER back to white
+      textSections[1].classList.add('line-active'); // WIR turns blue
+    }, 2000);
 
-      // Remove after circling animation completes
-      setTimeout(() => {
-        textSections[1].classList.remove('word-hit');
-      }, 2000);
-    }, 4000); // 50% of 8s animation
-
+    // Line leaves WIR and hits SIND (at 87.5% of 4s = 3.5s)
     setTimeout(() => {
-      // Hit SIND - when persistent line reaches SIND position
-      textSections[2].classList.add('word-hit');
-
-      // Remove after circling animation completes
-      setTimeout(() => {
-        textSections[2].classList.remove('word-hit');
-      }, 2000);
-    }, 7000); // 87.5% of 8s animation
+      textSections[1].classList.remove('line-active'); // WIR back to white
+      textSections[2].classList.add('line-active'); // SIND turns blue
+    }, 3500);
   }
 
   private resetAnimation(): void {
     const container = this.elementRef.nativeElement.querySelector('.container');
-    const textSections = this.elementRef.nativeElement.querySelectorAll('.text-section');
+    const textHeadings = this.elementRef.nativeElement.querySelectorAll('.portfolio-heading');
 
     if (container) {
       container.classList.remove('animate-lines');
     }
 
-    // Reset all word states
-    textSections.forEach((section: HTMLElement) => {
-      section.classList.remove('word-hit');
+    // Reset all text colors
+    textHeadings.forEach((heading: HTMLElement) => {
+      heading.classList.remove('line-active');
     });
   }
 }
