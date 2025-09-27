@@ -16,10 +16,10 @@
 
 .diagonal-mask {
   position: absolute;
-  width: 300%; /* Much larger to ensure coverage */
-  height: 300%; /* Much larger to ensure coverage */
-  top: -100%; /* Start from way outside the viewport */
-  left: -100%; /* Start from way outside the viewport */
+  width: 300%;
+  height: 300%;
+  top: -100%;
+  left: -100%;
   transform-origin: center center;
   will-change: transform;
   backface-visibility: hidden;
@@ -27,45 +27,45 @@
   transform-style: preserve-3d;
 }
 
-/* Direction Classes - Completely redesigned for full coverage */
+/* Direction Classes */
 .diagonal-mask.tr-bl {
-  transform: translateX(150%) translateY(-150%) scale(0) rotate(45deg) translateZ(0);
+  transform: translateX(150%) translateY(-150%) scale(0) rotate(45deg);
 }
 .diagonal-mask.tr-bl.mask-covering {
-  transform: translateX(0%) translateY(0%) scale(2) rotate(45deg) translateZ(0);
+  transform: translateX(0%) translateY(0%) scale(2) rotate(45deg);
 }
 .diagonal-mask.tr-bl.mask-uncovering {
-  transform: translateX(-150%) translateY(150%) scale(0) rotate(45deg) translateZ(0);
+  transform: translateX(-150%) translateY(150%) scale(0) rotate(45deg);
 }
 
 .diagonal-mask.tl-br {
-  transform: translateX(-150%) translateY(-150%) scale(0) rotate(-45deg) translateZ(0);
+  transform: translateX(-150%) translateY(-150%) scale(0) rotate(-45deg);
 }
 .diagonal-mask.tl-br.mask-covering {
-  transform: translateX(0%) translateY(0%) scale(2) rotate(-45deg) translateZ(0);
+  transform: translateX(0%) translateY(0%) scale(2) rotate(-45deg);
 }
 .diagonal-mask.tl-br.mask-uncovering {
-  transform: translateX(150%) translateY(150%) scale(0) rotate(-45deg) translateZ(0);
+  transform: translateX(150%) translateY(150%) scale(0) rotate(-45deg);
 }
 
 .diagonal-mask.bl-tr {
-  transform: translateX(-150%) translateY(150%) scale(0) rotate(45deg) translateZ(0);
+  transform: translateX(-150%) translateY(150%) scale(0) rotate(45deg);
 }
 .diagonal-mask.bl-tr.mask-covering {
-  transform: translateX(0%) translateY(0%) scale(2) rotate(45deg) translateZ(0);
+  transform: translateX(0%) translateY(0%) scale(2) rotate(45deg);
 }
 .diagonal-mask.bl-tr.mask-uncovering {
-  transform: translateX(150%) translateY(-150%) scale(0) rotate(45deg) translateZ(0);
+  transform: translateX(150%) translateY(-150%) scale(0) rotate(45deg);
 }
 
 .diagonal-mask.br-tl {
-  transform: translateX(150%) translateY(150%) scale(0) rotate(-45deg) translateZ(0);
+  transform: translateX(150%) translateY(150%) scale(0) rotate(-45deg);
 }
 .diagonal-mask.br-tl.mask-covering {
-  transform: translateX(0%) translateY(0%) scale(2) rotate(-45deg) translateZ(0);
+  transform: translateX(0%) translateY(0%) scale(2) rotate(-45deg);
 }
 .diagonal-mask.br-tl.mask-uncovering {
-  transform: translateX(-150%) translateY(-150%) scale(0) rotate(-45deg) translateZ(0);
+  transform: translateX(-150%) translateY(-150%) scale(0) rotate(-45deg);
 }
 
 /* Easing Types */
@@ -125,7 +125,7 @@
   top: 0;
   right: 0;
   z-index: 999998;
-  background: transparent; /* no background */
+  background: transparent;
   padding: 1rem 2rem;
   opacity: 0;
   visibility: hidden;
@@ -139,7 +139,7 @@
 
 .navbar-content {
   display: flex;
-  justify-content: flex-end; /* push hamburger to right */
+  justify-content: flex-end;
   align-items: center;
 }
 
@@ -159,7 +159,7 @@
   align-items: center;
   gap: 6px;
   transition: transform 0.3s ease;
-  outline: none; /* remove focus outline */
+  outline: none;
 }
 
 .hamburger-btn:disabled {
@@ -169,10 +169,6 @@
 
 .hamburger-btn.animating {
   pointer-events: none;
-}
-
-.hamburger-btn:focus {
-  outline: none; /* remove focus outline */
 }
 
 .hamburger-btn:hover:not(:disabled) {
@@ -218,6 +214,7 @@
   z-index: 999999;
   opacity: 0;
   visibility: hidden;
+  transition: opacity 0.3s ease;
 }
 
 .fullscreen-menu.active {
@@ -250,11 +247,7 @@
   z-index: 10000;
   transition: color 0.3s ease, transform 0.4s ease;
   color: white;
-  outline: none; /* remove focus outline */
-}
-
-.close-btn:focus {
-  outline: none; /* remove focus outline */
+  outline: none;
 }
 
 .close-btn:hover:not(:disabled) {
@@ -284,16 +277,10 @@
   font-size: 2rem;
   font-weight: 300;
   letter-spacing: 2px;
-  transition: color 0.3s ease, background 0.3s ease, transform 0.3s ease;
   padding: 1rem 1.5rem;
   border-radius: 8px;
-  outline: none; /* remove focus outline */
-  opacity: 1; /* Always visible when menu is active */
-  transform: translateY(0) scale(1); /* No initial transform */
-}
-
-.menu-item:focus {
-  outline: none; /* remove focus outline */
+  outline: none;
+  background: transparent;
 }
 
 .menu-item .menu-number {
@@ -305,16 +292,16 @@
 }
 
 .menu-item .menu-text {
-  color: white;
-  transition: transform 0.3s ease;
+  color: white; /* default text color */
+  transition: transform 0.3s ease, color 0.3s ease;
 }
 
 .menu-item:hover:not(.disabled) {
-  color: var(--primary-color);
   background: rgba(var(--primary-color-rgb), 0.15);
 }
 
 .menu-item:hover:not(.disabled) .menu-text {
+  color: var(--primary-color); /* text changes on hover */
   transform: translateX(12px);
 }
 
@@ -348,7 +335,7 @@
   }
 
   .diagonal-mask {
-    width: 350%; /* Even more coverage for mobile */
+    width: 350%;
     height: 350%;
     top: -125%;
     left: -125%;
@@ -390,7 +377,7 @@
   }
 
   .diagonal-mask {
-    width: 400%; /* Maximum coverage for small screens */
+    width: 400%;
     height: 400%;
     top: -150%;
     left: -150%;
