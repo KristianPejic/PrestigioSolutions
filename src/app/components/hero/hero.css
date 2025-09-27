@@ -1,6 +1,6 @@
 /* Content layer under curtain */
 .z-15 {
-  z-index: 10; /* Changed from 15 to 150 to be above tiles */
+  z-index: 10;
 }
 
 /* Make sure text has pointer-events: none */
@@ -14,7 +14,7 @@
   pointer-events: none;
 }
 
-/* Text starts animating when first wave covers (but hidden behind white tiles) */
+/* Text starts animating when first wave covers (but hidden behind tiles) */
 .show-scrolling-text .scrolling-text-wrapper {
   opacity: 1;
 }
@@ -69,14 +69,12 @@
 }
 
 /* Hero Content Overlay Styles */
-/* Initially hidden - no animations */
 .hero-content-hidden .hero-content-wrapper,
 .hero-content-hidden {
   opacity: 0;
   visibility: hidden;
 }
 
-/* Visible when second wave reveals content */
 .hero-content-visible .hero-content-wrapper,
 .hero-content-visible {
   opacity: 1;
@@ -85,14 +83,19 @@
 
 /* Hero title styling */
 .hero-title {
+  color: var(--text-light);
   text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
 }
 
-.hero-subtitle {
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+.hero-title .text-primary {
+  color: var(--primary-text-color);
 }
 
+.hero-subtitle {
+  color: var(--text-light);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
 
 /* Responsive adjustments for scrolling text */
 @media (max-width: 1200px) {
@@ -117,8 +120,6 @@
   .hero-subtitle {
     font-size: 1rem !important;
   }
-
-
 }
 
 @media (max-width: 480px) {
@@ -135,8 +136,6 @@
   .hero-subtitle {
     font-size: 0.875rem !important;
   }
-
-
 }
 
 /* Performance optimization */
@@ -157,8 +156,7 @@
     animation: none;
   }
 
-  .hero-content-wrapper
-  {
+  .hero-content-wrapper {
     transition: opacity 0.2s ease;
     transform: none;
   }
