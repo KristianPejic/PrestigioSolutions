@@ -1,75 +1,93 @@
-<div class="relative w-full h-screen overflow-hidden bg-black">
+<div class="hero-slider relative w-full h-screen overflow-hidden bg-black">
 
-  <!-- CONTENT LAYER (Under the curtain - gets revealed) -->
-  <div class="absolute inset-0 z-15">
+  <!-- NAVBAR (always visible on top) -->
+  <app-navbar [showNavbar]="showNavbar"
+              class="fixed top-0 left-0 w-full z-[9999] pointer-events-auto"></app-navbar>
 
-    <!-- NAVBAR (under curtain, gets revealed) -->
-    <app-navbar [showNavbar]="showNavbar"></app-navbar>
-
-    <!-- SCROLLING TEXT OVERLAY -->
-    <div class="flex items-center pointer-events-none h-full"
-         [ngClass]="{
-           'show-scrolling-text': showScrollingText,
-           'reveal-text': revealText
-         }">
-
-      <!-- Scrolling Text Container -->
-      <div class="scrolling-text-wrapper">
-        <div class="scrolling-text">
-          LOREM IPSUM DOLOR SIT AMET CONSECTETUR ADIPISCING ELIT SED DO EIUSMOD TEMPOR INCIDIDUNT UT LABORE ET DOLORE MAGNA ALIQUA UT ENIM AD MINIM VENIAM QUIS NOSTRUD EXERCITATION ULLAMCO
-        </div>
+  <!-- SCROLLING TEXT (appears on all slides) -->
+  <div class="absolute inset-0 z-10 flex items-center pointer-events-none"
+       [ngClass]="{
+         'show-scrolling-text': showScrollingText,
+         'reveal-text': revealText
+       }">
+    <div class="scrolling-text-wrapper">
+      <div class="scrolling-text">
+        LOREM IPSUM DOLOR SIT AMET CONSECTETUR ADIPISCING ELIT SED DO EIUSMOD TEMPOR INCIDIDUNT UT LABORE ET DOLORE MAGNA ALIQUA UT ENIM AD MINIM VENIAM QUIS NOSTRUD EXERCITATION ULLAMCO
       </div>
     </div>
+  </div>
 
-    <!-- HERO CONTENT OVERLAY (Below tile animation) -->
-    <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10"
-         [ngClass]="{
-           'hero-content-hidden': !showHeroContent,
-           'hero-content-visible': showHeroContent
-         }">
+  <!-- SLIDE 1: HERO CONTENT -->
+  <div class="hero-slide" [class.active]="activeSlide === 0">
+    <div class="absolute inset-0 z-0 flex flex-col items-center justify-center">
 
-      <div class="hero-content-wrapper mb-8 flex justify-center">
-        <div class="inline-block text-center sm:text-left">
-          <p class="font-semibold tracking-wide
-              text-sm sm:text-base md:text-lg lg:text-xl mb-2
-              text-center sm:text-left text-white">
+      <div class="hero-content-wrapper mb-8 flex justify-center text-center">
+        <div>
+          <p class="font-semibold tracking-wide text-sm sm:text-base md:text-lg lg:text-xl mb-2 text-white">
             Software nach Maß
           </p>
-          <h1 class="inline-block font-black leading-tight tracking-tight
-               text-4xl sm:text-6xl lg:text-7xl xl:text-8xl text-center text-white">
+          <h1 class="font-black leading-tight tracking-tight text-4xl sm:text-6xl lg:text-7xl xl:text-8xl text-white">
             <span class="text-primary">P</span>RESTIGIO
             <span class="text-primary">S</span>OLUTIONS
           </h1>
         </div>
       </div>
 
-      <!-- Hero Button -->
-      <div class="relative z-[200] group cursor-pointer" (click)="onDiscoverClick()">
+      <!-- HERO BUTTON -->
+      <div class="relative z-[200] group cursor-pointer">
         <div
-          class="relative z-10 px-8 py-4 border-2 bg-transparent font-bold text-lg rounded-lg
-           transform transition-all duration-300 group-hover:translate-y-1 group-hover:translate-x-1
-           shadow-[6px_6px_10px_rgba(0,0,0,0.6),-6px_-6px_10px_rgba(255,255,255,0.1)]
-           group-hover:shadow-[8px_8px_15px_rgba(0,0,0,0.8),-8px_-8px_15px_rgba(255,255,255,0.15)]
-           block text-center pointer-events-auto border-[var(--primary-color)] text-white">
+          class="hero-button relative z-10 px-4 py-2 sm:px-8 sm:py-4 border-2 bg-transparent font-bold text-base sm:text-lg rounded-lg
+                 transform transition-all duration-300 group-hover:translate-y-1 group-hover:translate-x-1
+                 shadow-[6px_6px_10px_rgba(0,0,0,0.6),-6px_-6px_10px_rgba(255,255,255,0.1)]
+                 group-hover:shadow-[8px_8px_15px_rgba(0,0,0,0.8),-8px_-8px_15px_rgba(255,255,255,0.15)]
+                 block text-center border-[var(--primary-color)] text-white"
+          (click)="onDiscoverClick()">
           Jetzt Entdecken
         </div>
 
-        <!-- Dashed border -->
-        <div
-          class="absolute inset-0 border-2 border-dashed rounded-lg opacity-50 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none border-[var(--primary-color)]">
-        </div>
-
         <!-- Ping bubbles -->
-        <div class="absolute -top-2 -right-2 w-4 h-4 rounded-full animate-ping shadow-lg pointer-events-none bg-[var(--primary-color)]"></div>
-        <div class="absolute -bottom-2 -left-2 w-4 h-4 rounded-full animate-ping shadow-lg pointer-events-none bg-[var(--primary-color)]"></div>
-        <div class="absolute top-1/3 left-3 w-3 h-3 rounded-full animate-ping opacity-70 pointer-events-none bg-[var(--primary-color)]"></div>
-        <div class="absolute top-2/3 right-3 w-3 h-3 rounded-full animate-ping opacity-70 pointer-events-none bg-[var(--primary-color)]"></div>
+        <div class="absolute -top-2 -right-2 w-4 h-4 rounded-full animate-ping shadow-lg bg-[var(--primary-color)]"></div>
+        <div class="absolute -bottom-2 -left-2 w-4 h-4 rounded-full animate-ping shadow-lg bg-[var(--primary-color)]"></div>
+        <div class="absolute top-1/3 left-3 w-3 h-3 rounded-full animate-ping opacity-70 bg-[var(--primary-color)]"></div>
+        <div class="absolute top-2/3 right-3 w-3 h-3 rounded-full animate-ping opacity-70 bg-[var(--primary-color)]"></div>
       </div>
-
     </div>
   </div>
 
-  <!-- TILE DROP ANIMATION COMPONENT (Curtain layer) -->
+  <!-- SLIDE 2: RESPONSIVE GALLERY -->
+  <div class="hero-slide" [class.active]="activeSlide === 1">
+    <div class="absolute inset-0 z-0 flex items-center justify-center">
+      <div class="gallery-wrapper flex flex-wrap gap-4 justify-center w-11/12 max-w-6xl">
+        <img class="flex-1 max-w-xs sm:max-w-sm md:max-w-md rounded-lg object-cover" src="assets/images/hero-section-slider/leo/done_pic1.jpg" alt="Gallery 1" />
+        <img class="flex-1 max-w-xs sm:max-w-sm md:max-w-md rounded-lg object-cover" src="assets/images/hero-section-slider/leo/done_pic2.jpg" alt="Gallery 2" />
+        <img class="flex-1 max-w-xs sm:max-w-sm md:max-w-md rounded-lg object-cover" src="assets/images/hero-section-slider/leo/done_pic3.jpg" alt="Gallery 3" />
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: BUBBLE ANIMATION -->
+  <div class="hero-slide" [class.active]="activeSlide === 2">
+    <div class="absolute inset-0 z-0 flex items-center justify-center">
+      <div class="bubble-animation-wrapper flex items-center justify-center gap-8">
+        <div class="bubble w-24 h-24 sm:w-32 sm:h-32 flex flex-col items-center justify-center border-4 border-[var(--primary-color)] rounded-full text-white font-bold">
+          <span class="bubble-number text-xl sm:text-2xl">1</span>
+          <span class="bubble-text text-base sm:text-lg">Anfrage</span>
+        </div>
+        <div class="line w-24 h-1 sm:h-2 bg-[var(--primary-color)]"></div>
+        <div class="bubble w-24 h-24 sm:w-32 sm:h-32 flex flex-col items-center justify-center border-4 border-[var(--primary-color)] rounded-full text-white font-bold">
+          <span class="bubble-number text-xl sm:text-2xl">2</span>
+          <span class="bubble-text text-base sm:text-lg">Gespräch</span>
+        </div>
+        <div class="line w-24 h-1 sm:h-2 bg-[var(--primary-color)]"></div>
+        <div class="bubble w-24 h-24 sm:w-32 sm:h-32 flex flex-col items-center justify-center border-4 border-[var(--primary-color)] rounded-full text-white font-bold">
+          <span class="bubble-number text-xl sm:text-2xl">3</span>
+          <span class="bubble-text text-base sm:text-lg">Umsetzung</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TILE DROP ANIMATION -->
   <app-tile-drop-animation
     (firstWaveComplete)="onFirstWaveComplete()"
     (animationComplete)="onTileAnimationComplete()"

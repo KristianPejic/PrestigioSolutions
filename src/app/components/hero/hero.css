@@ -1,25 +1,41 @@
-/* Content layer under curtain */
-.z-15 {
-  z-index: 10;
+/* ================= HERO SLIDER ================= */
+.hero-slider {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: black;
 }
 
-/* Make sure text has pointer-events: none */
+/* Each slide */
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s ease-in-out;
+}
+
+.hero-slide.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ================= SCROLLING TEXT ================= */
 .scrolling-text-wrapper {
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   opacity: 0;
-  transition: opacity 0.5s ease-in-out;
   pointer-events: none;
+  transition: opacity 0.5s ease-in-out;
 }
 
-/* Text starts animating when first wave covers (but hidden behind tiles) */
-.show-scrolling-text .scrolling-text-wrapper {
-  opacity: 1;
-}
-
-/* Text becomes visible when second wave reveals it */
+.show-scrolling-text .scrolling-text-wrapper,
 .reveal-text .scrolling-text-wrapper {
   opacity: 1;
 }
@@ -37,127 +53,145 @@
   pointer-events: none;
   animation: scrollText 300s linear infinite;
   transform: translateX(100vw);
-  animation-play-state: paused; /* Start paused */
+  animation-play-state: paused;
 }
 
-/* Start animation when text is shown */
 .show-scrolling-text .scrolling-text {
   animation-play-state: running;
 }
 
-/* Ultra slow scrolling animation */
 @keyframes scrollText {
-  from {
-    transform: translateX(100vw);
+  from { transform: translateX(100vw); }
+  to { transform: translateX(-100%); }
+}
+
+/* ================= HERO CONTENT ================= */
+.hero-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+/* ================= GALLERY SLIDE ================= */
+.gallery-wrapper {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 90%;
+}
+
+.gallery-wrapper img {
+  flex: 1 1 calc(33.333% - 1rem);
+  max-width: 300px;
+  height: auto;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+@media(max-width:768px) {
+  .gallery-wrapper img {
+    flex: 1 1 calc(50% - 1rem);
   }
-  to {
-    transform: translateX(-100%);
+}
+
+@media(max-width:480px) {
+  .gallery-wrapper img {
+    flex: 1 1 100%;
   }
 }
 
-/* Speed options */
-.scrolling-text.glacial {
-  animation: scrollText 600s linear infinite;
+/* ================= BUBBLE ANIMATION SLIDE ================= */
+.bubble-animation-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
 }
 
-.scrolling-text.snail-pace {
-  animation: scrollText 480s linear infinite;
-}
-
-.scrolling-text.turtle-slow {
-  animation: scrollText 360s linear infinite;
-}
-
-/* Hero Content Overlay Styles */
-.hero-content-hidden .hero-content-wrapper,
-.hero-content-hidden {
+.bubble {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid var(--primary-color);
+  color: white;
+  font-weight: bold;
+  font-size: 1.2rem;
+  position: relative;
   opacity: 0;
-  visibility: hidden;
+  transform: scale(0);
+  animation: bubbleAppear 0.5s forwards;
 }
 
-.hero-content-visible .hero-content-wrapper,
-.hero-content-visible {
-  opacity: 1;
-  visibility: visible;
+.bubble-number {
+  font-size: 1.5rem;
+  margin-bottom: 0.3rem;
 }
 
-/* Hero title styling */
-.hero-title {
-  color: var(--text-light);
-  text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+.bubble-text {
+  font-size: 1rem;
 }
 
-.hero-title .text-primary {
-  color: var(--primary-text-color);
+#line1,
+#line2 {
+  width: 60px;
+  height: 2px;
+  background: var(--primary-color);
+  opacity: 0;
+  animation: lineAppear 0.5s forwards;
 }
 
-.hero-subtitle {
-  color: var(--text-light);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+/* Bubble animations */
+@keyframes bubbleAppear {
+  from { opacity: 0; transform: scale(0); }
+  to { opacity: 1; transform: scale(1); }
 }
 
-/* Responsive adjustments for scrolling text */
-@media (max-width: 1200px) {
-  .scrolling-text {
-    font-size: clamp(12rem, 45vw, 60rem);
-    -webkit-text-stroke: 5px rgba(255, 255, 255, 0.4);
-    text-stroke: 5px rgba(255, 255, 255, 0.4);
+@keyframes lineAppear {
+  from { opacity: 0; width: 0; }
+  to { opacity: 1; width: 60px; }
+}
+
+@media(max-width:768px) {
+  .bubble-animation-wrapper {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  #line1,
+  #line2 {
+    width: 2px;
+    height: 60px;
   }
 }
 
-@media (max-width: 768px) {
-  .scrolling-text {
-    font-size: clamp(8rem, 40vw, 24rem);
-    -webkit-text-stroke: 4px rgba(255, 255, 255, 0.4);
-    text-stroke: 4px rgba(255, 255, 255, 0.4);
-  }
-
-  .hero-title {
-    font-size: 3rem !important;
-  }
-
-  .hero-subtitle {
-    font-size: 1rem !important;
-  }
+/* ================= HERO BUTTON ================= */
+.hero-slide .group div {
+  border-color: var(--primary-color);
 }
 
-@media (max-width: 480px) {
-  .scrolling-text {
-    font-size: clamp(6rem, 30vw, 16rem);
-    -webkit-text-stroke: 3px rgba(255, 255, 255, 0.4);
-    text-stroke: 3px rgba(255, 255, 255, 0.4);
-  }
-
-  .hero-title {
-    font-size: 2.5rem !important;
-  }
-
-  .hero-subtitle {
-    font-size: 0.875rem !important;
-  }
+.text-primary {
+  color: var(--primary-color) !important;
 }
 
-/* Performance optimization */
-.scrolling-text {
-  will-change: transform;
+/* ================= PERFORMANCE & ACCESSIBILITY ================= */
+.hero-slider,
+.hero-slide,
+.scrolling-text,
+.hero-content-wrapper,
+.gallery-wrapper,
+.bubble-animation-wrapper {
   backface-visibility: hidden;
-  perspective: 1000px;
+  transform-style: preserve-3d;
 }
 
-/* Ensure proper stacking and interaction */
-.z-10 {
-  z-index: 100;
-}
-
-/* Accessibility improvements */
 @media (prefers-reduced-motion: reduce) {
-  .scrolling-text {
-    animation: none;
-  }
-
-  .hero-content-wrapper {
-    transition: opacity 0.2s ease;
-    transform: none;
-  }
+  .scrolling-text { animation: none; }
+  .hero-content-wrapper { transition: opacity 0.2s ease; transform: none; }
 }

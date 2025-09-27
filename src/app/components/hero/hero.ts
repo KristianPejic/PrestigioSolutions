@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TileDropAnimationComponent } from '../tile-drop-animation/tile-drop-animation';
@@ -11,24 +11,38 @@ import { NavbarComponent } from '../navbar/navbar';
   templateUrl: './hero.html',
   styleUrls: ['./hero.css']
 })
-export class HeroComponent {
+export class HeroComponent implements OnInit, OnDestroy {
   showScrollingText = false;
   showNavbar = false;
   revealText = false;
-  showHeroContent = false; // New property for hero content timing
+  showHeroContent = false;
+  activeSlide = 0;
+  slideInterval: any;
 
   constructor(private router: Router) {}
+
+  ngOnInit(): void {
+    this.startAutoSlide();
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.slideInterval);
+  }
+
+  startAutoSlide(): void {
+    this.slideInterval = setInterval(() => {
+      this.activeSlide = (this.activeSlide + 1) % 3; // 3 slides
+    }, 5000); // 5 seconds
+  }
 
   onFirstWaveComplete(): void {
     this.showScrollingText = true;
     this.showNavbar = true;
-    // Show hero content during the animation (after first wave)
     this.showHeroContent = true;
   }
 
   onTileAnimationComplete(): void {
     this.revealText = true;
-    // Ensure hero content is visible after animation completes
     this.showHeroContent = true;
   }
 
@@ -36,11 +50,10 @@ export class HeroComponent {
     this.showScrollingText = false;
     this.showNavbar = false;
     this.revealText = false;
-    this.showHeroContent = false; // Reset hero content
+    this.showHeroContent = false;
   }
 
   onDiscoverClick(): void {
     console.log('Jetzt entdecken clicked!');
-    // Add your navigation logic here
   }
 }
