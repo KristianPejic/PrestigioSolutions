@@ -27,6 +27,11 @@ export class NavbarComponent {
   isCovering = false;
   isUncovering = false;
   isAnimating = false;
+  isButtonDisabled = false; // New flag for button cooldown
+
+  // Track current animation timeouts to clear them
+  private currentTimeouts: any[] = [];
+  private buttonCooldownTimeout: any;
 
   menuLinks = [
     { name: 'Home', href: '#home' },
@@ -43,19 +48,35 @@ export class NavbarComponent {
   ) {}
 
   toggleMenu(): void {
-    if (this.isAnimating) return; // Prevent multiple clicks during animation
+    // Check if button is disabled due to cooldown or animation
+    if (this.isButtonDisabled || this.isAnimating) {
+      console.log('Button disabled, ignoring click - isButtonDisabled:', this.isButtonDisabled, 'isAnimating:', this.isAnimating);
+      return;
+    }
+
+    // Disable button for 2.5 seconds to prevent rapid clicking
+    this.disableButtonTemporarily();
 
     if (!this.isMenuOpen) {
-      // Opening menu - start animation
+      // Opening menu
+      console.log('Opening menu');
       this.startMenuOpenAnimation();
     } else {
-      // Closing menu - start close animation
+      // Closing menu
+      console.log('Closing menu');
       this.startMenuCloseAnimation();
     }
   }
 
   handleMenuClick(link: any, event: Event): void {
     event.preventDefault();
+
+    // Check if interactions are disabled
+    if (this.isButtonDisabled || this.isAnimating) {
+      console.log('Menu item disabled, ignoring click');
+      return;
+    }
+
     console.log('Navigating to:', link.name);
     this.closeMenu();
     // Add your routing logic here
@@ -63,7 +84,20 @@ export class NavbarComponent {
   }
 
   closeMenu(): void {
-    if (this.isAnimating) return;
+    // Check if button is disabled due to cooldown or animation
+    if (this.isButtonDisabled || this.isAnimating) {
+      console.log('Close button disabled, ignoring click - isButtonDisabled:', this.isButtonDisabled, 'isAnimating:', this.isAnimating);
+      return;
+    }
+    if (!this.isMenuOpen) {
+      console.log('Menu already closed, ignoring close');
+      return;
+    }
+
+    // Disable button for 2.5 seconds to prevent rapid clicking
+    this.disableButtonTemporarily();
+
+    console.log('Closing menu via close button');
     this.startMenuCloseAnimation();
   }
 
@@ -88,12 +122,13 @@ export class NavbarComponent {
         });
       }, 50);
 
-      // After covering is complete, show menu
+      // After covering is complete, show menu and enable interactions
       const coverCompleteTime = 50 + this.animationDuration + 100;
       setTimeout(() => {
         this.ngZone.run(() => {
           console.log('Screen covered - showing menu');
           this.isMenuOpen = true;
+          this.isAnimating = false; // Enable buttons as soon as menu appears
           this.cdr.detectChanges();
         });
       }, coverCompleteTime);
@@ -107,15 +142,15 @@ export class NavbarComponent {
         });
       }, uncoverStartTime);
 
-      // Animation complete
+      // Animation complete - just cleanup
       const totalTime = uncoverStartTime + this.animationDuration + 100;
       setTimeout(() => {
         this.ngZone.run(() => {
           this.showMask = false;
           this.isCovering = false;
           this.isUncovering = false;
-          this.isAnimating = false;
-          console.log('Menu open animation complete');
+          // isAnimating already set to false earlier
+          console.log('Menu open animation complete - cleanup');
           this.cdr.detectChanges();
         });
       }, totalTime);
@@ -208,5 +243,23 @@ export class NavbarComponent {
     }
 
     return classes;
+  }
+
+  // Helper method to disable button temporarily for 2+ seconds
+  private disableButtonTemporarily(): void {
+    this.isButtonDisabled = true;
+    console.log('All buttons disabled for 2.5 seconds');
+
+    // Clear any existing cooldown timeout
+    if (this.buttonCooldownTimeout) {
+      clearTimeout(this.buttonCooldownTimeout);
+    }
+
+    // Re-enable button after 2.5 seconds
+    this.buttonCooldownTimeout = setTimeout(() => {
+      this.isButtonDisabled = false;
+      console.log('All buttons re-enabled after 2.5 seconds');
+      this.cdr.detectChanges();
+    }, 2500);
   }
 }
