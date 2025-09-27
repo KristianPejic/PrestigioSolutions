@@ -21,7 +21,8 @@
   <div class="hero-slide" [class.active]="activeSlide === 0">
     <div class="absolute inset-0 z-0 flex flex-col items-center justify-center">
 
-      <div class="hero-content-wrapper mb-8 flex justify-center text-center">
+      <!-- Hero content only shows when showHeroContent is true -->
+      <div *ngIf="showHeroContent" class="hero-content-wrapper mb-8 flex justify-center text-center">
         <div>
           <p class="font-semibold tracking-wide text-sm sm:text-base md:text-lg lg:text-xl mb-2 text-white">
             Software nach Maß
@@ -33,8 +34,8 @@
         </div>
       </div>
 
-      <!-- HERO BUTTON -->
-      <div class="relative z-[200] group cursor-pointer">
+      <!-- HERO BUTTON - also controlled by showHeroContent -->
+      <div *ngIf="showHeroContent" class="relative z-[200] group cursor-pointer">
         <div
           class="hero-button relative z-10 px-4 py-2 sm:px-8 sm:py-4 border-2 bg-transparent font-bold text-base sm:text-lg rounded-lg
                  transform transition-all duration-300 group-hover:translate-y-1 group-hover:translate-x-1
@@ -57,7 +58,8 @@
   <!-- SLIDE 2: RESPONSIVE GALLERY -->
   <div class="hero-slide" [class.active]="activeSlide === 1">
     <div class="absolute inset-0 z-0 flex items-center justify-center">
-      <div class="gallery-wrapper flex flex-wrap gap-4 justify-center w-11/12 max-w-6xl">
+      <!-- Gallery content also controlled by showHeroContent -->
+      <div *ngIf="showHeroContent" class="gallery-wrapper flex flex-wrap gap-4 justify-center w-11/12 max-w-6xl">
         <img class="flex-1 max-w-xs sm:max-w-sm md:max-w-md rounded-lg object-cover" src="assets/images/hero-section-slider/leo/done_pic1.jpg" alt="Gallery 1" />
         <img class="flex-1 max-w-xs sm:max-w-sm md:max-w-md rounded-lg object-cover" src="assets/images/hero-section-slider/leo/done_pic2.jpg" alt="Gallery 2" />
         <img class="flex-1 max-w-xs sm:max-w-sm md:max-w-md rounded-lg object-cover" src="assets/images/hero-section-slider/leo/done_pic3.jpg" alt="Gallery 3" />
@@ -68,7 +70,8 @@
   <!-- SLIDE 3: BUBBLE ANIMATION -->
   <div class="hero-slide" [class.active]="activeSlide === 2">
     <div class="absolute inset-0 z-0 flex items-center justify-center">
-      <div class="bubble-animation-wrapper flex items-center justify-center gap-8">
+      <!-- Bubble animation also controlled by showHeroContent -->
+      <div *ngIf="showHeroContent" class="bubble-animation-wrapper flex items-center justify-center gap-8">
         <div class="bubble w-24 h-24 sm:w-32 sm:h-32 flex flex-col items-center justify-center border-4 border-[var(--primary-color)] rounded-full text-white font-bold">
           <span class="bubble-number text-xl sm:text-2xl">1</span>
           <span class="bubble-text text-base sm:text-lg">Anfrage</span>

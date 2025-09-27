@@ -19,6 +19,9 @@ export class HeroComponent implements OnInit, OnDestroy {
   activeSlide = 0;
   slideInterval: any;
 
+  // Add timeout reference for cleanup
+  private heroContentTimeout: any;
+
   constructor(private router: Router) {}
 
   ngOnInit(): void {
@@ -27,6 +30,10 @@ export class HeroComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     clearInterval(this.slideInterval);
+    // Clear the hero content timeout if component is destroyed
+    if (this.heroContentTimeout) {
+      clearTimeout(this.heroContentTimeout);
+    }
   }
 
   startAutoSlide(): void {
@@ -38,12 +45,19 @@ export class HeroComponent implements OnInit, OnDestroy {
   onFirstWaveComplete(): void {
     this.showScrollingText = true;
     this.showNavbar = true;
-    this.showHeroContent = true;
+
+    // Delay the hero content appearance by 1750ms (1.75 seconds) after first wave completes
+    this.heroContentTimeout = setTimeout(() => {
+      this.showHeroContent = true;
+    }, 1500); // Reduced by 0.25 seconds (250ms)
   }
 
   onTileAnimationComplete(): void {
     this.revealText = true;
-    this.showHeroContent = true;
+    // Ensure hero content is shown if not already (fallback)
+    if (!this.showHeroContent) {
+      this.showHeroContent = true;
+    }
   }
 
   onHeroReset(): void {
@@ -51,6 +65,12 @@ export class HeroComponent implements OnInit, OnDestroy {
     this.showNavbar = false;
     this.revealText = false;
     this.showHeroContent = false;
+
+    // Clear any pending hero content timeout
+    if (this.heroContentTimeout) {
+      clearTimeout(this.heroContentTimeout);
+      this.heroContentTimeout = null;
+    }
   }
 
   onDiscoverClick(): void {
