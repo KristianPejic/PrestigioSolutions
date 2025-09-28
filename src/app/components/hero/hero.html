@@ -70,21 +70,38 @@
   <!-- SLIDE 3: BUBBLE ANIMATION -->
   <div class="hero-slide" [class.active]="activeSlide === 2">
     <div class="absolute inset-0 z-0 flex items-center justify-center">
-      <!-- Bubble animation also controlled by showHeroContent -->
       <div *ngIf="showHeroContent" class="bubble-animation-wrapper flex items-center justify-center gap-8">
-        <div class="bubble w-24 h-24 sm:w-32 sm:h-32 flex flex-col items-center justify-center border-4 border-[var(--primary-color)] rounded-full text-white font-bold">
-          <span class="bubble-number text-xl sm:text-2xl">1</span>
-          <span class="bubble-text text-base sm:text-lg">Anfrage</span>
+
+        <!-- BUBBLE 1 -->
+        <div class="bubble">
+          <div class="bubble-bg"></div>
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="45"/>
+          </svg>
+          <span class="bubble-number">1</span>
+          <span class="bubble-text">Anfrage</span>
         </div>
-        <div class="line w-24 h-1 sm:h-2 bg-[var(--primary-color)]"></div>
-        <div class="bubble w-24 h-24 sm:w-32 sm:h-32 flex flex-col items-center justify-center border-4 border-[var(--primary-color)] rounded-full text-white font-bold">
-          <span class="bubble-number text-xl sm:text-2xl">2</span>
-          <span class="bubble-text text-base sm:text-lg">Gespräch</span>
+        <div class="line"></div>
+
+        <!-- BUBBLE 2 -->
+        <div class="bubble">
+          <div class="bubble-bg"></div>
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="45"/>
+          </svg>
+          <span class="bubble-number">2</span>
+          <span class="bubble-text">Gespräch</span>
         </div>
-        <div class="line w-24 h-1 sm:h-2 bg-[var(--primary-color)]"></div>
-        <div class="bubble w-24 h-24 sm:w-32 sm:h-32 flex flex-col items-center justify-center border-4 border-[var(--primary-color)] rounded-full text-white font-bold">
-          <span class="bubble-number text-xl sm:text-2xl">3</span>
-          <span class="bubble-text text-base sm:text-lg">Umsetzung</span>
+        <div class="line"></div>
+
+        <!-- BUBBLE 3 -->
+        <div class="bubble">
+          <div class="bubble-bg"></div>
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="45"/>
+          </svg>
+          <span class="bubble-number">3</span>
+          <span class="bubble-text">Umsetzung</span>
         </div>
       </div>
     </div>

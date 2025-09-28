@@ -22,6 +22,7 @@
 .hero-slide.active {
   opacity: 1;
   pointer-events: auto;
+  z-index: 1;
 }
 
 /* ================= SCROLLING TEXT ================= */
@@ -109,65 +110,109 @@
   align-items: center;
   justify-content: center;
   gap: 2rem;
+  flex-wrap: wrap;
 }
 
 .bubble {
+  position: relative;
+  width: 6rem;
+  height: 6rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  border: 2px solid var(--primary-color);
-  color: white;
-  font-weight: bold;
-  font-size: 1.2rem;
-  position: relative;
   opacity: 0;
-  transform: scale(0);
-  animation: bubbleAppear 0.5s forwards;
+  transform: scale(0.8);
+}
+
+.bubble-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(79,70,229,0.15);
+  box-shadow: 0 0 25px rgba(79,70,229,0.5);
+  z-index: 0;
+}
+
+.bubble svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+  z-index: 1;
+}
+
+.bubble circle {
+  fill: none;
+  stroke: var(--primary-color);
+  stroke-width: 6;
+  stroke-dasharray: 283;
+  stroke-dashoffset: 283;
 }
 
 .bubble-number {
+  opacity: 0;
+  font-weight: bold;
   font-size: 1.5rem;
-  margin-bottom: 0.3rem;
+  z-index: 2;
 }
 
 .bubble-text {
+  opacity: 0;
+  margin-top: 0.3rem;
   font-size: 1rem;
+  z-index: 2;
 }
 
-#line1,
-#line2 {
-  width: 60px;
-  height: 2px;
+.line {
+  height: 8px;
+  width: 6rem;
   background: var(--primary-color);
   opacity: 0;
-  animation: lineAppear 0.5s forwards;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.8s ease, opacity 0.6s ease;
 }
 
-/* Bubble animations */
-@keyframes bubbleAppear {
-  from { opacity: 0; transform: scale(0); }
-  to { opacity: 1; transform: scale(1); }
+/* ================= BUBBLE ANIMATION CLASSES ================= */
+.show-bubble {
+  opacity: 1;
+  transform: scale(1);
+  transition: all 0.6s ease;
 }
 
-@keyframes lineAppear {
-  from { opacity: 0; width: 0; }
-  to { opacity: 1; width: 60px; }
+.draw-circle {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1.2s ease;
 }
 
+.show-number {
+  opacity: 1;
+  transition: opacity 0.6s ease;
+}
+
+.show-text {
+  opacity: 1;
+  transition: opacity 0.6s ease;
+}
+
+.show-line {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+/* ================= RESPONSIVE BUBBLES ================= */
 @media(max-width:768px) {
   .bubble-animation-wrapper {
     flex-direction: column;
     gap: 1.5rem;
   }
 
-  #line1,
-  #line2 {
-    width: 2px;
-    height: 60px;
+  .line {
+    width: 8px;
+    height: 4rem;
+    transform-origin: top;
   }
 }
 
