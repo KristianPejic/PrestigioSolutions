@@ -1,0 +1,55 @@
+:host {
+  display: block;
+}
+
+/* Fallback grid in case Tailwind is not present */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  justify-items: center;
+  align-items: start;
+  padding: 1rem;
+}
+
+/* Enforce card max width (safe fallback if Tailwind classes aren't available) */
+.card-width {
+  width: 350px;
+  max-width: 100%;
+}
+
+/* Small adjustments for the inner svg/icon and card when Tailwind missing */
+.service-card .icon {
+  display: block;
+  margin: 0 auto;
+}
+
+
+/* Responsive */
+@media (max-width: 640px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+    padding: 0.5rem;
+    gap: 1rem;
+  }
+  .card-width {
+    width: 100%;
+  }
+}
+
+/* Accessibility: focus outline for keyboard users */
+.service-card:focus-within,
+.service-card:focus {
+  outline: 3px solid rgba(135,206,235,0.18);
+  outline-offset: 6px;
+  border-radius: 1rem;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .service-card,
+  .service-card * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

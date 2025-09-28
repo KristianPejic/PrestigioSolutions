@@ -1,0 +1,131 @@
+<!-- Section Heading -->
+<h1 class="text-[152px] font-extrabold text-center mb-16 text-white tracking-tight mt-2">
+  Unsere Services
+</h1>
+
+<div class="services-grid">
+  <ng-container *ngFor="let s of services">
+    <div
+      class="group cursor-pointer transform transition-all duration-500 hover:scale-105 hover:-rotate-1"
+    >
+      <div
+        class="service-card text-white rounded-3xl border border-[rgba(135,206,235,0.2)] bg-gradient-to-tr from-[#0F0F0F] to-[#0B0B0B] shadow-2xl duration-700 z-10 relative backdrop-blur-xl hover:border-[rgba(135,206,235,0.35)] overflow-hidden hover:shadow-[0_20px_60px_rgba(135,206,235,0.08)] w-[350px] card-width"
+      >
+        <!-- Background effects -->
+        <div class="absolute inset-0 z-0 overflow-hidden">
+          <div
+            class="absolute inset-0 bg-gradient-to-tr from-[rgba(135,206,235,0.05)] to-[rgba(135,206,235,0.10)] opacity-40 group-hover:opacity-60 transition-opacity duration-500"
+          ></div>
+
+          <div
+            class="absolute -bottom-20 -left-20 w-48 h-48 rounded-full bg-gradient-to-tr from-[rgba(135,206,235,0.10)] to-transparent blur-3xl opacity-30 group-hover:opacity-50 transform group-hover:scale-110 transition-all duration-700 animate-bounce"
+          ></div>
+
+          <div
+            class="absolute top-10 left-10 w-16 h-16 rounded-full bg-[rgba(135,206,235,0.05)] blur-xl animate-ping"
+          ></div>
+
+          <div
+            class="absolute bottom-16 right-16 w-12 h-12 rounded-full bg-[rgba(135,206,235,0.05)] blur-lg animate-ping delay-1000"
+          ></div>
+
+          <div
+            class="absolute inset-0 bg-gradient-to-r from-transparent via-[rgba(135,206,235,0.05)] to-transparent transform -skew-x-12 translate-x-full group-hover:translate-x-[-200%] transition-transform duration-1000"
+          ></div>
+        </div>
+
+        <!-- Content -->
+        <div class="p-8 relative z-10">
+          <div class="flex flex-col items-center text-center">
+            <!-- Icon -->
+            <div class="relative mb-6">
+              <div
+                class="p-6 rounded-full backdrop-blur-lg border border-[rgba(135,206,235,0.12)] bg-gradient-to-br from-black/80 to-gray-900/60 shadow-2xl transform group-hover:rotate-12 group-hover:scale-110 transition-all duration-500"
+              >
+                <!-- Select icon by key, stroke uses theme color -->
+                <ng-container [ngSwitch]="s.key">
+                  <!-- Globe / Webseiten -->
+                  <svg *ngSwitchCase="'webseiten'"
+                       width="40" height="40" viewBox="0 0 24 24"
+                       fill="none" stroke="#87CEEB" stroke-width="1.6"
+                       stroke-linecap="round" stroke-linejoin="round"
+                       class="icon">
+                    <circle cx="12" cy="12" r="9"></circle>
+                    <path d="M2 12h20"></path>
+                    <path d="M12 2v20"></path>
+                  </svg>
+
+                  <!-- Code / Web Apps -->
+                  <svg *ngSwitchCase="'webapps'"
+                       width="40" height="40" viewBox="0 0 24 24"
+                       fill="none" stroke="#87CEEB" stroke-width="1.6"
+                       stroke-linecap="round" stroke-linejoin="round"
+                       class="icon">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                  </svg>
+
+                  <!-- Gear / Prozess & Kosten -->
+                  <svg *ngSwitchCase="'prozess'"
+                       width="40" height="40" viewBox="0 0 24 24"
+                       fill="none" stroke="#87CEEB" stroke-width="1.6"
+                       stroke-linecap="round" stroke-linejoin="round"
+                       class="icon">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33"></path>
+                    <path d="M4.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06c.6.6 1.4.8 2.1.6"></path>
+                  </svg>
+
+                  <!-- Person / IT-Beratung -->
+                  <svg *ngSwitchCase="'itberatung'"
+                       width="40" height="40" viewBox="0 0 24 24"
+                       fill="none" stroke="#87CEEB" stroke-width="1.6"
+                       stroke-linecap="round" stroke-linejoin="round"
+                       class="icon">
+                    <path d="M20 21v-2a4 4 0 00-3-3.87"></path>
+                    <path d="M4 21v-2a4 4 0 013-3.87"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </ng-container>
+              </div>
+            </div>
+
+            <!-- Title -->
+            <div class="mb-4 transform group-hover:scale-105 transition-transform duration-300">
+              <p class="text-3xl font-bold bg-clip-text text-transparent"
+                 style="background-image: linear-gradient(90deg, rgba(135,206,235,0.9), rgba(135,206,235,0.7));">
+                {{ s.title }}
+              </p>
+            </div>
+
+            <!-- Subtitle + Description -->
+            <div class="space-y-1 max-w-sm">
+              <p class="text-white font-semibold text-base">
+                {{ s.subtitle }}
+              </p>
+
+              <p *ngFor="let line of s.description"
+                 class="text-gray-300 text-sm leading-relaxed group-hover:text-gray-200 transition-colors duration-300">
+                {{ line }}
+              </p>
+            </div>
+
+            <!-- Divider -->
+            <div class="mt-6 w-1/3 h-0.5 bg-gradient-to-r from-transparent via-[rgba(135,206,235,0.7)] to-transparent rounded-full transform group-hover:w-1/2 group-hover:h-1 transition-all duration-500"></div>
+
+            <!-- Dots -->
+            <div class="flex space-x-2 mt-4 opacity-60 group-hover:opacity-100 transition-opacity duration-300">
+              <div class="w-2 h-2" style="background:#87CEEB;border-radius:999px;"></div>
+              <div class="w-2 h-2" style="background:#87CEEB;border-radius:999px; opacity:0.9;"></div>
+              <div class="w-2 h-2" style="background:#87CEEB;border-radius:999px; opacity:0.8;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- corner accents -->
+        <div class="absolute top-0 left-0 w-20 h-20 bg-gradient-to-br from-[rgba(135,206,235,0.10)] to-transparent rounded-br-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div class="absolute bottom-0 right-0 w-20 h-20 bg-gradient-to-tl from-[rgba(135,206,235,0.10)] to-transparent rounded-tl-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+      </div>
+    </div>
+  </ng-container>
+</div>
