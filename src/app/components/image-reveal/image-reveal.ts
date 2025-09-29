@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -19,21 +19,29 @@ export class ImageRevealComponent implements OnChanges, OnDestroy {
   isRevealed = false;
   private animationTimeout: any;
 
+  constructor(private cdr: ChangeDetectorRef) {}
+
   ngOnChanges(changes: SimpleChanges): void {
+    console.log('ImageReveal - isLineExtended changed:', this.isLineExtended);
+
     // When line extends and connects to image, automatically start animation
     if (changes['isLineExtended']) {
       if (this.isLineExtended && !this.isLoading && !this.isRevealed) {
-        // Wait for line animation to complete (1.5s) then start loading animation
+        console.log('ImageReveal - Line extended, starting animation after 2s delay');
+        // Wait for line animation to complete (2s) then start loading
         this.animationTimeout = setTimeout(() => {
+          console.log('ImageReveal - Starting loading animation NOW');
           this.startLoadingAnimation();
-        }, 1500);
+        }, 2000);
       } else if (!this.isLineExtended) {
         // Line retracted - reset everything
+        console.log('ImageReveal - Line retracted, resetting');
         if (this.animationTimeout) {
           clearTimeout(this.animationTimeout);
         }
         this.isLoading = false;
         this.isRevealed = false;
+        this.cdr.detectChanges();
       }
     }
   }
@@ -44,16 +52,23 @@ export class ImageRevealComponent implements OnChanges, OnDestroy {
   }
 
   private startLoadingAnimation(): void {
-    if (this.isLoading || this.isRevealed) return;
+    if (this.isLoading || this.isRevealed) {
+      console.log('ImageReveal - Animation already running or complete');
+      return;
+    }
 
+    console.log('ImageReveal - Loading animation STARTED');
     this.isLoading = true;
+    this.cdr.detectChanges();
 
-    // Loading animation duration: 3s (4 sides at 0.6s each + spinner fade)
+    // Loading animation duration: 1.8s (4 sides at 0.3s each + spinner fade) - MUCH FASTER
     setTimeout(() => {
+      console.log('ImageReveal - Loading complete, revealing image');
       this.isLoading = false;
       this.isRevealed = true;
       this.imageRevealed.emit();
-    }, 3000);
+      this.cdr.detectChanges();
+    }, 1800);
   }
 
   ngOnDestroy(): void {

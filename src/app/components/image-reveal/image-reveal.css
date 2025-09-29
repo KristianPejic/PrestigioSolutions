@@ -6,9 +6,10 @@
   padding: 1rem 2rem 4rem 2rem;
   min-height: 70vh;
   background: black;
+  margin-top: -55vh; /* Move entire container way up */
 }
 
-/* Connecting line from WIR section */
+/* Connecting line from WIR section - positioned to receive the line from above */
 .connecting-line {
   position: absolute;
   top: 0;
@@ -23,7 +24,7 @@
 }
 
 .connecting-line.line-extended {
-  height: calc(5vh + 250px); /* Reaches top of image - closer now */
+  height: calc(1vh + 250px); /* Very short connecting line */
 }
 
 /* Image wrapper */
@@ -33,7 +34,7 @@
   height: 500px;
   max-width: 90vw;
   max-height: 90vw;
-  margin-top: 5vh;
+  margin-top: 1vh; /* Almost no margin */
   cursor: pointer;
   border-radius: 20px;
   overflow: hidden;
@@ -85,11 +86,11 @@
   left: 0;
   width: 0;
   height: 4px;
-  animation: none; /* No animation until triggered */
+  animation: none;
 }
 
 .image-wrapper.start-animation .loading-bar-left {
-  animation: barTop 0.6s ease-in-out 0s forwards, showBar 0.3s ease forwards;
+  animation: barTop 0.3s ease-in-out 0s forwards, showBar 0.2s ease forwards;
 }
 
 /* Right bar */
@@ -109,7 +110,7 @@
 }
 
 .image-wrapper.start-animation .loading-bar-right {
-  animation: barRight 0.6s ease-in-out 0.6s forwards, showBar 0.3s ease forwards;
+  animation: barRight 0.3s ease-in-out 0.3s forwards, showBar 0.2s ease forwards;
 }
 
 /* Bottom bar */
@@ -122,7 +123,7 @@
 }
 
 .image-wrapper.start-animation .loading-bar-bottom {
-  animation: barBottom 0.6s ease-in-out 1.2s forwards, showBar 0.3s ease forwards;
+  animation: barBottom 0.3s ease-in-out 0.6s forwards, showBar 0.2s ease forwards;
 }
 
 /* Left bar */
@@ -142,7 +143,7 @@
 }
 
 .image-wrapper.start-animation .loading-bar-left-side {
-  animation: barLeft 0.6s ease-in-out 1.8s forwards, showBar 0.3s ease forwards;
+  animation: barLeft 0.3s ease-in-out 0.9s forwards, showBar 0.2s ease forwards;
 }
 
 @keyframes barTop {
@@ -258,11 +259,15 @@
   .image-wrapper {
     width: 400px;
     height: 400px;
-    margin-top: 5vh;
+    margin-top: 1vh;
   }
 
   .connecting-line.line-extended {
-    height: calc(5vh + 200px); /* Adjusted for mobile */
+    height: calc(1vh + 200px);
+  }
+
+  .image-reveal-container {
+    margin-top: -50vh;
   }
 }
 
@@ -270,11 +275,15 @@
   .image-wrapper {
     width: 300px;
     height: 300px;
-    margin-top: 5vh;
+    margin-top: 1vh;
   }
 
   .connecting-line.line-extended {
-    height: calc(5vh + 150px); /* Adjusted for small mobile */
+    height: calc(1vh + 150px);
+  }
+
+  .image-reveal-container {
+    margin-top: -45vh;
   }
 
   .click-hint p {

@@ -47,15 +47,25 @@ export class WerWirSindComponent implements OnInit {
     const rect = element.getBoundingClientRect();
     const windowHeight = window.innerHeight;
 
-    // Trigger animation when element is 50% visible
+    // Check if we've scrolled past the section (section is above viewport)
+    const hasPassed = rect.bottom < windowHeight * 0.3;
+
+    // Check if we're approaching or in the section
     const isVisible = rect.top < windowHeight * 0.7 && rect.bottom > windowHeight * 0.3;
 
+    // Check if we're above the section (section is below viewport)
+    const isAbove = rect.top > windowHeight * 0.7;
+
     if (isVisible && !this.isAnimated) {
+      // Trigger animation when entering the section
       this.isAnimated = true;
       this.triggerAnimation();
       this.lineExtended.emit(true);
-    } else if (!isVisible && this.isAnimated) {
-      // Reset animation when scrolling away
+    } else if (hasPassed && this.isAnimated) {
+      // We've scrolled past the section going DOWN - keep animation active
+      // Do nothing, let it stay animated
+    } else if (isAbove && this.isAnimated) {
+      // We scrolled back UP above the section - reset animation
       this.isAnimated = false;
       this.resetAnimation();
       this.lineExtended.emit(false);

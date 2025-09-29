@@ -20,13 +20,13 @@ export class AppComponent {
   title = 'PrestigioSolutions';
   isLineExtended = false;
 
+  // This method receives the event from wer-wir-sind when line extends
   onLineExtended(extended: boolean): void {
     this.isLineExtended = extended;
-    console.log('Line extended:', extended);
+    console.log('Line extended from wer-wir-sind:', extended);
   }
 
   onImageRevealed(): void {
     console.log('Image revealed!');
-    // You can add additional logic here when image is revealed
   }
 }

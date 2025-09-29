@@ -4,14 +4,17 @@
   <!-- Hero Section (includes tile animation and navbar) -->
   <app-hero></app-hero>
 
-  <!-- Wer Wir Sind Section (Large Text Section) -->
-  <app-wer-wir-sind></app-wer-wir-sind>
+  <!-- Wer Wir Sind Section (Large Text Section) - NOW WITH EVENT BINDING -->
+  <app-wer-wir-sind (lineExtended)="onLineExtended($event)"></app-wer-wir-sind>
+
+  <!-- Image Reveal Section - RECEIVES isLineExtended -->
   <app-image-reveal
     [isLineExtended]="isLineExtended"
     [imageSrc]="'assets/images/hero-section-slider/Pixabay/sonstiges/Earth.png'"
     [imageAlt]="'Prestigio Solutions Team'"
     (imageRevealed)="onImageRevealed()">
   </app-image-reveal>
+
   <app-short-services></app-short-services>
 
 </div>
