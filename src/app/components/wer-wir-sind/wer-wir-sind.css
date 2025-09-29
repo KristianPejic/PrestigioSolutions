@@ -19,9 +19,9 @@
   z-index: 1;
 }
 
-/* Special highlight line (middle one over WIR) */
+/* Special highlight line (middle one over WIR) - extends further down */
 .line.highlight-line {
-  background: white; /* Start white */
+  background: white;
   width: 2px;
   transition: all 2s ease-out;
 }
@@ -34,10 +34,10 @@
   width: 100%;
   z-index: 10;
   display: flex;
-  justify-content: center; /* Changed to center instead of space-between */
+  justify-content: center;
   align-items: center;
-  gap: 8%; /* Added gap between words for proper spacing */
-  padding: 0 10%; /* Reduced padding */
+  gap: 8%;
+  padding: 0 10%;
 }
 
 .text-section {
@@ -51,8 +51,8 @@
 .text-left,
 .text-center,
 .text-right {
-  text-align: center; /* Center all text */
-  padding: 0 1rem; /* Small padding for spacing */
+  text-align: center;
+  padding: 0 1rem;
 }
 
 .overflow {
@@ -83,8 +83,10 @@
   height: 100vh;
 }
 
+/* Middle line extends further down to connect to image component */
 .container.animate-lines .line.highlight-line {
-  background: #3b82f6; /* Baby blue like mobile */
+  height: 105vh; /* Extends down to reach the image component */
+  background: linear-gradient(180deg, white 0%, #3b82f6 50%, #87CEEB 100%);
   box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
 }
 
@@ -96,35 +98,23 @@
 
 /* Reset animation when scrolling back up - lines go back to 0 */
 .container:not(.animate-lines) .line {
-  height: 0; /* Reset to 0 instead of 50vh */
+  height: 0;
   transition: all 0.5s ease-out;
 }
 
 .container:not(.animate-lines) .line.highlight-line {
-  background: white; /* Back to white */
+  background: white;
   box-shadow: none;
   transition: all 0.5s ease-out;
 }
 
 .container:not(.animate-lines) .highlight-text {
-  color: white; /* Back to white */
+  color: white;
   text-shadow: none;
   transition: all 0.5s ease-out;
 }
 
 /* All text sections start white and can be made blue when line passes through */
-.portfolio-heading {
-  font-weight: 800;
-  font-size: clamp(4rem, 8vw, 10rem);
-  line-height: 0.8;
-  text-transform: uppercase;
-  color: white;
-  display: inline-block;
-  letter-spacing: -0.05em;
-  margin: 0;
-  transition: all 0.5s ease;
-}
-
 .portfolio-heading.line-active {
   color: #3b82f6;
   text-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
@@ -167,15 +157,19 @@
 
   /* Adjust line positions for tablet sizes */
   .line:nth-child(1) {
-    left: 16% !important; /* Kiss the left edge of "WER" */
+    left: 16% !important;
   }
 
   .line:nth-child(2) {
-    left: 50% !important; /* Through middle of "WIR" */
+    left: 50% !important;
   }
 
   .line:nth-child(3) {
-    left: 84% !important; /* Kiss the right edge of "SIND" */
+    left: 84% !important;
+  }
+
+  .container.animate-lines .line.highlight-line {
+    height: 110vh; /* Extends to image on tablet */
   }
 }
 
@@ -202,7 +196,7 @@
     transition: all 0.8s ease;
   }
 
-  /* Mobile - single line that moves through words */
+  /* Mobile - single line that extends to image */
   .line:nth-child(1) {
     display: block;
     background: #3b82f6;
@@ -213,6 +207,11 @@
     top: 0;
     transition: all 0.8s ease-out;
     z-index: 5;
+  }
+
+  .container.animate-lines .line:nth-child(1) {
+    height: 120vh; /* Extends further on mobile to reach image */
+    background: linear-gradient(180deg, #3b82f6 0%, #87CEEB 100%);
   }
 
   /* Hide other lines on mobile */
@@ -228,13 +227,10 @@
   }
 
   @keyframes mobileLineMovement {
-    /* Start at center (WIR position) */
     0% {
       height: 100vh;
       top: 0;
     }
-
-    /* Move to WER position and pause */
     12.5% {
       height: 100vh;
       top: -20vh;
@@ -243,29 +239,24 @@
       height: 100vh;
       top: -20vh;
     }
-
-    /* Move back to WIR position and pause */
     50% {
       height: 100vh;
       top: 0;
     }
     75% {
-      height: 100vh;
+      height: 120vh; /* Extends to image */
       top: 0;
     }
-
-    /* Move to SIND position and pause */
     87.5% {
-      height: 100vh;
+      height: 120vh;
       top: 20vh;
     }
     100% {
-      height: 100vh;
+      height: 120vh;
       top: 20vh;
     }
   }
 
-  /* Reset animation for mobile */
   .container:not(.animate-lines) .line {
     height: 100vh;
     top: 0;

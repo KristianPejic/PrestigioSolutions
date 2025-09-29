@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, ElementRef } from '@angular/core';
+import { Component, HostListener, OnInit, ElementRef, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -9,13 +9,15 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./wer-wir-sind.css']
 })
 export class WerWirSindComponent implements OnInit {
+  @Output() lineExtended = new EventEmitter<boolean>();
+
   isAnimated = false;
   isMobile = false;
 
   // 3 lines positioned to kiss the edges and go through middle
   lines: any[] = [
     { position: '22%', highlight: false },    // Kiss the left edge of "WER"
-    { position: '50%', highlight: true },     // Through the middle of "WIR"
+    { position: '50%', highlight: true },     // Through the middle of "WIR" - extends to image
     { position: '78%', highlight: false }     // Kiss the right edge of "SIND"
   ];
 
@@ -51,10 +53,12 @@ export class WerWirSindComponent implements OnInit {
     if (isVisible && !this.isAnimated) {
       this.isAnimated = true;
       this.triggerAnimation();
+      this.lineExtended.emit(true);
     } else if (!isVisible && this.isAnimated) {
       // Reset animation when scrolling away
       this.isAnimated = false;
       this.resetAnimation();
+      this.lineExtended.emit(false);
     }
   }
 
@@ -91,18 +95,15 @@ export class WerWirSindComponent implements OnInit {
     });
 
     // Sequential text coloring based on faster line movement (4s total)
-    // Line hits WER first (at 12.5% of 4s = 0.5s)
     setTimeout(() => {
       textSections[0].classList.add('line-active'); // WER turns blue
     }, 500);
 
-    // Line leaves WER and hits WIR (at 50% of 4s = 2s)
     setTimeout(() => {
       textSections[0].classList.remove('line-active'); // WER back to white
       textSections[1].classList.add('line-active'); // WIR turns blue
     }, 2000);
 
-    // Line leaves WIR and hits SIND (at 87.5% of 4s = 3.5s)
     setTimeout(() => {
       textSections[1].classList.remove('line-active'); // WIR back to white
       textSections[2].classList.add('line-active'); // SIND turns blue

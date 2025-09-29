@@ -1,0 +1,37 @@
+<div class="image-reveal-container">
+  <!-- Connecting Line from WIR -->
+  <div class="connecting-line" [class.line-extended]="isLineExtended"></div>
+
+  <!-- Image Container -->
+  <div
+    class="image-wrapper"
+    [class.loading]="isLoading"
+    [class.revealed]="isRevealed"
+    [class.start-animation]="isLineExtended && isLoading">
+
+    <!-- Loading Animation Overlay -->
+    <div class="loading-overlay" *ngIf="isLoading">
+      <div class="loading-bar loading-bar-left"></div>
+      <div class="loading-bar loading-bar-right"></div>
+      <div class="loading-bar loading-bar-bottom"></div>
+      <div class="loading-bar loading-bar-left-side"></div>
+      <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Image -->
+    <img
+      [src]="imageSrc"
+      [alt]="imageAlt"
+      class="reveal-image"
+      [class.image-visible]="isRevealed">
+
+    <!-- Click Hint - Hidden since auto-animation -->
+    <div class="click-hint" *ngIf="!isLoading && !isRevealed && !isLineExtended">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M12 8v8M8 12h8"></path>
+      </svg>
+      <p>Waiting for connection...</p>
+    </div>
+  </div>
+</div>

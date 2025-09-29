@@ -1,46 +1,105 @@
 :host {
   display: block;
+  width: 100%;
+  padding: 2rem 1rem;
 }
 
-/* Fallback grid in case Tailwind is not present */
+/* Section heading responsive sizing */
+.section-heading {
+  font-size: clamp(3rem, 8vw, 9.5rem);
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 4rem;
+  color: white;
+  letter-spacing: -0.02em;
+  margin-top: 0.5rem;
+}
+
+/* Services grid with consistent card sizing - 2x2 layout */
 .services-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.5rem;
-  justify-items: center;
-  align-items: start;
+  grid-template-columns: repeat(2, minmax(300px, 400px));
+  gap: 2rem;
+  justify-content: center;
+  align-items: stretch;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
   padding: 1rem;
 }
 
-/* Enforce card max width (safe fallback if Tailwind classes aren't available) */
-.card-width {
-  width: 350px;
-  max-width: 100%;
+/* Remove the card-width class and apply sizing directly */
+.service-card {
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Small adjustments for the inner svg/icon and card when Tailwind missing */
+/* Ensure consistent card content layout */
+.service-card > div {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ensure icon container is consistent */
 .service-card .icon {
   display: block;
   margin: 0 auto;
+  width: 40px;
+  height: 40px;
 }
 
+/* Responsive breakpoints */
+@media (max-width: 1200px) {
+  .services-grid {
+    grid-template-columns: repeat(2, minmax(280px, 1fr));
+    gap: 1.5rem;
+    max-width: 800px;
+  }
 
-/* Responsive */
+  .service-card {
+    min-height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .services-grid {
+    grid-template-columns: repeat(2, minmax(240px, 1fr));
+    gap: 1rem;
+    padding: 0.5rem;
+    max-width: 600px;
+  }
+
+  .service-card {
+    min-height: 380px;
+  }
+}
+
 @media (max-width: 640px) {
+  :host {
+    padding: 1rem 0.5rem;
+  }
+
   .services-grid {
     grid-template-columns: 1fr;
+    gap: 1.25rem;
     padding: 0.5rem;
-    gap: 1rem;
+    max-width: 400px;
   }
-  .card-width {
-    width: 100%;
+
+  .service-card {
+    min-height: 360px;
+    max-width: 100%;
   }
 }
 
 /* Accessibility: focus outline for keyboard users */
 .service-card:focus-within,
 .service-card:focus {
-  outline: 3px solid rgba(135,206,235,0.18);
+  outline: 3px solid rgba(135, 206, 235, 0.18);
   outline-offset: 6px;
   border-radius: 1rem;
 }
