@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component, Input, ChangeDetectorRef, NgZone, OnChanges, SimpleChanges, ElementRef, Renderer2 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export type AnimationDirection = 'top-right-to-bottom-left' | 'top-left-to-bottom-right' | 'bottom-left-to-top-right' | 'bottom-right-to-top-left';
@@ -11,8 +11,8 @@ export type EasingType = 'smooth' | 'bouncy' | 'sharp' | 'elastic';
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.css']
 })
-export class NavbarComponent {
-  @Input() showNavbar = true; // Show navbar by default now
+export class NavbarComponent implements OnChanges {
+  @Input() showNavbar = false; // Controlled by parent
   @Input() animationDirection: AnimationDirection = 'top-right-to-bottom-left';
   @Input() animationEasing: EasingType = 'smooth';
   @Input() animationDuration: number = 1400;
@@ -27,7 +27,7 @@ export class NavbarComponent {
   isCovering = false;
   isUncovering = false;
   isAnimating = false;
-  isButtonDisabled = false; // New flag for button cooldown
+  isButtonDisabled = false;
 
   // Track current animation timeouts to clear them
   private currentTimeouts: any[] = [];
@@ -44,8 +44,24 @@ export class NavbarComponent {
 
   constructor(
     private cdr: ChangeDetectorRef,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private elementRef: ElementRef,
+    private renderer: Renderer2
   ) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['showNavbar']) {
+      if (this.showNavbar) {
+        this.revealNavbar();
+      }
+    }
+  }
+
+  private revealNavbar(): void {
+    const hostElement = this.elementRef.nativeElement;
+    this.renderer.addClass(hostElement, 'show-navbar');
+    console.log('Navbar now visible after tile animation');
+  }
 
   toggleMenu(): void {
     // Check if button is disabled due to cooldown or animation

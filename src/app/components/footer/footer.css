@@ -1,0 +1,165 @@
+/* Ensure the host element doesn't interfere */
+:host {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  z-index: 40 !important; /* Below tiles (z-index: 50) but above content */
+  pointer-events: none;
+  display: block;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+/* Show footer after tile animation completes */
+:host.show-footer {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Fixed footer glued to the bottom of the screen */
+.footer-fixed {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  z-index: 40 !important; /* Below tiles (z-index: 50) but above most content */
+  background: transparent !important;
+  pointer-events: none; /* Allow clicks through the footer container */
+  padding: 1.5rem 2rem;
+  margin: 0 !important;
+  transform: translateZ(0); /* Force GPU acceleration */
+}
+
+/* Footer content wrapper */
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 100vw;
+  margin: 0 auto;
+}
+
+/* Text visibility control - Default: show full text */
+.full-text {
+  display: inline;
+}
+
+.short-text {
+  display: none;
+}
+
+/* Footer links */
+.footer-link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  pointer-events: auto; /* Re-enable clicks for links */
+  letter-spacing: 0.025em;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  user-select: none;
+}
+
+/* Hover effects */
+.footer-link:hover {
+  color: var(--primary-color);
+  background: rgba(0, 0, 0, 0.5);
+  border-color: rgba(135, 206, 235, 0.3);
+  box-shadow: 0 0 20px rgba(135, 206, 235, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Active/Click effect */
+.footer-link:active {
+  transform: translateY(0);
+  box-shadow: 0 0 10px rgba(135, 206, 235, 0.3);
+}
+
+/* Focus state for accessibility */
+.footer-link:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .footer-fixed {
+    padding: 1.25rem 1rem;
+  }
+
+  .footer-link {
+    font-size: 0.8rem;
+    padding: 0.6rem 1rem;
+    min-height: 44px; /* Larger touch target */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Show initials on tablet */
+  .full-text {
+    display: none;
+  }
+
+  .short-text {
+    display: inline;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-fixed {
+    padding: 1rem 0.75rem;
+  }
+
+  .footer-content {
+    gap: 0.5rem;
+  }
+
+  .footer-link {
+    font-size: 1rem;
+    padding: 0.7rem 1.2rem;
+    min-height: 50px; /* Even larger touch target on mobile */
+    min-width: 50px;
+    border-radius: 12px;
+  }
+
+  /* Show initials on mobile */
+  .full-text {
+    display: none;
+  }
+
+  .short-text {
+    display: inline;
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+  }
+}
+
+/* Accessibility: Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .footer-link {
+    transition: none;
+  }
+}
+
+/* Performance optimization */
+.footer-fixed {
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}

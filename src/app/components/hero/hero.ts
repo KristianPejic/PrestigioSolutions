@@ -1,19 +1,19 @@
-import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TileDropAnimationComponent } from '../tile-drop-animation/tile-drop-animation';
-import { NavbarComponent } from '../navbar/navbar';
 
 @Component({
   selector: 'app-hero',
   standalone: true,
-  imports: [CommonModule, TileDropAnimationComponent, NavbarComponent],
+  imports: [CommonModule, TileDropAnimationComponent],
   templateUrl: './hero.html',
   styleUrls: ['./hero.css']
 })
 export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
+  @Output() tileAnimationComplete = new EventEmitter<void>(); // Emit event for footer and navbar
+
   showScrollingText = false;
-  showNavbar = false;
   revealText = false;
   showHeroContent = false;
   activeSlide = 0;
@@ -55,7 +55,6 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onFirstWaveComplete(): void {
     this.showScrollingText = true;
-    this.showNavbar = true;
 
     this.heroContentTimeout = setTimeout(() => {
       this.showHeroContent = true;
@@ -69,11 +68,14 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
       this.showHeroContent = true;
       if (this.activeSlide === 2) this.triggerBubbleSequence();
     }
+
+    // Emit event to show footer and navbar
+    this.tileAnimationComplete.emit();
+    console.log('Hero: Tile animation complete - emitting event for footer and navbar');
   }
 
   onHeroReset(): void {
     this.showScrollingText = false;
-    this.showNavbar = false;
     this.revealText = false;
     this.showHeroContent = false;
 

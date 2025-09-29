@@ -55,11 +55,13 @@ body {
   background: #0d9668;
 }
 
-/* Performance optimizations */
+/* Performance optimizations - REMOVED problematic properties */
+/* These were trapping the fixed footer:
 .app-container {
   will-change: transform;
   backface-visibility: hidden;
 }
+*/
 
 /* Accessibility improvements */
 @media (prefers-reduced-motion: reduce) {

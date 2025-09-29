@@ -1,3 +1,24 @@
+/* ================= HOST ELEMENT - STICKY NAVBAR ================= */
+:host {
+  position: fixed !important;
+  top: 0 !important;
+  right: 0 !important;
+  width: auto !important;
+  z-index: 9998 !important; /* Above footer (40) but below tiles (50) and fullscreen menu */
+  pointer-events: none !important; /* CRITICAL: Allow clicks to pass through host */
+  display: block;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+/* Show navbar after tile animation completes */
+:host.show-navbar {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: none !important; /* KEEP THIS: Host should never block clicks */
+}
+
 /* ================= Diagonal Mask Animation ================= */
 .mask-animation-container {
   position: fixed;
@@ -7,11 +28,11 @@
   bottom: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 9999999; /* Above everything */
+  z-index: 99999999 !important; /* Highest z-index for mask */
   overflow: hidden;
   margin: 0;
   padding: 0;
-  pointer-events: none;
+  pointer-events: auto !important; /* Allow interaction with mask */
 }
 
 .diagonal-mask {
@@ -25,6 +46,7 @@
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   transform-style: preserve-3d;
+  pointer-events: none !important; /* CRITICAL: Mask should never block clicks */
 }
 
 /* Direction Classes */
@@ -121,20 +143,13 @@
 
 /* ================= Navbar Wrapper ================= */
 .navbar-wrapper {
-  position: fixed;
-  top: 0;
-  right: 0;
-  z-index: 999998;
+  position: fixed !important;
+  top: 0 !important;
+  right: 0 !important;
+  z-index: 9998 !important;
   background: transparent;
   padding: 1rem 2rem;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.5s ease;
-}
-
-.navbar-wrapper.visible {
-  opacity: 1;
-  visibility: visible;
+  pointer-events: auto; /* Enable clicks on navbar */
 }
 
 .navbar-content {
@@ -203,27 +218,29 @@
 
 /* ================= Fullscreen Menu ================= */
 .fullscreen-menu {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
   background: rgba(0, 0, 0, 0.98);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  z-index: 999999;
+  z-index: 999999999 !important; /* HIGHEST - Above mask and everything */
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease;
+  pointer-events: none !important; /* Disable clicks when hidden */
 }
 
 .fullscreen-menu.active {
-  opacity: 1;
-  visibility: visible;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important; /* Enable ALL clicks when active */
 }
 
 .fullscreen-menu.animating {
-  pointer-events: none;
+  pointer-events: auto !important; /* Keep clickable during animation */
 }
 
 .menu-inner {
@@ -232,6 +249,8 @@
   text-align: center;
   position: relative;
   padding-top: 1rem;
+  pointer-events: auto !important; /* Ensure inner content is clickable */
+  z-index: 10;
 }
 
 /* ================= Close Button ================= */
@@ -244,10 +263,11 @@
   background: none;
   border: none;
   cursor: pointer;
-  z-index: 10000;
+  z-index: 10000000 !important; /* Above everything in the menu */
   transition: color 0.3s ease, transform 0.4s ease;
   color: white;
   outline: none;
+  pointer-events: auto !important; /* Always clickable */
 }
 
 .close-btn:hover:not(:disabled) {
@@ -266,6 +286,7 @@
   flex-direction: column;
   gap: 2.5rem;
   margin-top: 3rem;
+  pointer-events: auto !important; /* Ensure menu items are clickable */
 }
 
 .menu-item {
@@ -281,6 +302,8 @@
   border-radius: 8px;
   outline: none;
   background: transparent;
+  pointer-events: auto !important; /* Ensure each item is clickable */
+  cursor: pointer;
 }
 
 .menu-item .menu-number {
@@ -306,8 +329,9 @@
 }
 
 .menu-item.disabled {
-  pointer-events: none;
+  pointer-events: none !important;
   opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* ================= Responsive ================= */
