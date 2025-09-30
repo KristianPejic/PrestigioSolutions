@@ -68,7 +68,7 @@
 
 /* Slide image to the left when layout transforms */
 .content-wrapper.split-layout .image-wrapper {
-  transform: translateX(calc(-420px - 1rem));
+  transform: translateX(calc(-415px - 1rem));
 }
 
 .image-wrapper:hover:not(.loading) {

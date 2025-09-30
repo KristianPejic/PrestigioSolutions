@@ -14,16 +14,24 @@
   top: 0;
   width: 4px;
   background: white;
-  height: 50vh;
+  height: 0;
   transition: all 2s ease-out;
   z-index: 1;
 }
 
-/* Special highlight line (middle one over WIR) - extends much further down to connect to image */
+/* Special highlight line (middle one over WIR) - extends first */
 .line.highlight-line {
   background: white;
   width: 2px;
   transition: all 2s ease-out;
+}
+
+/* Left and right lines - white lines with two-stage animation */
+.line:nth-child(1),
+.line:nth-child(3) {
+  background: white;
+  width: 2px;
+  transition: none; /* Disable default transition, will use animation */
 }
 
 /* Text container */
@@ -83,11 +91,35 @@
   height: 100vh;
 }
 
-/* Middle line extends MUCH further down to connect to image component */
+/* Middle line extends and changes to blue gradient */
 .container.animate-lines .line.highlight-line {
-  height: 150vh; /* Extended significantly to reach the image */
+  height: 150vh;
   background: linear-gradient(180deg, white 0%, #3b82f6 50%, #87CEEB 100%);
   box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+}
+
+/* Left and right white lines extend with two-stage animation */
+.container.animate-lines .line:nth-child(1),
+.container.animate-lines .line:nth-child(3) {
+  animation: lineStopAndContinue 6s ease-out forwards;
+  background: white;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Two-stage animation: extend to text, pause 5s, then continue down */
+@keyframes lineStopAndContinue {
+  0% {
+    height: 0;
+  }
+  16.7% {
+    height: 100vh; /* Stop at WER/SIND level (1s out of 6s) */
+  }
+  83.3% {
+    height: 100vh; /* Hold for 5 seconds (66.6% of 6s = 4s, adjusted timing) */
+  }
+  100% {
+    height: 150vh; /* Continue down to image */
+  }
 }
 
 /* Text turns blue when line is active - controlled by JS */
@@ -100,6 +132,7 @@
 .container:not(.animate-lines) .line {
   height: 0;
   transition: all 0.5s ease-out;
+  animation: none;
 }
 
 .container:not(.animate-lines) .line.highlight-line {
@@ -169,7 +202,27 @@
   }
 
   .container.animate-lines .line.highlight-line {
-    height: 145vh; /* Extends to image on tablet */
+    height: 145vh;
+  }
+
+  .container.animate-lines .line:nth-child(1),
+  .container.animate-lines .line:nth-child(3) {
+    animation: lineStopAndContinueTablet 7s ease-out forwards;
+  }
+
+  @keyframes lineStopAndContinueTablet {
+    0% {
+      height: 0;
+    }
+    14.3% {
+      height: 100vh;
+    }
+    85.7% {
+      height: 100vh;
+    }
+    100% {
+      height: 145vh;
+    }
   }
 }
 
@@ -210,7 +263,7 @@
   }
 
   .container.animate-lines .line:nth-child(1) {
-    height: 140vh; /* Extends further on mobile to reach image */
+    height: 140vh;
     background: linear-gradient(180deg, #3b82f6 0%, #87CEEB 100%);
   }
 
@@ -244,7 +297,7 @@
       top: 0;
     }
     75% {
-      height: 140vh; /* Extends to image */
+      height: 140vh;
       top: 0;
     }
     87.5% {
