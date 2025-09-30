@@ -1,37 +1,75 @@
-<div class="image-reveal-container">
+<div class="image-reveal-container" [class.layout-transformed]="isLayoutTransformed">
   <!-- Connecting Line from WIR -->
-  <div class="connecting-line" [class.line-extended]="isLineExtended"></div>
+  <div class="connecting-line center-line" [class.line-extended]="isLineExtended"></div>
 
-  <!-- Image Container -->
-  <div
-    class="image-wrapper"
-    [class.loading]="isLoading"
-    [class.revealed]="isRevealed"
-    [class.start-animation]="isLineExtended && isLoading">
+  <!-- Left connecting line (from WER) -->
+  <div class="connecting-line left-line"
+       [class.line-connected]="leftLineConnected && isLayoutTransformed">
+  </div>
 
-    <!-- Loading Animation Overlay -->
-    <div class="loading-overlay" *ngIf="isLoading">
-      <div class="loading-bar loading-bar-left"></div>
-      <div class="loading-bar loading-bar-right"></div>
-      <div class="loading-bar loading-bar-bottom"></div>
-      <div class="loading-bar loading-bar-left-side"></div>
-      <div class="loading-spinner"></div>
+  <!-- Right connecting line (from SIND) -->
+  <div class="connecting-line right-line"
+       [class.line-connected]="rightLineConnected && isLayoutTransformed">
+  </div>
+
+  <!-- Content Wrapper -->
+  <div class="content-wrapper" [class.split-layout]="isLayoutTransformed">
+
+    <!-- Image Container -->
+    <div class="image-wrapper"
+         [class.loading]="isLoading"
+         [class.revealed]="isRevealed"
+         [class.shifted-left]="isLayoutTransformed"
+         [class.start-animation]="isLineExtended && isLoading">
+
+      <!-- Loading Animation Overlay -->
+      <div class="loading-overlay" *ngIf="isLoading">
+        <div class="loading-bar loading-bar-left"></div>
+        <div class="loading-bar loading-bar-right"></div>
+        <div class="loading-bar loading-bar-bottom"></div>
+        <div class="loading-bar loading-bar-left-side"></div>
+        <div class="loading-spinner"></div>
+      </div>
+
+      <!-- Image -->
+      <img [src]="imageSrc"
+           [alt]="imageAlt"
+           class="reveal-image"
+           [class.image-visible]="isRevealed">
+
+      <!-- Click Hint -->
+      <div class="click-hint" *ngIf="!isLoading && !isRevealed && !isLineExtended">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 8v8M8 12h8"></path>
+        </svg>
+        <p>Waiting for connection...</p>
+      </div>
     </div>
 
-    <!-- Image -->
-    <img
-      [src]="imageSrc"
-      [alt]="imageAlt"
-      class="reveal-image"
-      [class.image-visible]="isRevealed">
-
-    <!-- Click Hint - Hidden since auto-animation -->
-    <div class="click-hint" *ngIf="!isLoading && !isRevealed && !isLineExtended">
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-        <circle cx="12" cy="12" r="10"></circle>
-        <path d="M12 8v8M8 12h8"></path>
-      </svg>
-      <p>Waiting for connection...</p>
+    <!-- Text Container (appears after layout transform) -->
+    <div class="text-container"
+         [class.text-visible]="isLayoutTransformed"
+         *ngIf="isRevealed">
+      <div class="text-content">
+        <h2 class="text-heading">Maßgeschneiderte Lösungen</h2>
+        <p class="text-paragraph">
+          Wir entwickeln innovative Software-Lösungen, die perfekt auf Ihre individuellen Anforderungen zugeschnitten sind.
+        </p>
+        <p class="text-paragraph">
+          Von modernen Webseiten über komplexe Web-Apps bis hin zur strategischen IT-Beratung –
+          unser Team steht für Qualität, Effizienz und nachhaltige Digitalisierung.
+        </p>
+        <div class="text-highlight">
+          <div class="highlight-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#87CEEB" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <span>Ihre Vision, unsere Expertise</span>
+        </div>
+      </div>
     </div>
   </div>
 </div>

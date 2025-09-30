@@ -23,27 +23,24 @@ import { NavbarComponent } from './components/navbar/navbar';
 export class AppComponent implements OnInit {
   title = 'PrestigioSolutions';
   isLineExtended = false;
-  showFooter = false; // Control footer visibility
-  showNavbar = false; // Control navbar visibility
-  private hasAnimationCompleted = false; // Track if animation has run once
+  leftLineConnected = false;
+  rightLineConnected = false;
+  showFooter = false;
+  showNavbar = false;
+  private hasAnimationCompleted = false;
 
   ngOnInit(): void {
-    // Force scroll to top on component initialization (page refresh)
     this.scrollToTop();
   }
 
   private scrollToTop(): void {
-    // Method 1: Immediate scroll
     window.scrollTo(0, 0);
-
-    // Method 2: Also set scroll position on document
     if (typeof document !== 'undefined') {
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
     }
   }
 
-  // This method receives the event from wer-wir-sind when line extends
   onLineExtended(extended: boolean): void {
     this.isLineExtended = extended;
     console.log('Line extended from wer-wir-sind:', extended);
@@ -53,9 +50,17 @@ export class AppComponent implements OnInit {
     console.log('Image revealed!');
   }
 
-  // This method receives the event when tile animation completes
+  onLayoutTransformed(): void {
+    console.log('Layout transformed - connecting additional lines');
+    // Connect the left and right lines after layout transforms
+    setTimeout(() => {
+      this.leftLineConnected = true;
+      this.rightLineConnected = true;
+      console.log('Left and right lines now connected');
+    }, 300);
+  }
+
   onTileAnimationComplete(): void {
-    // Only show footer/navbar the FIRST time animation completes
     if (!this.hasAnimationCompleted) {
       this.showFooter = true;
       this.showNavbar = true;

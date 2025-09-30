@@ -12,43 +12,44 @@ export class ImageRevealComponent implements OnChanges, OnDestroy {
   @Input() imageSrc: string = 'assets/images/reveal-image.jpg';
   @Input() imageAlt: string = 'Reveal Image';
   @Input() isLineExtended: boolean = false;
+  @Input() leftLineConnected: boolean = false;
+  @Input() rightLineConnected: boolean = false;
 
   @Output() imageRevealed = new EventEmitter<void>();
+  @Output() layoutTransformed = new EventEmitter<void>();
 
   isLoading = false;
   isRevealed = false;
+  isLayoutTransformed = false;
   private animationTimeout: any;
+  private layoutTimeout: any;
 
   constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log('ImageReveal - isLineExtended changed:', this.isLineExtended);
 
-    // When line extends and connects to image, automatically start animation
     if (changes['isLineExtended']) {
       if (this.isLineExtended && !this.isLoading && !this.isRevealed) {
         console.log('ImageReveal - Line extended, starting animation after 2s delay');
-        // Wait for line animation to complete (2s) then start loading
         this.animationTimeout = setTimeout(() => {
           console.log('ImageReveal - Starting loading animation NOW');
           this.startLoadingAnimation();
         }, 2000);
       } else if (!this.isLineExtended) {
-        // Line retracted - reset everything
         console.log('ImageReveal - Line retracted, resetting');
         if (this.animationTimeout) {
           clearTimeout(this.animationTimeout);
         }
+        if (this.layoutTimeout) {
+          clearTimeout(this.layoutTimeout);
+        }
         this.isLoading = false;
         this.isRevealed = false;
+        this.isLayoutTransformed = false;
         this.cdr.detectChanges();
       }
     }
-  }
-
-  onImageClick(): void {
-    // Manual click disabled - animation auto-starts when line connects
-    return;
   }
 
   private startLoadingAnimation(): void {
@@ -61,19 +62,30 @@ export class ImageRevealComponent implements OnChanges, OnDestroy {
     this.isLoading = true;
     this.cdr.detectChanges();
 
-    // Loading animation duration: 1.8s (4 sides at 0.3s each + spinner fade) - MUCH FASTER
+    // Loading animation duration: 1.8s
     setTimeout(() => {
       console.log('ImageReveal - Loading complete, revealing image');
       this.isLoading = false;
       this.isRevealed = true;
       this.imageRevealed.emit();
       this.cdr.detectChanges();
+
+      // Transform layout after 1.5s delay
+      this.layoutTimeout = setTimeout(() => {
+        console.log('ImageReveal - Transforming layout');
+        this.isLayoutTransformed = true;
+        this.layoutTransformed.emit();
+        this.cdr.detectChanges();
+      }, 1500);
     }, 1800);
   }
 
   ngOnDestroy(): void {
     if (this.animationTimeout) {
       clearTimeout(this.animationTimeout);
+    }
+    if (this.layoutTimeout) {
+      clearTimeout(this.layoutTimeout);
     }
   }
 }
