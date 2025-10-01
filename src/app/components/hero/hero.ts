@@ -11,7 +11,7 @@ import { TileDropAnimationComponent } from '../tile-drop-animation/tile-drop-ani
   styleUrls: ['./hero.css']
 })
 export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
-  @Output() tileAnimationComplete = new EventEmitter<void>(); // Emit event for footer and navbar
+  @Output() tileAnimationComplete = new EventEmitter<void>();
 
   showScrollingText = false;
   revealText = false;
@@ -41,12 +41,10 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
   /** Auto-slide logic: slides 0 and 1 every 5s, slide 2 waits for animation */
   startAutoSlide(): void {
     this.slideInterval = setInterval(() => {
-      // If currently on slide 2, do nothing (handled separately)
-      if (this.activeSlide === 2) return;
+      if (this.activeSlide === 2) return; // slide 3 handled separately
 
       this.activeSlide = (this.activeSlide + 1) % 3;
 
-      // Trigger bubble animation if moving to slide 2
       if (this.activeSlide === 2 && this.showHeroContent) {
         this.triggerBubbleSequence();
       }
@@ -69,9 +67,7 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
       if (this.activeSlide === 2) this.triggerBubbleSequence();
     }
 
-    // Emit event to show footer and navbar
     this.tileAnimationComplete.emit();
-    console.log('Hero: Tile animation complete - emitting event for footer and navbar');
   }
 
   onHeroReset(): void {
@@ -101,26 +97,28 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
       const text = bubble.querySelector('.bubble-text') as HTMLElement;
       const line = lines[i] as HTMLElement;
 
-      // Reset classes for animation
       bubble.classList.remove('show-bubble');
       number.classList.remove('show-number');
       text.classList.remove('show-text');
       circle?.classList.remove('draw-circle');
       line?.classList.remove('show-line');
 
-      // Animate bubble sequence
       setTimeout(() => bubble.classList.add('show-bubble'), delay);
       setTimeout(() => number.classList.add('show-number'), delay + 500);
       setTimeout(() => circle?.classList.add('draw-circle'), delay + 1000);
       setTimeout(() => text.classList.add('show-text'), delay + 2200);
       if (line) setTimeout(() => line.classList.add('show-line'), delay + 2800);
 
-      delay += 2500; // stagger each bubble
+      delay += 2500;
     });
 
-    // Move to next slide after last bubble animation finishes
+    // After last bubble finishes, wait, then go back to slide 0
     setTimeout(() => {
-      this.activeSlide = (this.activeSlide + 1) % 3;
-    }, delay + 500);
+      this.activeSlide = 0;
+
+      //  Restart auto-slide fresh so slide 1 also lasts full 5s again
+      clearInterval(this.slideInterval);
+      this.startAutoSlide();
+    }, delay + 2000); // pause after last bubble
   }
 }

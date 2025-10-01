@@ -125,7 +125,6 @@
 /* Text turns blue when line is active - controlled by JS */
 .container.animate-lines .highlight-text.line-active {
   color: #3b82f6;
-  text-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
 }
 
 /* Reset animation when scrolling back up - lines go back to 0 */
@@ -150,24 +149,20 @@
 /* All text sections start white and can be made blue when line passes through */
 .portfolio-heading.line-active {
   color: #3b82f6;
-  text-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
 }
 
 /* Enhanced visual effects */
 .portfolio-heading:not(.highlight-text) {
-  text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
 }
 
 /* Hover effects */
 .text-left:hover .portfolio-heading:not(.highlight-text),
 .text-right:hover .portfolio-heading:not(.highlight-text) {
   color: rgba(255, 255, 255, 0.8);
-  text-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
 }
 
 .wir-highlighted:hover .highlight-text {
   color: #2563eb;
-  text-shadow: 0 0 40px rgba(59, 130, 246, 0.6);
 }
 
 /* Responsive adjustments */
