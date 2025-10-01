@@ -70,6 +70,10 @@
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   user-select: none;
+  transform: translateY(0);
+  box-shadow: 0 0 10px rgba(135, 206, 235, 0.3);
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
 }
 
 /* Hover effects */
@@ -79,18 +83,6 @@
   border-color: rgba(135, 206, 235, 0.3);
   box-shadow: 0 0 20px rgba(135, 206, 235, 0.2);
   transform: translateY(-2px);
-}
-
-/* Active/Click effect */
-.footer-link:active {
-  transform: translateY(0);
-  box-shadow: 0 0 10px rgba(135, 206, 235, 0.3);
-}
-
-/* Focus state for accessibility */
-.footer-link:focus {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
 }
 
 /* Responsive adjustments */
