@@ -27,23 +27,14 @@ export class ImageRevealComponent implements OnChanges, OnDestroy {
   constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('ImageReveal - isLineExtended changed:', this.isLineExtended);
-
     if (changes['isLineExtended']) {
       if (this.isLineExtended && !this.isLoading && !this.isRevealed) {
-        console.log('ImageReveal - Line extended, starting animation after 2s delay');
         this.animationTimeout = setTimeout(() => {
-          console.log('ImageReveal - Starting loading animation NOW');
           this.startLoadingAnimation();
         }, 2000);
       } else if (!this.isLineExtended) {
-        console.log('ImageReveal - Line retracted, resetting');
-        if (this.animationTimeout) {
-          clearTimeout(this.animationTimeout);
-        }
-        if (this.layoutTimeout) {
-          clearTimeout(this.layoutTimeout);
-        }
+        if (this.animationTimeout) clearTimeout(this.animationTimeout);
+        if (this.layoutTimeout) clearTimeout(this.layoutTimeout);
         this.isLoading = false;
         this.isRevealed = false;
         this.isLayoutTransformed = false;
@@ -53,26 +44,18 @@ export class ImageRevealComponent implements OnChanges, OnDestroy {
   }
 
   private startLoadingAnimation(): void {
-    if (this.isLoading || this.isRevealed) {
-      console.log('ImageReveal - Animation already running or complete');
-      return;
-    }
+    if (this.isLoading || this.isRevealed) return;
 
-    console.log('ImageReveal - Loading animation STARTED');
     this.isLoading = true;
     this.cdr.detectChanges();
 
-    // Loading animation duration: 1.8s
     setTimeout(() => {
-      console.log('ImageReveal - Loading complete, revealing image');
       this.isLoading = false;
       this.isRevealed = true;
       this.imageRevealed.emit();
       this.cdr.detectChanges();
 
-      // Transform layout after 1.5s delay
       this.layoutTimeout = setTimeout(() => {
-        console.log('ImageReveal - Transforming layout');
         this.isLayoutTransformed = true;
         this.layoutTransformed.emit();
         this.cdr.detectChanges();
@@ -81,11 +64,7 @@ export class ImageRevealComponent implements OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.animationTimeout) {
-      clearTimeout(this.animationTimeout);
-    }
-    if (this.layoutTimeout) {
-      clearTimeout(this.layoutTimeout);
-    }
+    if (this.animationTimeout) clearTimeout(this.animationTimeout);
+    if (this.layoutTimeout) clearTimeout(this.layoutTimeout);
   }
 }
