@@ -4,6 +4,18 @@
 @tailwind components;
 @tailwind utilities;
 
+.hero-slider {
+  width: 100%;
+  height: 100vh;
+  background: url('/assets/images/hero-section-slider/leo/hero-section-hat.jpg') no-repeat center center;
+  background-size: cover;
+}
+
+@media (max-width: 768px) {
+  .hero-slider {
+    background-position: 70% center;
+  }
+}
 
 /* Define global color variables */
 :root {
