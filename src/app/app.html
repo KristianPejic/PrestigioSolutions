@@ -1,8 +1,29 @@
-<!-- Router Outlet for all pages -->
-<router-outlet></router-outlet>
+<!-- Main App Container -->
+<div class="app-container">
 
-<!-- Sticky Navbar -->
+  <!-- Hero Section (includes tile animation) -->
+  <app-hero (tileAnimationComplete)="onTileAnimationComplete()"></app-hero>
+
+  <!-- Wer Wir Sind Section (Large Text Section) -->
+  <app-wer-wir-sind (lineExtended)="onLineExtended($event)"></app-wer-wir-sind>
+
+  <!-- Image Reveal Section - Now with layout transformation -->
+  <app-image-reveal
+    [isLineExtended]="isLineExtended"
+    [leftLineConnected]="leftLineConnected"
+    [rightLineConnected]="rightLineConnected"
+    [imageSrc]="'assets/images/hero-section-slider/Pixabay/sonstiges/Earth.png'"
+    [imageAlt]="'Prestigio Solutions Team'"
+    (imageRevealed)="onImageRevealed()"
+    (layoutTransformed)="onLayoutTransformed()">
+  </app-image-reveal>
+
+  <app-short-services></app-short-services>
+
+</div>
+
+<!-- Sticky Navbar OUTSIDE app-container -->
 <app-navbar [showNavbar]="showNavbar"></app-navbar>
 
-<!-- Fixed Footer -->
+<!-- Fixed Footer OUTSIDE app-container -->
 <app-footer [showFooter]="showFooter"></app-footer>
