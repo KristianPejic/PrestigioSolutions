@@ -1,0 +1,20 @@
+.page-container { min-height: 100vh; background: black; color: white; padding: 2rem; }
+    .hero-section { text-align: center; padding: 6rem 2rem 4rem; background: linear-gradient(180deg, rgba(135, 206, 235, 0.1), transparent); }
+    .page-title { font-size: clamp(3rem, 8vw, 6rem); font-weight: 800; color: #87CEEB; margin-bottom: 1rem; text-shadow: 0 0 40px rgba(135, 206, 235, 0.3); }
+    .page-subtitle { font-size: clamp(1.2rem, 3vw, 2rem); color: rgba(255, 255, 255, 0.8); font-weight: 300; }
+    .contact-content { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem; display: grid; gap: 3rem; grid-template-columns: 1fr 1.5fr; }
+    .contact-info { display: flex; flex-direction: column; gap: 1.5rem; }
+    .info-card { background: rgba(135, 206, 235, 0.05); border: 2px solid rgba(135, 206, 235, 0.2); border-radius: 20px; padding: 2rem; text-align: center; transition: all 0.4s ease; }
+    .info-card:hover { background: rgba(135, 206, 235, 0.08); border-color: rgba(135, 206, 235, 0.4); transform: translateY(-5px); }
+    .icon { font-size: 3rem; margin-bottom: 1rem; }
+    .info-card h3 { color: #87CEEB; font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .info-card p { color: rgba(255, 255, 255, 0.8); line-height: 1.6; }
+    .contact-form-container { background: rgba(135, 206, 235, 0.05); border: 2px solid rgba(135, 206, 235, 0.2); border-radius: 20px; padding: 2.5rem; }
+    .contact-form { display: flex; flex-direction: column; gap: 1.5rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+    .form-group label { color: #87CEEB; font-weight: 600; font-size: 1.1rem; }
+    .form-group input, .form-group textarea { background: rgba(135, 206, 235, 0.05); border: 2px solid rgba(135, 206, 235, 0.2); border-radius: 10px; padding: 1rem; color: white; font-size: 1rem; transition: all 0.3s ease; }
+    .form-group input:focus, .form-group textarea:focus { outline: none; border-color: rgba(135, 206, 235, 0.6); background: rgba(135, 206, 235, 0.08); }
+    .submit-btn { background: linear-gradient(135deg, #3b82f6, #87CEEB); border: none; border-radius: 10px; padding: 1.2rem 2rem; color: white; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+    .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(135, 206, 235, 0.3); }
+    @media (max-width: 768px) { .hero-section { padding: 5rem 1rem 3rem; } .contact-content { grid-template-columns: 1fr; padding: 2rem 1rem; } }

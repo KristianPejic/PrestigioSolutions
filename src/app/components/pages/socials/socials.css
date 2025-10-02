@@ -1,0 +1,11 @@
+.page-container { min-height: 100vh; background: black; color: white; padding: 2rem; }
+    .hero-section { text-align: center; padding: 6rem 2rem 4rem; background: linear-gradient(180deg, rgba(135, 206, 235, 0.1), transparent); }
+    .page-title { font-size: clamp(3rem, 8vw, 6rem); font-weight: 800; color: #87CEEB; margin-bottom: 1rem; text-shadow: 0 0 40px rgba(135, 206, 235, 0.3); }
+    .page-subtitle { font-size: clamp(1.2rem, 3vw, 2rem); color: rgba(255, 255, 255, 0.8); font-weight: 300; }
+    .socials-grid { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem; display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+    .social-card { background: rgba(135, 206, 235, 0.05); border: 2px solid rgba(135, 206, 235, 0.2); border-radius: 20px; padding: 2.5rem; text-align: center; text-decoration: none; color: white; transition: all 0.4s ease; display: block; }
+    .social-card:hover { background: rgba(135, 206, 235, 0.08); border-color: rgba(135, 206, 235, 0.4); box-shadow: 0 0 40px rgba(135, 206, 235, 0.2); transform: translateY(-10px) scale(1.05); }
+    .social-icon { width: 80px; height: 80px; margin: 0 auto 1.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; }
+    .social-card h3 { color: #87CEEB; font-size: 1.8rem; margin-bottom: 0.75rem; }
+    .social-card p { color: rgba(255, 255, 255, 0.8); line-height: 1.6; }
+    @media (max-width: 768px) { .hero-section { padding: 5rem 1rem 3rem; } .socials-grid { padding: 2rem 1rem; grid-template-columns: 1fr; } }

@@ -1,0 +1,16 @@
+<div class="page-container">
+  <div class="hero-section">
+    <h1 class="page-title">Socials</h1>
+    <p class="page-subtitle">Folgen Sie uns auf Social Media</p>
+  </div>
+
+  <div class="socials-grid">
+    <a *ngFor="let social of socials" [href]="social.url" target="_blank" class="social-card">
+      <div class="social-icon" [style.background]="social.color">
+        <span [innerHTML]="social.icon"></span>
+      </div>
+      <h3>{{ social.name }}</h3>
+      <p>{{ social.description }}</p>
+    </a>
+  </div>
+</div>

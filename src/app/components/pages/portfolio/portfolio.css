@@ -1,0 +1,15 @@
+.page-container { min-height: 100vh; background: black; color: white; padding: 2rem; }
+    .hero-section { text-align: center; padding: 6rem 2rem 4rem; background: linear-gradient(180deg, rgba(135, 206, 235, 0.1), transparent); }
+    .page-title { font-size: clamp(3rem, 8vw, 6rem); font-weight: 800; color: #87CEEB; margin-bottom: 1rem; text-shadow: 0 0 40px rgba(135, 206, 235, 0.3); }
+    .page-subtitle { font-size: clamp(1.2rem, 3vw, 2rem); color: rgba(255, 255, 255, 0.8); font-weight: 300; }
+    .portfolio-grid { max-width: 1400px; margin: 0 auto; padding: 4rem 2rem; display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); }
+    .project-card { background: rgba(135, 206, 235, 0.05); border: 2px solid rgba(135, 206, 235, 0.2); border-radius: 20px; overflow: hidden; transition: all 0.4s ease; cursor: pointer; }
+    .project-card:hover { border-color: rgba(135, 206, 235, 0.4); box-shadow: 0 0 40px rgba(135, 206, 235, 0.2); transform: translateY(-8px); }
+    .project-image { width: 100%; height: 250px; }
+    .project-info { padding: 2rem; }
+    .project-info h3 { color: #87CEEB; font-size: 1.8rem; margin-bottom: 0.5rem; }
+    .project-category { color: rgba(255, 255, 255, 0.6); font-size: 0.9rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px; }
+    .project-description { color: rgba(255, 255, 255, 0.9); line-height: 1.6; margin-bottom: 1.5rem; }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .tag { background: rgba(135, 206, 235, 0.15); color: #87CEEB; padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.85rem; }
+    @media (max-width: 768px) { .hero-section { padding: 5rem 1rem 3rem; } .portfolio-grid { padding: 2rem 1rem; grid-template-columns: 1fr; } }

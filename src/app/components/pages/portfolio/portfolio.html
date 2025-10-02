@@ -1,0 +1,20 @@
+<div class="page-container">
+  <div class="hero-section">
+    <h1 class="page-title">Portfolio</h1>
+    <p class="page-subtitle">Unsere erfolgreichen Projekte</p>
+  </div>
+
+  <div class="portfolio-grid">
+    <div class="project-card" *ngFor="let project of projects">
+      <div class="project-image" [style.background]="project.color"></div>
+      <div class="project-info">
+        <h3>{{ project.title }}</h3>
+        <p class="project-category">{{ project.category }}</p>
+        <p class="project-description">{{ project.description }}</p>
+        <div class="project-tags">
+          <span *ngFor="let tag of project.tags" class="tag">{{ tag }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
