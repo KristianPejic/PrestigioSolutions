@@ -50,7 +50,6 @@
     <nav class="menu-nav">
       <a
         *ngFor="let link of menuLinks; let i = index"
-        href="#"
         class="menu-item"
         [style.--delay]="i"
         [class.disabled]="isAnimating || isButtonDisabled"

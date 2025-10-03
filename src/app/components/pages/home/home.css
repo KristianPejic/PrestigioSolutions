@@ -1,0 +1,18 @@
+/* Home Component Host Styles */
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  background-color: black;
+}
+
+/* Ensure smooth transitions between sections */
+app-hero,
+app-wer-wir-sind,
+app-image-reveal,
+app-short-services {
+  display: block;
+  width: 100%;
+}
+
+/* Optional: Add any home-specific styling here */

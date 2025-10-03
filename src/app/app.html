@@ -1,24 +1,30 @@
 <!-- Main App Container -->
 <div class="app-container">
 
-  <!-- Hero Section (includes tile animation) -->
-  <app-hero (tileAnimationComplete)="onTileAnimationComplete()"></app-hero>
+  <!-- Landing Page Content (shown when no route is active) -->
+  <ng-container *ngIf="showLandingPage">
+    <!-- Hero Section (includes tile animation) -->
+    <app-hero (tileAnimationComplete)="onTileAnimationComplete()"></app-hero>
 
-  <!-- Wer Wir Sind Section (Large Text Section) -->
-  <app-wer-wir-sind (lineExtended)="onLineExtended($event)"></app-wer-wir-sind>
+    <!-- Wer Wir Sind Section (Large Text Section) -->
+    <app-wer-wir-sind (lineExtended)="onLineExtended($event)"></app-wer-wir-sind>
 
-  <!-- Image Reveal Section - Now with layout transformation -->
-  <app-image-reveal
-    [isLineExtended]="isLineExtended"
-    [leftLineConnected]="leftLineConnected"
-    [rightLineConnected]="rightLineConnected"
-    [imageSrc]="'assets/images/hero-section-slider/Pixabay/sonstiges/Earth.png'"
-    [imageAlt]="'Prestigio Solutions Team'"
-    (imageRevealed)="onImageRevealed()"
-    (layoutTransformed)="onLayoutTransformed()">
-  </app-image-reveal>
+    <!-- Image Reveal Section - Now with layout transformation -->
+    <app-image-reveal
+      [isLineExtended]="isLineExtended"
+      [leftLineConnected]="leftLineConnected"
+      [rightLineConnected]="rightLineConnected"
+      [imageSrc]="'assets/images/hero-section-slider/Pixabay/sonstiges/Earth.png'"
+      [imageAlt]="'Prestigio Solutions Team'"
+      (imageRevealed)="onImageRevealed()"
+      (layoutTransformed)="onLayoutTransformed()">
+    </app-image-reveal>
 
-  <app-short-services></app-short-services>
+    <app-short-services></app-short-services>
+  </ng-container>
+
+  <!-- Router Outlet - displays other route components -->
+  <router-outlet></router-outlet>
 
 </div>
 

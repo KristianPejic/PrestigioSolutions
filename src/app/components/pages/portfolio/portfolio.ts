@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-
+import { CommonModule } from '@angular/common'
 @Component({
   selector: 'app-portfolio',
-  imports: [],
+  imports: [CommonModule],
   standalone:true,
   templateUrl: './portfolio.html',
   styleUrl: './portfolio.css'

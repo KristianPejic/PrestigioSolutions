@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-
+import { CommonModule } from '@angular/common'
 @Component({
   selector: 'app-socials',
-  imports: [],
+  imports: [CommonModule],
   standalone:true,
   templateUrl: './socials.html',
   styleUrl: './socials.css'

@@ -2,11 +2,6 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: '',
-    redirectTo: 'home',
-    pathMatch: 'full'
-  },
-  {
     path: 'uber-uns',
     loadComponent: () =>
       import('./components/pages/uber-uns/uber-uns').then(
@@ -45,9 +40,5 @@ export const routes: Routes = [
         (m) => m.Socials
       ),
     title: 'Socials - Ihr IT Partner'
-  },
-  {
-    path: '**',
-    redirectTo: 'home'
   }
 ];

@@ -1,5 +1,6 @@
 import { Component, Input, ChangeDetectorRef, NgZone, OnChanges, SimpleChanges, ElementRef, Renderer2 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 export type AnimationDirection = 'top-right-to-bottom-left' | 'top-left-to-bottom-right' | 'bottom-left-to-top-right' | 'bottom-right-to-top-left';
 export type EasingType = 'smooth' | 'bouncy' | 'sharp' | 'elastic';
@@ -34,19 +35,20 @@ export class NavbarComponent implements OnChanges {
   private buttonCooldownTimeout: any;
 
   menuLinks = [
-    { name: 'Home', href: '#home' },
-    { name: 'About Us', href: '#about' },
-    { name: 'Services', href: '#services' },
-    { name: 'Portfolio', href: '#portfolio' },
-    { name: 'Contact', href: '#contact' },
-    { name: 'Socials', href: '#socials' }
+    { name: 'Home', route: '/' },
+    { name: 'About Us', route: '/uber-uns' },
+    { name: 'Services', route: '/unsere-services' },
+    { name: 'Portfolio', route: '/portfolio' },
+    { name: 'Contact', route: '/kontakt' },
+    { name: 'Socials', route: '/socials' }
   ];
 
   constructor(
     private cdr: ChangeDetectorRef,
     private ngZone: NgZone,
     private elementRef: ElementRef,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private router: Router
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -93,10 +95,17 @@ export class NavbarComponent implements OnChanges {
       return;
     }
 
-    console.log('Navigating to:', link.name);
+    console.log('Navigating to:', link.name, 'at route:', link.route);
+
+    // Close menu first
     this.closeMenu();
-    // Add your routing logic here
-    // this.router.navigate([link.href]);
+
+    // Navigate after a short delay to allow menu to close smoothly
+    setTimeout(() => {
+      this.router.navigate([link.route]).then(() => {
+        window.scrollTo(0, 0);
+      });
+    }, 500);
   }
 
   closeMenu(): void {
