@@ -33,20 +33,42 @@ export class AppComponent implements OnInit {
   showFooter = false;
   showNavbar = false;
   showLandingPage = true;
+  showTileAnimation = false;
   private hasAnimationCompleted = false;
+  private hasVisitedBefore = false;
 
   constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.scrollToTop();
 
+    // Check if user has visited before (in this session)
+    const hasVisited = sessionStorage.getItem('hasVisitedHome');
+    this.hasVisitedBefore = hasVisited === 'true';
+
     // Check if we're on a route or landing page
     const currentUrl = this.router.url;
     if (currentUrl === '/' || currentUrl === '') {
       this.showLandingPage = true;
-      this.showFooter = false;
+
+      if (this.hasVisitedBefore) {
+        // Skip animation, show footer and navbar immediately
+        this.showTileAnimation = false;
+        this.showFooter = true;
+        this.showNavbar = true;
+        this.hasAnimationCompleted = true;
+        console.log('Returning to home - skipping tile animation');
+      } else {
+        // First visit - show tile animation
+        this.showTileAnimation = true;
+        this.showFooter = false;
+        this.showNavbar = false;
+        sessionStorage.setItem('hasVisitedHome', 'true');
+        console.log('First visit to home - showing tile animation');
+      }
     } else {
       this.showLandingPage = false;
+      this.showTileAnimation = false;
       this.showFooter = true;
       this.showNavbar = true;
     }
@@ -58,12 +80,29 @@ export class AppComponent implements OnInit {
       // Show landing page only on root path
       if (event.url === '/' || event.url === '') {
         this.showLandingPage = true;
-        this.showFooter = false;
-        this.showNavbar = false;
-        this.hasAnimationCompleted = false;
+
+        // Check if we should show tile animation
+        const hasVisited = sessionStorage.getItem('hasVisitedHome');
+        if (hasVisited === 'true') {
+          // Already visited - skip animation
+          this.showTileAnimation = false;
+          this.showFooter = true;
+          this.showNavbar = true;
+          this.hasAnimationCompleted = true;
+          console.log('Navigating back to home - skipping tile animation');
+        } else {
+          // First visit - show animation
+          this.showTileAnimation = true;
+          this.showFooter = false;
+          this.showNavbar = false;
+          this.hasAnimationCompleted = false;
+          sessionStorage.setItem('hasVisitedHome', 'true');
+          console.log('First navigation to home - showing tile animation');
+        }
       } else {
         // Hide landing page, show routed component
         this.showLandingPage = false;
+        this.showTileAnimation = false;
         this.showFooter = true;
         this.showNavbar = true;
       }
@@ -104,9 +143,7 @@ export class AppComponent implements OnInit {
       this.showFooter = true;
       this.showNavbar = true;
       this.hasAnimationCompleted = true;
-      console.log('Tile animation complete - showing footer and navbar (FIRST TIME)');
-    } else {
-      console.log('Tile animation complete - footer and navbar already shown');
+      console.log('Tile animation complete - showing footer and navbar');
     }
   }
 }

@@ -103,8 +103,9 @@
     </div>
   </div>
 
-  <!-- TILE DROP ANIMATION -->
+  <!-- TILE DROP ANIMATION (only show if showTileAnimation is true) -->
   <app-tile-drop-animation
+    *ngIf="showTileAnimation"
     (firstWaveComplete)="onFirstWaveComplete()"
     (animationComplete)="onTileAnimationComplete()"
     (animationReset)="onHeroReset()">

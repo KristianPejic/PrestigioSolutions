@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, Output, EventEmitter } from '@angular/core';
+import {Component, OnInit, OnDestroy, AfterViewInit, Output, EventEmitter, SimpleChanges, Input} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TileDropAnimationComponent } from '../tile-drop-animation/tile-drop-animation';
@@ -11,6 +11,7 @@ import { TileDropAnimationComponent } from '../tile-drop-animation/tile-drop-ani
   styleUrls: ['./hero.css']
 })
 export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
+  @Input() showTileAnimation = true;
   @Output() tileAnimationComplete = new EventEmitter<void>();
 
   showScrollingText = false;
@@ -26,10 +27,27 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {
     this.startAutoSlide();
   }
+  ngOnChanges(changes: SimpleChanges): void {
+    // If tile animation is disabled, show content immediately
+    if (changes['showTileAnimation'] && !this.showTileAnimation) {
+      this.showScrollingText = true;
+      this.revealText = true;
+      this.showHeroContent = true;
+      console.log('Tile animation disabled - showing hero content immediately');
+    }
+  }
 
   ngAfterViewInit(): void {
     if (this.activeSlide === 2 && this.showHeroContent) {
       this.triggerBubbleSequence();
+    }
+
+    // If tile animation is disabled, emit complete immediately
+    if (!this.showTileAnimation) {
+      setTimeout(() => {
+        this.tileAnimationComplete.emit();
+        console.log('Tile animation skipped - emitting complete');
+      }, 100);
     }
   }
 

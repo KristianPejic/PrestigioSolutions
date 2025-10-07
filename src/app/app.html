@@ -3,8 +3,11 @@
 
   <!-- Landing Page Content (shown when no route is active) -->
   <ng-container *ngIf="showLandingPage">
-    <!-- Hero Section (includes tile animation) -->
-    <app-hero (tileAnimationComplete)="onTileAnimationComplete()"></app-hero>
+    <!-- Hero Section (includes tile animation only on first visit) -->
+    <app-hero
+      [showTileAnimation]="showTileAnimation"
+      (tileAnimationComplete)="onTileAnimationComplete()">
+    </app-hero>
 
     <!-- Wer Wir Sind Section (Large Text Section) -->
     <app-wer-wir-sind (lineExtended)="onLineExtended($event)"></app-wer-wir-sind>
@@ -23,7 +26,6 @@
     <app-short-services></app-short-services>
   </ng-container>
 
-  <!-- Router Outlet - displays other route components -->
   <router-outlet></router-outlet>
 
 </div>

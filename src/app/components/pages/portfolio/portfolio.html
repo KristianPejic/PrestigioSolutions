@@ -4,16 +4,44 @@
     <p class="page-subtitle">Unsere erfolgreichen Projekte</p>
   </div>
 
-  <div class="portfolio-grid">
-    <div class="project-card" *ngFor="let project of projects">
-      <div class="project-image" [style.background]="project.color"></div>
-      <div class="project-info">
-        <h3>{{ project.title }}</h3>
-        <p class="project-category">{{ project.category }}</p>
-        <p class="project-description">{{ project.description }}</p>
-        <div class="project-tags">
-          <span *ngFor="let tag of project.tags" class="tag">{{ tag }}</span>
+  <div class="portfolio-slider">
+    <div class="slider-wrapper">
+      <div class="slider-nav prev" (click)="prevSlide()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#87CEEB" stroke-width="2">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+      </div>
+
+      <div class="slider-track">
+        <div class="project-card"
+             *ngFor="let project of projects; let i = index"
+             [ngClass]="getCardClass(i)"
+             (click)="isCardVisible(i) ? goToSlide(i) : null"
+             [style.cursor]="isCardVisible(i) ? 'pointer' : 'default'">
+          <div class="project-image" [style.background]="project.color"></div>
+          <div class="project-info">
+            <h3>{{ project.title }}</h3>
+            <p class="project-category">{{ project.category }}</p>
+            <p class="project-description">{{ project.description }}</p>
+            <div class="project-tags">
+              <span *ngFor="let tag of project.tags" class="tag">{{ tag }}</span>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <div class="slider-nav next" (click)="nextSlide()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#87CEEB" stroke-width="2">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="slider-dots">
+      <div *ngFor="let project of projects; let i = index"
+           class="dot"
+           [class.active]="i === currentIndex"
+           (click)="goToSlide(i)">
       </div>
     </div>
   </div>

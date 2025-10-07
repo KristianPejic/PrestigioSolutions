@@ -13,6 +13,11 @@
   transition: opacity 0.8s ease, visibility 0.8s ease;
 }
 
+/* Hide footer completely when not shown - prevents any visibility during tile animation */
+:host:not(.show-footer) {
+  display: none !important;
+}
+
 /* Show footer after tile animation completes */
 :host.show-footer {
   opacity: 1;

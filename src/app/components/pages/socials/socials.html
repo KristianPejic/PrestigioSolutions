@@ -1,16 +1,81 @@
 <div class="page-container">
+  <!-- Hero Section with Animated Background -->
   <div class="hero-section">
-    <h1 class="page-title">Socials</h1>
-    <p class="page-subtitle">Folgen Sie uns auf Social Media</p>
+    <div class="hero-background">
+      <div class="floating-shape shape-1"></div>
+      <div class="floating-shape shape-2"></div>
+      <div class="floating-shape shape-3"></div>
+    </div>
+    <div class="hero-content">
+      <h1 class="page-title">
+        <span class="title-word">Connect</span>
+        <span class="title-word">With</span>
+        <span class="title-word">Us</span>
+      </h1>
+      <p class="page-subtitle">Folgen Sie uns auf allen Plattformen und bleiben Sie auf dem Laufenden</p>
+      <div class="subtitle-underline"></div>
+    </div>
   </div>
 
-  <div class="socials-grid">
-    <a *ngFor="let social of socials" [href]="social.url" target="_blank" class="social-card">
-      <div class="social-icon" [style.background]="social.color">
-        <span [innerHTML]="social.icon"></span>
+  <!-- Social Cards Grid -->
+  <div class="socials-wrapper">
+    <div class="socials-grid">
+      <a *ngFor="let social of socials; let i = index"
+         [href]="social.url"
+         target="_blank"
+         rel="noopener noreferrer"
+         class="social-card"
+         [style.animation-delay]="(i * 0.1) + 's'">
+
+        <!-- Card Glow Effect -->
+        <div class="card-glow" [style.background]="social.color"></div>
+
+        <!-- Icon Container -->
+        <div class="social-icon-wrapper">
+          <div class="social-icon" [style.background]="social.color">
+            <span class="icon-content" [innerHTML]="social.icon"></span>
+          </div>
+          <div class="icon-ring"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="card-content">
+          <h3 class="social-name">{{ social.name }}</h3>
+          <p class="social-description">{{ social.description }}</p>
+          <div class="card-footer">
+            <span class="follow-text">Follow Us</span>
+            <span class="arrow">→</span>
+          </div>
+        </div>
+
+        <!-- Decorative Elements -->
+        <div class="corner-accent top-left"></div>
+        <div class="corner-accent bottom-right"></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Call to Action Section -->
+  <div class="cta-section">
+    <div class="cta-content">
+      <h2 class="cta-title">Verpassen Sie nichts</h2>
+      <p class="cta-text">Folgen Sie uns auf Ihren bevorzugten Plattformen für die neuesten Updates, Insights und exklusive Inhalte</p>
+      <div class="cta-stats">
+        <div class="stat-item">
+          <span class="stat-number">10K+</span>
+          <span class="stat-label">Followers</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number">500+</span>
+          <span class="stat-label">Posts</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number">4</span>
+          <span class="stat-label">Platforms</span>
+        </div>
       </div>
-      <h3>{{ social.name }}</h3>
-      <p>{{ social.description }}</p>
-    </a>
+    </div>
   </div>
 </div>
