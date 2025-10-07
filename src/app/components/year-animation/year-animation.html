@@ -1,0 +1,37 @@
+<div class="year-animation-container">
+  <!-- Year Display with Zoom Effect -->
+  <div class="year-wrapper" [style.opacity]="getYearOpacity()">
+
+    <!-- First 2 - moves left -->
+    <span class="year-digit digit-2-first"
+          [style.transform]="'translateX(' + getDigitOffset('first') + 'px)'">
+      2
+    </span>
+
+    <!-- Middle 0 (THE ZOOM TARGET - Portal) -->
+    <span class="year-digit digit-0-middle zoom-target"
+          [style.transform]="'scale(' + getZeroScale() + ')'">
+      0
+    </span>
+
+    <!-- Second 2 - moves right -->
+    <span class="year-digit digit-2-second"
+          [style.transform]="'translateX(' + getDigitOffset('third') + 'px)'">
+      2
+    </span>
+
+    <!-- Last 6 - moves right -->
+    <span class="year-digit digit-6"
+          [style.transform]="'translateX(' + getDigitOffset('third') + 'px)'">
+      6
+    </span>
+  </div>
+
+  <!-- Text with cyan gradient styling -->
+  <div class="inner-text"
+       [style.opacity]="getTextOpacity()"
+       [style.transform]="getTextTransform()">
+    <div class="text-line">Unser Jahr.</div>
+    <div class="text-line">Ihre Chance!</div>
+  </div>
+</div>

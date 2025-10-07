@@ -2,21 +2,27 @@
   position: relative;
   height: 200vh;
   background: black;
-  overflow-x: hidden;
+  overflow: hidden; /* Changed from overflow-x: hidden */
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100vw; /* Force full viewport width */
+  margin: 0;
+  padding: 0;
+  left: 50%; /* Center the container */
+  transform: translateX(-50%); /* Perfect centering */
 }
 
-/* Strategic vertical lines */
+/* Strategic vertical lines - ABSOLUTELY POSITIONED */
 .line {
   position: absolute;
-  top: 0;
-  width: 4px;
+  top: 0; /* Back to top */
+  width: 2px;
   background: white;
   height: 0;
   transition: all 2s ease-out;
   z-index: 1;
+  margin-left: -1px; /* Center the line on its position */
 }
 
 /* Special highlight line (middle one over WIR) - extends first */
@@ -34,25 +40,26 @@
   transition: none; /* Disable default transition, will use animation */
 }
 
-/* Text container */
+/* Text container - FLEXBOX LAYOUT */
 .text-container {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+  position: relative;
   width: 100%;
+  max-width: 100%;
   z-index: 10;
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly; /* Even spacing */
   align-items: center;
-  gap: 8%;
-  padding: 0 10%;
+  padding: 0 5%;
+  gap: 5%; /* Add gap between words */
 }
 
 .text-section {
-  flex: 1;
+  flex: 1; /* Each section takes equal space */
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+  position: relative;
 }
 
 /* All text sections centered */
@@ -60,11 +67,12 @@
 .text-center,
 .text-right {
   text-align: center;
-  padding: 0 1rem;
+  width: 100%;
+  display: block; /* Make sure they display */
 }
 
 .overflow {
-  overflow: hidden;
+  overflow: visible; /* Changed from hidden to show all text */
   display: inline-block;
 }
 
@@ -91,9 +99,9 @@
   height: 100vh;
 }
 
-/* Middle line extends and changes to blue gradient */
+/* Middle line extends and changes to blue gradient - MUCH LONGER */
 .container.animate-lines .line.highlight-line {
-  height: 150vh;
+  height: 300vh; /* Much longer to reach images */
   background: linear-gradient(180deg, white 0%, #3b82f6 50%, #87CEEB 100%);
   box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
 }
@@ -106,25 +114,26 @@
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
-/* Two-stage animation: extend to text, pause 5s, then continue down */
+/* Two-stage animation: extend to text, pause 4s, then continue down - MUCH LONGER */
 @keyframes lineStopAndContinue {
   0% {
     height: 0;
   }
   16.7% {
-    height: 100vh; /* Stop at WER/SIND level (1s out of 6s) */
+    height: 100vh; /* Stop at WER/SIND level */
   }
   83.3% {
-    height: 100vh; /* Hold for 5 seconds (66.6% of 6s = 4s, adjusted timing) */
+    height: 100vh; /* Hold for 4 seconds */
   }
   100% {
-    height: 150vh; /* Continue down to image */
+    height: 300vh; /* Continue down to reach images - 300vh */
   }
 }
 
 /* Text turns blue when line is active - controlled by JS */
 .container.animate-lines .highlight-text.line-active {
   color: #3b82f6;
+  text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
 }
 
 /* Reset animation when scrolling back up - lines go back to 0 */
@@ -149,10 +158,7 @@
 /* All text sections start white and can be made blue when line passes through */
 .portfolio-heading.line-active {
   color: #3b82f6;
-}
-
-/* Enhanced visual effects */
-.portfolio-heading:not(.highlight-text) {
+  text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
 }
 
 /* Hover effects */
@@ -165,35 +171,28 @@
   color: #2563eb;
 }
 
+/* Large Screens - Extra spacing */
+@media (min-width: 1920px) {
+  .text-container {
+    max-width: 2000px;
+    gap: 8%;
+  }
+
+  .portfolio-heading {
+    font-size: clamp(5rem, 8vw, 12rem);
+  }
+}
+
 /* Responsive adjustments */
 @media (max-width: 1200px) {
   .text-container {
-    padding: 0 5%;
+    width: 85%;
+    gap: 4%;
+    padding: 0 1rem;
   }
 
   .portfolio-heading {
     font-size: clamp(3rem, 7vw, 8rem);
-  }
-
-  .text-left {
-    padding-left: 1%;
-  }
-
-  .text-right {
-    padding-right: 1%;
-  }
-
-  /* Adjust line positions for tablet sizes */
-  .line:nth-child(1) {
-    left: 16% !important;
-  }
-
-  .line:nth-child(2) {
-    left: 50% !important;
-  }
-
-  .line:nth-child(3) {
-    left: 84% !important;
   }
 
   .container.animate-lines .line.highlight-line {
@@ -202,17 +201,17 @@
 
   .container.animate-lines .line:nth-child(1),
   .container.animate-lines .line:nth-child(3) {
-    animation: lineStopAndContinueTablet 7s ease-out forwards;
+    animation: lineStopAndContinueTablet 6s ease-out forwards;
   }
 
   @keyframes lineStopAndContinueTablet {
     0% {
       height: 0;
     }
-    14.3% {
+    16.7% {
       height: 100vh;
     }
-    85.7% {
+    83.3% {
       height: 100vh;
     }
     100% {
@@ -227,6 +226,9 @@
     flex-direction: column;
     gap: 3rem;
     padding: 0 2rem;
+    width: 100%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 
   .text-left,
@@ -236,10 +238,11 @@
     text-align: center;
     padding: 0;
     position: relative;
+    width: 100%;
   }
 
   .portfolio-heading {
-    font-size: clamp(2rem, 12vw, 6rem);
+    font-size: clamp(2.5rem, 12vw, 6rem);
     position: relative;
     transition: all 0.8s ease;
   }
@@ -325,5 +328,15 @@
   .container:not(.animate-lines) .portfolio-heading.line-active {
     color: white !important;
     text-shadow: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .portfolio-heading {
+    font-size: clamp(2rem, 12vw, 4.5rem);
+  }
+
+  .text-container {
+    gap: 2rem;
   }
 }
