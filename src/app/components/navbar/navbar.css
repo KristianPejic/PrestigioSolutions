@@ -251,6 +251,7 @@
   visibility: hidden;
   transition: opacity 0.3s ease;
   pointer-events: none !important; /* Disable clicks when hidden */
+  overflow-y: auto;
 }
 
 .fullscreen-menu.active {
@@ -264,11 +265,13 @@
 }
 
 .menu-inner {
-  height: 100%;
+  min-height: 100%;
   padding: 2rem;
   text-align: center;
   position: relative;
-  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   pointer-events: auto !important; /* Ensure inner content is clickable */
   z-index: 10;
 }
@@ -304,9 +307,11 @@
 .menu-nav {
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
-  margin-top: 3rem;
+  gap: 2rem;
   pointer-events: auto !important; /* Ensure menu items are clickable */
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .menu-item {
@@ -386,6 +391,10 @@
     padding: 0.8rem 1.2rem;
   }
 
+  .menu-item .menu-number {
+    font-size: 0.9rem;
+  }
+
   .diagonal-mask {
     width: 350%;
     height: 350%;
@@ -420,14 +429,19 @@
   }
 
   .menu-nav {
-    gap: 1rem;
+    gap: 1.2rem;
+    padding: 0 1rem;
   }
 
   .menu-item {
-    font-size: 1.5rem;
-    flex-direction: column;
-    gap: 0.5rem;
+    font-size: 1.4rem;
+    gap: 1.5rem;
     padding: 0.6rem 1rem;
+  }
+
+  .menu-item .menu-number {
+    font-size: 0.8rem;
+    min-width: 25px;
   }
 
   .close-btn {

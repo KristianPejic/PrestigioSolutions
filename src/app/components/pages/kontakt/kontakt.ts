@@ -9,6 +9,9 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule]
 })
 export class Kontakt {
+  showToast = false;
+  toastMessage = '';
+
   emailCategories = [
     {
       category: 'Allgemeine Anfragen',
@@ -57,7 +60,20 @@ export class Kontakt {
   copyToClipboard(email: any): void {
     navigator.clipboard.writeText(email.address).then(() => {
       email.copied = true; // show check icon
-      setTimeout(() => email.copied = false, 2000); // revert after 2s
+
+      // Show toast notification
+      this.toastMessage = `${email.address} kopiert!`;
+      this.showToast = true;
+
+      // Hide toast after 3 seconds
+      setTimeout(() => {
+        this.showToast = false;
+      }, 3000);
+
+      // Revert icon after 2 seconds
+      setTimeout(() => {
+        email.copied = false;
+      }, 2000);
     });
   }
 }

@@ -2,7 +2,7 @@
   min-height: 100vh;
   background: black;
   color: white;
-  padding: 2rem;
+  padding: 0; /* REMOVED PADDING - was 2rem */
 }
 
 .hero-section {
