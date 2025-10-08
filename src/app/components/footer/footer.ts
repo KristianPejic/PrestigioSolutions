@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges, ElementRef, Renderer2 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-footer',
@@ -13,7 +14,8 @@ export class FooterComponent implements OnChanges {
 
   constructor(
     private elementRef: ElementRef,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private router: Router
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -30,15 +32,11 @@ export class FooterComponent implements OnChanges {
 
   onDatenschutzClick(event: Event): void {
     event.preventDefault();
-    console.log('Datenschutz clicked');
-    // Add your navigation logic here later
-    // this.router.navigate(['/datenschutz']);
+    this.router.navigate(['/datenschutz']);
   }
 
   onImpressumClick(event: Event): void {
     event.preventDefault();
-    console.log('Impressum clicked');
-    // Add your navigation logic here later
-    // this.router.navigate(['/impressum']);
+    this.router.navigate(['/impressum']);
   }
 }

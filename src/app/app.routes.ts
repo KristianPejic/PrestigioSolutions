@@ -40,5 +40,15 @@ export const routes: Routes = [
         (m) => m.Socials
       ),
     title: 'Socials - Ihr IT Partner'
-  }
+  },
+{
+    path: 'impressum',
+    loadComponent: () => import('./components/rechtliches/impressum/impressum').then(m => m.Impressum),
+    title: 'Impressum'
+  },
+  {
+    path: 'datenschutz',
+    loadComponent: () => import('./components/rechtliches/datenschutz/datenschutz').then(m => m.Datenschutz),
+    title: 'Datenschutz'
+  },
 ];
