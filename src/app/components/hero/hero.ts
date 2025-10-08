@@ -17,6 +17,9 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
   revealText = false;
   showHeroContent = false;
   activeSlide = 0;
+  logoAnimationActive = false;
+  logoAnimationComplete = false;
+  hideFirstSlide = false;
 
   private slideInterval: any;
   private heroContentTimeout: any;
@@ -38,12 +41,22 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.heroContentTimeout) clearTimeout(this.heroContentTimeout);
   }
 
-  /** Auto-slide logic: slides 0 and 1 every 5s, slide 2 waits for animation */
+  /** Auto-slide logic */
   startAutoSlide(): void {
     this.slideInterval = setInterval(() => {
-      if (this.activeSlide === 2) return; // slide 3 handled separately
+      if (this.logoAnimationComplete && this.activeSlide === 0) {
+        this.activeSlide = 1;
+      }
 
-      this.activeSlide = (this.activeSlide + 1) % 3;
+      if (this.activeSlide === 2) return;
+
+      const nextSlide = (this.activeSlide + 1) % 3;
+
+      if (this.logoAnimationComplete && nextSlide === 0) {
+        this.activeSlide = 1;
+      } else {
+        this.activeSlide = nextSlide;
+      }
 
       if (this.activeSlide === 2 && this.showHeroContent) {
         this.triggerBubbleSequence();
@@ -53,7 +66,6 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onFirstWaveComplete(): void {
     this.showScrollingText = true;
-
     this.heroContentTimeout = setTimeout(() => {
       this.showHeroContent = true;
       if (this.activeSlide === 2) this.triggerBubbleSequence();
@@ -74,18 +86,50 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
     this.showScrollingText = false;
     this.revealText = false;
     this.showHeroContent = false;
+    this.logoAnimationActive = false;
+    this.logoAnimationComplete = false;
+    this.hideFirstSlide = false;
+    this.activeSlide = 0;
 
     if (this.heroContentTimeout) {
       clearTimeout(this.heroContentTimeout);
       this.heroContentTimeout = null;
     }
+
+    clearInterval(this.slideInterval);
+    this.startAutoSlide();
   }
 
   onDiscoverClick(): void {
-    console.log('Jetzt entdecken clicked!');
+    if (this.logoAnimationActive || this.logoAnimationComplete) return;
+
+    clearInterval(this.slideInterval);
+    this.activeSlide = 0;
+    this.logoAnimationActive = true;
+
+    setTimeout(() => this.triggerLogoAnimation(), 500);
   }
 
-  /** Bubble sequence animation for slide 3 */
+  triggerLogoAnimation(): void {
+    const prestigioText = document.querySelector('.prestigio-text') as HTMLElement;
+    const softwareText = document.querySelector('.software-text') as HTMLElement;
+
+    if (!prestigioText || !softwareText) return;
+
+    prestigioText.classList.add('logo-animation-active');
+    softwareText.classList.add('fly-out');
+
+    setTimeout(() => {
+      this.logoAnimationComplete = true;
+      this.logoAnimationActive = false;
+      this.hideFirstSlide = true;
+
+      this.activeSlide = 1;
+      this.startAutoSlide();
+    }, 3500); // total duration
+  }
+
+  /** Bubble animation sequence (slide 3) */
   triggerBubbleSequence(): void {
     const bubbles = document.querySelectorAll('.bubble');
     const lines = document.querySelectorAll('.line');
@@ -112,13 +156,10 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
       delay += 2500;
     });
 
-    // After last bubble finishes, wait, then go back to slide 0
     setTimeout(() => {
-      this.activeSlide = 0;
-
-      //  Restart auto-slide fresh so slide 1 also lasts full 5s again
+      this.activeSlide = this.logoAnimationComplete ? 1 : 0;
       clearInterval(this.slideInterval);
       this.startAutoSlide();
-    }, delay + 2000); // pause after last bubble
+    }, delay + 2000);
   }
 }
