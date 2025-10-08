@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: 'uber-uns',
+    path: 'über-uns',
     loadComponent: () =>
       import('./components/pages/uber-uns/uber-uns').then(
         (m) => m.UberUns

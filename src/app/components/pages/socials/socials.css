@@ -1,4 +1,4 @@
-.page-container { min-height: 100vh; background: black; color: white; padding: 2rem; }
+.page-container { min-height: 100vh; background: black; color: white;}
     .hero-section { text-align: center; padding: 6rem 2rem 4rem; background: linear-gradient(180deg, rgba(135, 206, 235, 0.1), transparent); }
     .page-title { font-size: clamp(3rem, 8vw, 6rem); font-weight: 800; color: #87CEEB; margin-bottom: 1rem; text-shadow: 0 0 40px rgba(135, 206, 235, 0.3); }
     .page-subtitle { font-size: clamp(1.2rem, 3vw, 2rem); color: rgba(255, 255, 255, 0.8); font-weight: 300; }

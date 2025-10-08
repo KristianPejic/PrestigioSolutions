@@ -644,7 +644,6 @@
 .prestigio-text {
   position: relative;
   display: inline-block;
-  white-space: nowrap;
 }
 
 .prestigio-text .letter {
