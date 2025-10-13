@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 })
 export class Portfolio {
   currentIndex = 0;
+  isAnimating = false;
 
   projects = [
     {
@@ -84,16 +85,37 @@ export class Portfolio {
     }
   ];
 
-  nextSlide() {
+  nextSlide(): void {
+    if (this.isAnimating) return;
+
+    this.isAnimating = true;
     this.currentIndex = (this.currentIndex + 1) % this.projects.length;
+
+    setTimeout(() => {
+      this.isAnimating = false;
+    }, 600);
   }
 
-  prevSlide() {
+  prevSlide(): void {
+    if (this.isAnimating) return;
+
+    this.isAnimating = true;
     this.currentIndex = (this.currentIndex - 1 + this.projects.length) % this.projects.length;
+
+    setTimeout(() => {
+      this.isAnimating = false;
+    }, 600);
   }
 
-  goToSlide(index: number) {
+  goToSlide(index: number): void {
+    if (this.isAnimating || index === this.currentIndex) return;
+
+    this.isAnimating = true;
     this.currentIndex = index;
+
+    setTimeout(() => {
+      this.isAnimating = false;
+    }, 600);
   }
 
   getCardClass(index: number): string {
