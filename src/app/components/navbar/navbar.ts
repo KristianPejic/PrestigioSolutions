@@ -35,11 +35,11 @@ export class NavbarComponent implements OnChanges {
   private buttonCooldownTimeout: any;
 
   menuLinks = [
-    { name: 'Home', route: '/' },
-    { name: 'About Us', route: '/uber-uns' },
+    { name: 'Startseite', route: '/' },
+    { name: 'Über Uns', route: '/über-uns' },
     { name: 'Services', route: '/unsere-services' },
     { name: 'Portfolio', route: '/portfolio' },
-    { name: 'Contact', route: '/kontakt' },
+    { name: 'Kontakt', route: '/kontakt' },
     { name: 'Socials', route: '/socials' }
   ];
 

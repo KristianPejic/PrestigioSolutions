@@ -13,25 +13,33 @@
     </div>
   </div>
 
+  <!-- LOGO IN TOP LEFT (visible after animation) -->
+  <div *ngIf="logoAnimationComplete" class="fixed top-8 left-8 z-[300] logo-final">
+    <h1 class="font-black text-3xl sm:text-4xl md:text-5xl text-white">
+      <span class="text-primary">P</span><span class="text-primary">S</span>
+    </h1>
+  </div>
+
   <!-- SLIDE 1: HERO CONTENT -->
-  <div class="hero-slide" [class.active]="activeSlide === 0">
+  <div class="hero-slide" [class.active]="activeSlide === 0 && !logoAnimationComplete">
     <div class="absolute inset-0 z-0 flex flex-col items-center justify-center">
 
       <!-- Hero content only shows when showHeroContent is true -->
       <div *ngIf="showHeroContent" class="hero-content-wrapper mb-8 flex justify-center text-center">
-        <div>
-          <p class="font-semibold tracking-wide text-sm sm:text-base md:text-lg lg:text-xl mb-2 text-white">
+        <div class="relative">
+          <p class="software-text font-semibold tracking-wide text-sm sm:text-base md:text-lg lg:text-xl mb-2 text-white">
             Software nach Maß
           </p>
-          <h1 class="font-black leading-tight tracking-tight text-4xl sm:text-6xl lg:text-7xl xl:text-8xl text-white">
-            <span class="text-primary">P</span>RESTIGIO
-            <span class="text-primary">S</span>OLUTIONS
+          <h1 class="prestigio-text font-black leading-tight tracking-tight text-4xl sm:text-6xl lg:text-7xl xl:text-8xl text-white">
+            <span class="letter letter-p text-primary">P</span><span class="letter letter-rest">RESTIGIO</span>
+            <span class="letter-space"></span>
+            <span class="letter letter-s text-primary">S</span><span class="letter letter-rest">OLUTIONS</span>
           </h1>
         </div>
       </div>
 
       <!-- HERO BUTTON - also controlled by showHeroContent -->
-      <div *ngIf="showHeroContent" class="relative z-[200] group cursor-pointer">
+      <div *ngIf="showHeroContent && !logoAnimationActive && !logoAnimationComplete" class="relative z-[200] group cursor-pointer">
         <div
           class="hero-button relative z-10 px-4 py-2 sm:px-8 sm:py-4 border-2 bg-transparent font-bold text-base sm:text-lg rounded-lg
                  transform transition-all duration-300 group-hover:translate-y-1 group-hover:translate-x-1

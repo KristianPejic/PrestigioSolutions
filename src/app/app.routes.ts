@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: 'uber-uns',
+    path: 'über-uns',
     loadComponent: () =>
       import('./components/pages/uber-uns/uber-uns').then(
         (m) => m.UberUns
@@ -40,5 +40,15 @@ export const routes: Routes = [
         (m) => m.Socials
       ),
     title: 'Socials - Ihr IT Partner'
-  }
+  },
+{
+    path: 'impressum',
+    loadComponent: () => import('./components/rechtliches/impressum/impressum').then(m => m.Impressum),
+    title: 'Impressum'
+  },
+  {
+    path: 'datenschutz',
+    loadComponent: () => import('./components/rechtliches/datenschutz/datenschutz').then(m => m.Datenschutz),
+    title: 'Datenschutz'
+  },
 ];
