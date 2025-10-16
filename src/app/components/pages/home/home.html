@@ -1,10 +1,7 @@
-<!-- Hero Section (includes tile animation) -->
 <app-hero (tileAnimationComplete)="onTileAnimationComplete()"></app-hero>
 
-<!-- Wer Wir Sind Section (Large Text Section) -->
 <app-wer-wir-sind (lineExtended)="onLineExtended($event)"></app-wer-wir-sind>
 
-<!-- Image Reveal Section - Now with layout transformation -->
 <app-image-reveal
   [isLineExtended]="isLineExtended"
   [leftLineConnected]="leftLineConnected"
@@ -16,5 +13,3 @@
 </app-image-reveal>
 
 <app-short-services></app-short-services>
-
-

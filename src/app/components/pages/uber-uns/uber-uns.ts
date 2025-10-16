@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-uber-uns',
@@ -7,19 +7,12 @@ import { Component, OnInit, AfterViewInit, ElementRef } from '@angular/core';
   templateUrl: './uber-uns.html',
   styleUrl: './uber-uns.css'
 })
-export class UberUns implements OnInit, AfterViewInit {
+export class UberUns implements AfterViewInit {
 
   constructor(private el: ElementRef) {}
 
-  ngOnInit(): void {
-    // Component initialization
-  }
-
   ngAfterViewInit(): void {
-    // Initialize counter animation for stats
     this.initCounterAnimation();
-
-    // Initialize scroll animations
     this.initScrollAnimations();
   }
 
@@ -78,7 +71,6 @@ export class UberUns implements OnInit, AfterViewInit {
       });
     }, observerOptions);
 
-    // Observe all animatable elements
     const elements = this.el.nativeElement.querySelectorAll(
       '.mission-card, .team-member, .timeline-item, .stat-item'
     );

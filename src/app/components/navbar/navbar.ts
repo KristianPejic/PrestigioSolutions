@@ -23,7 +23,6 @@ export class NavbarComponent implements OnChanges, OnDestroy {
   @Input() showLoadingIndicator: boolean = true;
   @Input() loadingText: string = 'Loading...';
 
-  // UI state
   isMenuOpen = false;
   showMask = false;
   isCovering = false;
@@ -31,7 +30,6 @@ export class NavbarComponent implements OnChanges, OnDestroy {
   isAnimating = false;
   isButtonDisabled = false;
 
-  // Private properties
   private buttonCooldownTimeout: ReturnType<typeof setTimeout> | null = null;
   private hamburgerButton: HTMLElement | null = null;
   private animationSubscription?: Subscription;
@@ -70,9 +68,6 @@ export class NavbarComponent implements OnChanges, OnDestroy {
     this.navbarAnimationService.cancelCurrentAnimation();
   }
 
-  /**
-   * Listen to animation state changes from the service
-   */
   private setupAnimationListener(): void {
     this.animationSubscription = this.navbarAnimationService.animationState$.subscribe(state => {
       debugLog('📊 Animation state:', state.phase, `${(state.progress * 100).toFixed(0)}%`);
@@ -109,18 +104,12 @@ export class NavbarComponent implements OnChanges, OnDestroy {
     });
   }
 
-  /**
-   * Reveal navbar after tile animation completes
-   */
   private revealNavbar(): void {
     const hostElement = this.elementRef.nativeElement;
     this.renderer.addClass(hostElement, 'show-navbar');
     debugLog('✅ Navbar revealed');
   }
 
-  /**
-   * Toggle menu open/closed
-   */
   toggleMenu(): void {
     if (this.isButtonDisabled || this.isAnimating) {
       debugLog('⚠️ Button disabled, ignoring click');
@@ -138,27 +127,20 @@ export class NavbarComponent implements OnChanges, OnDestroy {
     }
   }
 
-  /**
-   * Open menu with diagonal wipe animation
-   */
   private openMenu(): void {
     this.disableButtonTemporarily();
     this.isAnimating = true;
     document.body.style.overflow = 'hidden';
 
-    // Preload route components for instant navigation
     this.preloadRouteComponents();
 
-    // Run the cover → uncover animation
     this.navbarAnimationService.startNavigation(
       () => {
-        // When screen is fully covered, show the menu
         debugLog('📍 Screen covered - displaying menu');
         this.isMenuOpen = true;
         this.cdr.detectChanges();
       },
       () => {
-        // When animation completes
         debugLog('✅ Menu open animation complete');
         this.isAnimating = false;
         this.cdr.detectChanges();
@@ -166,21 +148,15 @@ export class NavbarComponent implements OnChanges, OnDestroy {
     );
   }
 
-  /**
-   * Preload lazy-loaded components by navigating without changing location
-   */
   private preloadRouteComponents(): void {
     debugLog('🔄 Preloading route components...');
 
     this.menuLinks.forEach(link => {
-      // Skip home route as it's already loaded
       if (link.route !== '/') {
-        // Force router to load the component without navigating
         this.router.navigate([link.route], {
           skipLocationChange: true,
           replaceUrl: false
         }).then(() => {
-          // Navigate back to current route silently
           this.router.navigate([this.router.url], {
             skipLocationChange: true,
             replaceUrl: false
@@ -192,9 +168,6 @@ export class NavbarComponent implements OnChanges, OnDestroy {
     debugLog('✅ Route components preloaded');
   }
 
-  /**
-   * Close menu with diagonal wipe animation
-   */
   closeMenu(): void {
     if (this.isButtonDisabled || this.isAnimating || !this.isMenuOpen) {
       debugLog('⚠️ Cannot close menu');
@@ -204,17 +177,14 @@ export class NavbarComponent implements OnChanges, OnDestroy {
     this.disableButtonTemporarily();
     this.isAnimating = true;
 
-    // Run the cover → uncover animation
     this.navbarAnimationService.startNavigation(
       () => {
-        // When screen is fully covered, hide the menu
         debugLog('📍 Screen covered - hiding menu');
         this.isMenuOpen = false;
         document.body.style.overflow = '';
         this.cdr.detectChanges();
       },
       () => {
-        // When animation completes
         debugLog('✅ Menu close animation complete');
         this.isAnimating = false;
         this.cdr.detectChanges();
@@ -222,10 +192,6 @@ export class NavbarComponent implements OnChanges, OnDestroy {
     );
   }
 
-  /**
-   * Handle menu item click and navigation
-   * Route changes when screen is fully covered
-   */
   handleMenuClick(link: MenuLink, event: Event): void {
     event.preventDefault();
 
@@ -239,10 +205,8 @@ export class NavbarComponent implements OnChanges, OnDestroy {
     this.disableButtonTemporarily();
     this.isAnimating = true;
 
-    // Start diagonal wipe animation immediately
     this.navbarAnimationService.startNavigation(
       () => {
-        // When screen is FULLY covered, navigate immediately
         debugLog('📍 Screen fully covered - navigating now');
 
         this.router.navigateByUrl(link.route).then(() => {
@@ -259,7 +223,6 @@ export class NavbarComponent implements OnChanges, OnDestroy {
       }
     );
 
-    // Keep menu overlay visible for 250ms, then close it
     setTimeout(() => {
       debugLog('📍 Closing menu overlay after 250ms');
       this.isMenuOpen = false;
@@ -268,9 +231,6 @@ export class NavbarComponent implements OnChanges, OnDestroy {
     }, 250);
   }
 
-  /**
-   * Return focus to hamburger button after menu closes
-   */
   private returnFocusToHamburger(): void {
     if (this.hamburgerButton && !this.isMenuOpen) {
       setTimeout(() => {
@@ -280,13 +240,9 @@ export class NavbarComponent implements OnChanges, OnDestroy {
     }
   }
 
-  /**
-   * Get CSS classes for the diagonal mask
-   */
   getMaskClasses(): string {
     let classes = 'diagonal-mask';
 
-    // Direction
     switch (this.animationDirection) {
       case 'top-right-to-bottom-left':
         classes += ' tr-bl';
@@ -302,10 +258,8 @@ export class NavbarComponent implements OnChanges, OnDestroy {
         break;
     }
 
-    // Easing
     classes += ` ${this.animationEasing}`;
 
-    // Animation state
     if (this.isCovering && !this.isUncovering) {
       classes += ' mask-covering';
     } else if (this.isUncovering) {
@@ -315,9 +269,6 @@ export class NavbarComponent implements OnChanges, OnDestroy {
     return classes;
   }
 
-  /**
-   * Temporarily disable all interactive buttons
-   */
   private disableButtonTemporarily(): void {
     this.isButtonDisabled = true;
     debugLog('🔒 Buttons disabled for', ANIMATION_DURATION.NAVBAR_COOLDOWN, 'ms');

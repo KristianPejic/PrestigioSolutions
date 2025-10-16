@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { YearAnimation } from './year-animation';
+import { YearAnimationComponent } from './year-animation';
 
 describe('YearAnimation', () => {
-  let component: YearAnimation;
-  let fixture: ComponentFixture<YearAnimation>;
+  let component: YearAnimationComponent;
+  let fixture: ComponentFixture<YearAnimationComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [YearAnimation]
+      imports: [YearAnimationComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(YearAnimation);
+    fixture = TestBed.createComponent(YearAnimationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

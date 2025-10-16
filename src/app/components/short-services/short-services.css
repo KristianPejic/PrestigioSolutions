@@ -4,7 +4,6 @@
   padding: 2rem 1rem;
 }
 
-/* Section heading responsive sizing */
 .section-heading {
   font-size: clamp(3rem, 8vw, 9.5rem);
   font-weight: 800;
@@ -15,7 +14,6 @@
   margin-top: 0.5rem;
 }
 
-/* Services grid with consistent card sizing - 2x2 layout */
 .services-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(300px, 400px));
@@ -28,7 +26,6 @@
   padding: 1rem;
 }
 
-/* Remove the card-width class and apply sizing directly */
 .service-card {
   width: 100%;
   height: 100%;
@@ -37,14 +34,12 @@
   flex-direction: column;
 }
 
-/* Ensure consistent card content layout */
 .service-card > div {
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
-/* Ensure icon container is consistent */
 .service-card .icon {
   display: block;
   margin: 0 auto;
@@ -52,7 +47,6 @@
   height: 40px;
 }
 
-/* Responsive breakpoints */
 @media (max-width: 1200px) {
   .services-grid {
     grid-template-columns: repeat(2, minmax(280px, 1fr));
@@ -96,7 +90,6 @@
   }
 }
 
-/* Accessibility: focus outline for keyboard users */
 .service-card:focus-within,
 .service-card:focus {
   outline: 3px solid rgba(135, 206, 235, 0.18);
@@ -104,7 +97,6 @@
   border-radius: 1rem;
 }
 
-/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .service-card,
   .service-card * {

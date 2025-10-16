@@ -1,5 +1,4 @@
 <div class="page-container">
-  <!-- Hero Section with Animated Background -->
   <div class="hero-section">
     <div class="hero-background">
       <div class="floating-shape shape-1"></div>
@@ -17,7 +16,6 @@
     </div>
   </div>
 
-  <!-- Social Cards Grid -->
   <div class="socials-wrapper">
     <div class="socials-grid">
       <a *ngFor="let social of socials; let i = index"
@@ -27,10 +25,8 @@
          class="social-card"
          [style.animation-delay]="(i * 0.1) + 's'">
 
-        <!-- Card Glow Effect -->
         <div class="card-glow" [style.background]="social.color"></div>
 
-        <!-- Icon Container -->
         <div class="social-icon-wrapper">
           <div class="social-icon" [style.background]="social.color">
             <i class="{{ social.icon }} icon-content"></i>
@@ -38,7 +34,6 @@
           <div class="icon-ring"></div>
         </div>
 
-        <!-- Content -->
         <div class="card-content">
           <h3 class="social-name">{{ social.name }}</h3>
           <p class="social-description">{{ social.description }}</p>
@@ -48,14 +43,12 @@
           </div>
         </div>
 
-        <!-- Decorative Elements -->
         <div class="corner-accent top-left"></div>
         <div class="corner-accent bottom-right"></div>
       </a>
     </div>
   </div>
 
-  <!-- Call to Action Section -->
   <div class="cta-section">
     <div class="cta-content">
       <h2 class="cta-title">Verpassen Sie nichts</h2>

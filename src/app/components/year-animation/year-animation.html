@@ -1,33 +1,26 @@
 <div class="year-animation-container">
-  <!-- Year Display with Zoom Effect -->
   <div class="year-wrapper" [style.opacity]="getYearOpacity()">
-
-    <!-- First 2 - moves left -->
     <span class="year-digit digit-2-first"
           [style.transform]="'translateX(' + getDigitOffset('first') + 'px)'">
       2
     </span>
 
-    <!-- Middle 0 (THE ZOOM TARGET - Portal) -->
     <span class="year-digit digit-0-middle zoom-target"
           [style.transform]="'scale(' + getZeroScale() + ')'">
       0
     </span>
 
-    <!-- Second 2 - moves right -->
     <span class="year-digit digit-2-second"
           [style.transform]="'translateX(' + getDigitOffset('third') + 'px)'">
       2
     </span>
 
-    <!-- Last 6 - moves right -->
     <span class="year-digit digit-6"
           [style.transform]="'translateX(' + getDigitOffset('third') + 'px)'">
       6
     </span>
   </div>
 
-  <!-- Particle System Inside the "0" -->
   <div class="particles-container" [style.opacity]="getParticleOpacity()">
     <div class="particle" *ngFor="let particle of particles"
          [style.left.%]="particle.x"
@@ -39,14 +32,12 @@
     </div>
   </div>
 
-  <!-- Animated Rings Inside the "0" -->
   <div class="rings-container" [style.opacity]="getRingOpacity()">
     <div class="ring ring-1"></div>
     <div class="ring ring-2"></div>
     <div class="ring ring-3"></div>
   </div>
 
-  <!-- Text with cyan gradient styling -->
   <div class="inner-text"
        [style.opacity]="getTextOpacity()"
        [style.transform]="getTextTransform()">

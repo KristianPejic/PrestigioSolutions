@@ -39,7 +39,6 @@
   transition: transform 0.1s linear;
 }
 
-/* ================= PARTICLE SYSTEM ================= */
 .particles-container {
   position: fixed;
   top: 0;
@@ -84,7 +83,6 @@
   }
 }
 
-/* ================= ANIMATED RINGS ================= */
 .rings-container {
   position: fixed;
   top: 50%;
@@ -148,7 +146,6 @@
   }
 }
 
-/* ================= TEXT STYLING ================= */
 .inner-text {
   position: fixed;
   top: 50%;
@@ -179,7 +176,6 @@
   letter-spacing: 0.02em;
 }
 
-/* ================= RESPONSIVE ================= */
 @media (min-width: 1441px) {
   .inner-text {
     font-size: clamp(1.8rem, 4vw, 3.5rem);
@@ -300,7 +296,6 @@
   }
 }
 
-/* Performance Optimizations */
 .year-digit,
 .particle,
 .ring,
@@ -310,7 +305,6 @@
   transform-style: preserve-3d;
 }
 
-/* Accessibility - Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   .year-animation-container {
     height: 100vh;

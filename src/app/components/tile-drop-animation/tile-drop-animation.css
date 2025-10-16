@@ -1,4 +1,3 @@
-/* Container that covers the entire screen */
 .tile-animation-fixed-container {
   position: fixed;
   top: 0;
@@ -13,7 +12,6 @@
   padding: 0;
 }
 
-/* Grid container - NO gaps whatsoever */
 .tile-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -27,7 +25,6 @@
   outline: none;
 }
 
-/* Individual tiles */
 .white-tile {
   background-color: #ffffff;
   width: 100%;
@@ -39,13 +36,9 @@
   box-sizing: border-box;
   display: block;
   position: relative;
-
-  /* Initial position - above screen */
   transform: translateY(-100%) translateZ(0);
   transition: transform 1.0s cubic-bezier(0.23, 1, 0.32, 1);
   opacity: 1;
-
-  /* Performance optimizations for smoother animation */
   will-change: transform;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
@@ -54,13 +47,11 @@
   transform-style: preserve-3d;
 }
 
-/* Phase 1: Tiles drop down to cover screen */
 .white-tile.tile-covering {
   transform: translateY(0%) translateZ(0);
   -webkit-transform: translateY(0%) translateZ(0);
 }
 
-/* Phase 2: Tiles slide up from bottom to reveal content underneath */
 .white-tile.tile-uncovering {
   transform: translateY(-100%) translateZ(0);
   -webkit-transform: translateY(-100%) translateZ(0);
@@ -69,7 +60,6 @@
   pointer-events: none;
 }
 
-/* Ensure no browser default spacing */
 * {
   box-sizing: border-box;
 }

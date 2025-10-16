@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-unsere-services',
@@ -7,16 +7,11 @@ import { Component, OnInit, AfterViewInit, ElementRef } from '@angular/core';
   templateUrl: './unsere-services.html',
   styleUrl: './unsere-services.css'
 })
-export class UnsereServices implements OnInit, AfterViewInit {
+export class UnsereServices implements AfterViewInit {
 
   constructor(private el: ElementRef) {}
 
-  ngOnInit(): void {
-    // Component initialization
-  }
-
   ngAfterViewInit(): void {
-    // Initialize scroll animations
     this.initScrollAnimations();
   }
 
@@ -34,7 +29,6 @@ export class UnsereServices implements OnInit, AfterViewInit {
       });
     }, observerOptions);
 
-    // Observe all animatable elements
     const elements = this.el.nativeElement.querySelectorAll(
       '.service-detail-card, .process-step, .feature-item'
     );

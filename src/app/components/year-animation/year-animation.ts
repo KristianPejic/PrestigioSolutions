@@ -1,6 +1,5 @@
 import { Component, HostListener, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ScrollProgressService } from '../../services/scroll-progress.service';
 import { ResizeService } from '../../services/resize.service';
 import { Throttle } from '../../utils/decorators';
 import { Subscription } from 'rxjs';
@@ -30,7 +29,6 @@ export class YearAnimationComponent implements OnInit, OnDestroy {
 
   constructor(
     private elementRef: ElementRef,
-    private scrollProgressService: ScrollProgressService,
     private resizeService: ResizeService
   ) {}
 
@@ -49,35 +47,26 @@ export class YearAnimationComponent implements OnInit, OnDestroy {
     this.resizeSubscription?.unsubscribe();
   }
 
-  /**
-   * Generate particles for the animation inside the "0"
-   */
   private generateParticles(): void {
-    const particleCount = 50; // Number of particles
+    const particleCount = 50;
 
     for (let i = 0; i < particleCount; i++) {
-      // Random position around center (50%, 50%)
       const angle = (Math.PI * 2 * i) / particleCount;
-      const radius = Math.random() * 15 + 35; // 35-50% from center
-
+      const radius = Math.random() * 15 + 35;
       const x = 50 + Math.cos(angle) * radius;
       const y = 50 + Math.sin(angle) * radius;
-
-      // Random offsets for animation
       const xOffset = (Math.random() - 0.5) * 200;
       const yOffset = (Math.random() - 0.5) * 200;
 
-      const particle: Particle = {
-        x: x,
-        y: y,
-        size: Math.random() * 6 + 3, // 3-9px
-        delay: Math.random() * 2, // 0-2s delay
-        duration: Math.random() * 2 + 3, // 3-5s duration
-        xOffset: xOffset,
-        yOffset: yOffset
-      };
-
-      this.particles.push(particle);
+      this.particles.push({
+        x,
+        y,
+        size: Math.random() * 6 + 3,
+        delay: Math.random() * 2,
+        duration: Math.random() * 2 + 3,
+        xOffset,
+        yOffset
+      });
     }
   }
 
@@ -91,12 +80,11 @@ export class YearAnimationComponent implements OnInit, OnDestroy {
     const element = this.elementRef.nativeElement;
     const rect = element.getBoundingClientRect();
     const windowHeight = window.innerHeight;
+    const elementCenter = rect.top + (rect.height / 2);
+    const screenCenter = windowHeight / 2;
+    const distanceFromCenter = elementCenter - screenCenter;
 
     if (this.isMobile) {
-      const elementCenter = rect.top + (rect.height / 2);
-      const screenCenter = windowHeight / 2;
-      const distanceFromCenter = elementCenter - screenCenter;
-
       const mobileDelay = windowHeight * 0.5;
 
       if (distanceFromCenter > -mobileDelay) {
@@ -107,10 +95,6 @@ export class YearAnimationComponent implements OnInit, OnDestroy {
         this.scrollProgress = Math.min(1, scrollAfterDelay / zoomRange);
       }
     } else {
-      const elementCenter = rect.top + (rect.height / 2);
-      const screenCenter = windowHeight / 2;
-      const distanceFromCenter = elementCenter - screenCenter;
-
       if (distanceFromCenter > 0) {
         this.scrollProgress = 0;
       } else {
@@ -120,13 +104,9 @@ export class YearAnimationComponent implements OnInit, OnDestroy {
       }
     }
 
-    // Apply CSS variables for particle animation
     this.applyParticleOffsets();
   }
 
-  /**
-   * Apply random offsets to particles as CSS variables
-   */
   private applyParticleOffsets(): void {
     const particleElements = this.elementRef.nativeElement.querySelectorAll('.particle');
     particleElements.forEach((el: HTMLElement, index: number) => {
@@ -138,9 +118,7 @@ export class YearAnimationComponent implements OnInit, OnDestroy {
   }
 
   getYearOpacity(): number {
-    if (this.scrollProgress < 0.3) {
-      return 1;
-    }
+    if (this.scrollProgress < 0.3) return 1;
     return 1 - ((this.scrollProgress - 0.3) / 0.7);
   }
 
@@ -149,14 +127,10 @@ export class YearAnimationComponent implements OnInit, OnDestroy {
     const offset = this.scrollProgress * maxOffset;
 
     switch(position) {
-      case 'first':
-        return -offset * 2;
-      case 'second':
-        return -offset * 1.5;
-      case 'third':
-        return offset * 1.5;
-      default:
-        return 0;
+      case 'first': return -offset * 2;
+      case 'second': return -offset * 1.5;
+      case 'third': return offset * 1.5;
+      default: return 0;
     }
   }
 
@@ -167,35 +141,17 @@ export class YearAnimationComponent implements OnInit, OnDestroy {
     return minScale + (easedProgress * (maxScale - minScale));
   }
 
-  /**
-   * Particle opacity - fade in as zoom increases
-   */
   getParticleOpacity(): number {
-    if (this.scrollProgress < 0.2) {
-      return 0;
-    }
-    if (this.scrollProgress < 0.4) {
-      return (this.scrollProgress - 0.2) / 0.2;
-    }
-    if (this.scrollProgress < 0.7) {
-      return 1;
-    }
+    if (this.scrollProgress < 0.2) return 0;
+    if (this.scrollProgress < 0.4) return (this.scrollProgress - 0.2) / 0.2;
+    if (this.scrollProgress < 0.7) return 1;
     return 1 - ((this.scrollProgress - 0.7) / 0.3);
   }
 
-  /**
-   * Ring opacity - fade in with particles
-   */
   getRingOpacity(): number {
-    if (this.scrollProgress < 0.25) {
-      return 0;
-    }
-    if (this.scrollProgress < 0.45) {
-      return (this.scrollProgress - 0.25) / 0.2;
-    }
-    if (this.scrollProgress < 0.65) {
-      return 1;
-    }
+    if (this.scrollProgress < 0.25) return 0;
+    if (this.scrollProgress < 0.45) return (this.scrollProgress - 0.25) / 0.2;
+    if (this.scrollProgress < 0.65) return 1;
     return 1 - ((this.scrollProgress - 0.65) / 0.35);
   }
 
@@ -204,22 +160,17 @@ export class YearAnimationComponent implements OnInit, OnDestroy {
     const fadeInStart = isMobile ? 0.25 : 0.2;
     const fadeInEnd = isMobile ? 0.45 : 0.4;
 
-    if (this.scrollProgress < fadeInStart) {
-      return 0;
-    }
+    if (this.scrollProgress < fadeInStart) return 0;
     if (this.scrollProgress < fadeInEnd) {
       return (this.scrollProgress - fadeInStart) / (fadeInEnd - fadeInStart);
     }
-    if (this.scrollProgress < 0.8) {
-      return 1;
-    }
+    if (this.scrollProgress < 0.8) return 1;
     return 1 - ((this.scrollProgress - 0.8) / 0.2);
   }
 
   getTextScale(): number {
     const isMobile = window.innerWidth < 768;
     const isSmallMobile = window.innerWidth < 480;
-
     const minScale = isSmallMobile ? 0.2 : (isMobile ? 0.25 : 0.3);
     const maxScale = isSmallMobile ? 1.2 : (isMobile ? 1.5 : 1.8);
     const easedProgress = Math.pow(this.scrollProgress, 0.6);
@@ -229,9 +180,7 @@ export class YearAnimationComponent implements OnInit, OnDestroy {
   getTextTransform(): string {
     const isMobile = window.innerWidth < 768;
     const verticalMove = isMobile ? this.scrollProgress * 10 : -this.scrollProgress * 20;
-
     const scale = this.getTextScale();
-
     return `translate(-50%, calc(-50% + ${verticalMove}px)) scale(${scale})`;
   }
 }

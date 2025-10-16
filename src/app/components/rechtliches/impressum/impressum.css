@@ -1,10 +1,12 @@
 @import '../../../styles/shared-legal.css';
+
 .legal-page {
   min-height: 100vh;
   background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
   padding: 2rem;
   position: relative;
   overflow-y: auto;
+  will-change: scroll-position;
 }
 
 .legal-page::before {
@@ -33,6 +35,9 @@
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 .back-button {
@@ -142,7 +147,6 @@
   text-shadow: 0 0 10px rgba(135, 206, 235, 0.5);
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .legal-page {
     padding: 1rem;
@@ -225,7 +229,6 @@
   }
 }
 
-/* Accessibility */
 @media (prefers-reduced-motion: reduce) {
   .back-button,
   .legal-section,
@@ -236,15 +239,4 @@
   .back-button:hover .arrow {
     transform: none;
   }
-}
-
-/* Performance optimization */
-.legal-page {
-  will-change: scroll-position;
-}
-
-.legal-container {
-  will-change: transform;
-  backface-visibility: hidden;
-  transform: translateZ(0);
 }

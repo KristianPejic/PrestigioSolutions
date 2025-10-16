@@ -16,7 +16,6 @@
   visibility: visible;
 }
 
-/* FIXED: Mask container should NOT block pointer events by default */
 .mask-animation-container {
   position: fixed;
   top: 0;
@@ -29,20 +28,18 @@
   overflow: hidden;
   margin: 0;
   padding: 0;
-  pointer-events: none !important; /* Changed from auto */
+  pointer-events: none !important;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.1s ease, visibility 0.1s ease;
 }
 
-/* Only enable pointer events when mask is active */
 .mask-animation-container.active {
   pointer-events: auto !important;
   opacity: 1;
   visibility: visible;
 }
 
-/* IMPROVED: Better diagonal wipe effect */
 .diagonal-mask {
   position: absolute;
   width: 200%;
@@ -58,7 +55,6 @@
   transition-duration: 1200ms;
 }
 
-/* Top-Right to Bottom-Left */
 .diagonal-mask.tr-bl {
   top: -50%;
   right: -50%;
@@ -71,7 +67,6 @@
   transform: translate(-100%, 100%) rotate(45deg) scale(0.5);
 }
 
-/* Top-Left to Bottom-Right */
 .diagonal-mask.tl-br {
   top: -50%;
   left: -50%;
@@ -84,7 +79,6 @@
   transform: translate(100%, 100%) rotate(-45deg) scale(0.5);
 }
 
-/* Bottom-Left to Top-Right */
 .diagonal-mask.bl-tr {
   bottom: -50%;
   left: -50%;
@@ -97,7 +91,6 @@
   transform: translate(100%, -100%) rotate(45deg) scale(0.5);
 }
 
-/* Bottom-Right to Top-Left */
 .diagonal-mask.br-tl {
   bottom: -50%;
   right: -50%;
@@ -110,7 +103,6 @@
   transform: translate(-100%, -100%) rotate(-45deg) scale(0.5);
 }
 
-/* Easing types */
 .diagonal-mask.smooth {
   transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
 }
@@ -124,7 +116,6 @@
   transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Loading indicator */
 .loading-indicator {
   position: absolute;
   top: 50%;
@@ -166,7 +157,6 @@
   100% { transform: rotate(360deg); }
 }
 
-/* Navbar */
 .navbar-wrapper {
   position: fixed !important;
   top: 0 !important;
@@ -202,7 +192,6 @@
   filter: drop-shadow(0 0 10px rgba(135, 206, 235, 0.5));
 }
 
-/* Hamburger button */
 .hamburger-btn {
   width: 60px;
   height: 60px;
@@ -255,7 +244,6 @@
   transform: rotate(-45deg) translate(8px, -7px);
 }
 
-/* Fullscreen menu */
 .fullscreen-menu {
   position: fixed !important;
   top: 0 !important;
@@ -372,7 +360,6 @@
   cursor: not-allowed;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .logo-image {
     height: 50px;
@@ -467,7 +454,6 @@
   }
 }
 
-/* Performance optimizations */
 .fullscreen-menu,
 .hamburger-btn,
 .line,
@@ -486,14 +472,12 @@
   contain: layout style paint;
 }
 
-/* Fallback for browsers without backdrop-filter */
 @supports not (backdrop-filter: blur(10px)) {
   .fullscreen-menu {
     background: rgba(0, 0, 0, 0.98);
   }
 }
 
-/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .diagonal-mask {
     transition-duration: 0.3s !important;
