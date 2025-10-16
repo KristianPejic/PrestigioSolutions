@@ -7,7 +7,6 @@ import { ShortServices } from './components/short-services/short-services';
 import { FooterComponent } from './components/footer/footer';
 import { NavbarComponent } from './components/navbar/navbar';
 import { SkipLinkComponent } from './components/skip-link/skip.link';
-import { RouteLoaderComponent } from './components/route-loader/route-loader';
 import { Router, NavigationEnd, RouterModule } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
@@ -27,7 +26,6 @@ import { debugLog } from './enviroments/enviroments';
     FooterComponent,
     NavbarComponent,
     SkipLinkComponent,
-    RouteLoaderComponent,
     RouterModule,
     CommonModule
   ],

@@ -14,9 +14,9 @@
 :host.show-navbar {
   opacity: 1;
   visibility: visible;
-  pointer-events: none !important;
 }
 
+/* FIXED: Mask container should NOT block pointer events by default */
 .mask-animation-container {
   position: fixed;
   top: 0;
@@ -29,15 +29,24 @@
   overflow: hidden;
   margin: 0;
   padding: 0;
-  pointer-events: auto !important;
+  pointer-events: none !important; /* Changed from auto */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.1s ease, visibility 0.1s ease;
 }
 
+/* Only enable pointer events when mask is active */
+.mask-animation-container.active {
+  pointer-events: auto !important;
+  opacity: 1;
+  visibility: visible;
+}
+
+/* IMPROVED: Better diagonal wipe effect */
 .diagonal-mask {
   position: absolute;
-  width: 300%;
-  height: 300%;
-  top: -100%;
-  left: -100%;
+  width: 200%;
+  height: 200%;
   transform-origin: center center;
   will-change: transform;
   backface-visibility: hidden;
@@ -46,48 +55,62 @@
   pointer-events: none !important;
   transition-property: transform;
   transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+  transition-duration: 1200ms;
 }
 
+/* Top-Right to Bottom-Left */
 .diagonal-mask.tr-bl {
-  transform: translateX(150%) translateY(-150%) scale(0) rotate(45deg);
+  top: -50%;
+  right: -50%;
+  transform: translate(100%, -100%) rotate(45deg) scale(0.5);
 }
 .diagonal-mask.tr-bl.mask-covering {
-  transform: translateX(0%) translateY(0%) scale(2) rotate(45deg);
+  transform: translate(0%, 0%) rotate(45deg) scale(2);
 }
 .diagonal-mask.tr-bl.mask-uncovering {
-  transform: translateX(-150%) translateY(150%) scale(0) rotate(45deg);
+  transform: translate(-100%, 100%) rotate(45deg) scale(0.5);
 }
 
+/* Top-Left to Bottom-Right */
 .diagonal-mask.tl-br {
-  transform: translateX(-150%) translateY(-150%) scale(0) rotate(-45deg);
+  top: -50%;
+  left: -50%;
+  transform: translate(-100%, -100%) rotate(-45deg) scale(0.5);
 }
 .diagonal-mask.tl-br.mask-covering {
-  transform: translateX(0%) translateY(0%) scale(2) rotate(-45deg);
+  transform: translate(0%, 0%) rotate(-45deg) scale(2);
 }
 .diagonal-mask.tl-br.mask-uncovering {
-  transform: translateX(150%) translateY(150%) scale(0) rotate(-45deg);
+  transform: translate(100%, 100%) rotate(-45deg) scale(0.5);
 }
 
+/* Bottom-Left to Top-Right */
 .diagonal-mask.bl-tr {
-  transform: translateX(-150%) translateY(150%) scale(0) rotate(45deg);
+  bottom: -50%;
+  left: -50%;
+  transform: translate(-100%, 100%) rotate(45deg) scale(0.5);
 }
 .diagonal-mask.bl-tr.mask-covering {
-  transform: translateX(0%) translateY(0%) scale(2) rotate(45deg);
+  transform: translate(0%, 0%) rotate(45deg) scale(2);
 }
 .diagonal-mask.bl-tr.mask-uncovering {
-  transform: translateX(150%) translateY(-150%) scale(0) rotate(45deg);
+  transform: translate(100%, -100%) rotate(45deg) scale(0.5);
 }
 
+/* Bottom-Right to Top-Left */
 .diagonal-mask.br-tl {
-  transform: translateX(150%) translateY(150%) scale(0) rotate(-45deg);
+  bottom: -50%;
+  right: -50%;
+  transform: translate(100%, 100%) rotate(-45deg) scale(0.5);
 }
 .diagonal-mask.br-tl.mask-covering {
-  transform: translateX(0%) translateY(0%) scale(2) rotate(-45deg);
+  transform: translate(0%, 0%) rotate(-45deg) scale(2);
 }
 .diagonal-mask.br-tl.mask-uncovering {
-  transform: translateX(-150%) translateY(-150%) scale(0) rotate(-45deg);
+  transform: translate(-100%, -100%) rotate(-45deg) scale(0.5);
 }
 
+/* Easing types */
 .diagonal-mask.smooth {
   transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
 }
@@ -101,11 +124,7 @@
   transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.diagonal-mask.mask-covering,
-.diagonal-mask.mask-uncovering {
-  transition-duration: 1200ms;
-}
-
+/* Loading indicator */
 .loading-indicator {
   position: absolute;
   top: 50%;
@@ -117,13 +136,19 @@
   gap: 20px;
   z-index: calc(var(--z-mask) + 1);
   pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.loading-indicator.visible {
+  opacity: 1;
 }
 
 .spinner {
   width: 40px;
   height: 40px;
-  border: 3px solid rgba(0, 0, 0, 0.1);
-  border-left: 3px solid var(--primary-color);
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-left: 3px solid white;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -131,9 +156,8 @@
 .loading-text {
   font-size: 1.1rem;
   font-weight: 500;
-  color: #374151;
+  color: white;
   margin: 0;
-  opacity: 0.9;
   text-align: center;
 }
 
@@ -142,6 +166,7 @@
   100% { transform: rotate(360deg); }
 }
 
+/* Navbar */
 .navbar-wrapper {
   position: fixed !important;
   top: 0 !important;
@@ -174,9 +199,10 @@
 
 .logo-image:hover {
   transform: scale(1.05);
-  filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.5));
+  filter: drop-shadow(0 0 10px rgba(135, 206, 235, 0.5));
 }
 
+/* Hamburger button */
 .hamburger-btn {
   width: 60px;
   height: 60px;
@@ -198,10 +224,6 @@
 .hamburger-btn:disabled {
   cursor: not-allowed;
   opacity: 0.7;
-}
-
-.hamburger-btn.animating {
-  pointer-events: none;
 }
 
 .hamburger-btn:hover:not(:disabled) {
@@ -233,6 +255,7 @@
   transform: rotate(-45deg) translate(8px, -7px);
 }
 
+/* Fullscreen menu */
 .fullscreen-menu {
   position: fixed !important;
   top: 0 !important;
@@ -245,7 +268,7 @@
   z-index: var(--z-overlay) !important;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
   pointer-events: none !important;
   overflow-y: auto;
 }
@@ -253,10 +276,6 @@
 .fullscreen-menu.active {
   opacity: 1 !important;
   visibility: visible !important;
-  pointer-events: auto !important;
-}
-
-.fullscreen-menu.animating {
   pointer-events: auto !important;
 }
 
@@ -269,7 +288,6 @@
   flex-direction: column;
   justify-content: center;
   pointer-events: auto !important;
-  z-index: 10;
 }
 
 .close-btn {
@@ -323,6 +341,7 @@
   background: transparent;
   pointer-events: auto !important;
   cursor: pointer;
+  transition: background 0.3s ease;
 }
 
 .menu-item .menu-number {
@@ -339,7 +358,7 @@
 }
 
 .menu-item:hover:not(.disabled) {
-  background: rgba(var(--primary-color-rgb), 0.15);
+  background: rgba(135, 206, 235, 0.15);
 }
 
 .menu-item:hover:not(.disabled) .menu-text {
@@ -353,6 +372,7 @@
   cursor: not-allowed;
 }
 
+/* Responsive */
 @media (max-width: 768px) {
   .logo-image {
     height: 50px;
@@ -386,13 +406,6 @@
 
   .menu-item .menu-number {
     font-size: 0.9rem;
-  }
-
-  .diagonal-mask {
-    width: 350%;
-    height: 350%;
-    top: -125%;
-    left: -125%;
   }
 
   .loading-text {
@@ -443,13 +456,6 @@
     right: 1.5rem;
   }
 
-  .diagonal-mask {
-    width: 400%;
-    height: 400%;
-    top: -150%;
-    left: -150%;
-  }
-
   .spinner {
     width: 32px;
     height: 32px;
@@ -461,6 +467,7 @@
   }
 }
 
+/* Performance optimizations */
 .fullscreen-menu,
 .hamburger-btn,
 .line,
@@ -479,12 +486,14 @@
   contain: layout style paint;
 }
 
+/* Fallback for browsers without backdrop-filter */
 @supports not (backdrop-filter: blur(10px)) {
-  .diagonal-mask {
-    background: var(--primary-color) !important;
+  .fullscreen-menu {
+    background: rgba(0, 0, 0, 0.98);
   }
 }
 
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .diagonal-mask {
     transition-duration: 0.3s !important;

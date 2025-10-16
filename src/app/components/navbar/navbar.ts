@@ -1,12 +1,11 @@
 import { Component, Input, ChangeDetectorRef, NgZone, OnChanges, SimpleChanges, ElementRef, Renderer2, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, NavigationStart } from '@angular/router';
+import { Router } from '@angular/router';
 import { AnimationDirection, EasingType, MenuLink } from '../../models/types';
 import { ANIMATION_DURATION } from '../../constants/animation.constants';
 import { NavbarAnimationService } from '../../services/navbar-animation.service';
 import { debugLog } from '../../enviroments/enviroments';
 import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-navbar',
@@ -20,11 +19,11 @@ export class NavbarComponent implements OnChanges, OnDestroy {
   @Input() animationDirection: AnimationDirection = 'top-right-to-bottom-left';
   @Input() animationEasing: EasingType = 'smooth';
   @Input() animationDuration: number = ANIMATION_DURATION.NAVBAR_MASK;
-  @Input() pauseDuration: number = ANIMATION_DURATION.NAVBAR_PAUSE;
   @Input() maskBackground: string = '#87CEEB';
   @Input() showLoadingIndicator: boolean = true;
   @Input() loadingText: string = 'Loading...';
 
+  // UI state
   isMenuOpen = false;
   showMask = false;
   isCovering = false;
@@ -32,11 +31,10 @@ export class NavbarComponent implements OnChanges, OnDestroy {
   isAnimating = false;
   isButtonDisabled = false;
 
+  // Private properties
   private buttonCooldownTimeout: ReturnType<typeof setTimeout> | null = null;
   private hamburgerButton: HTMLElement | null = null;
   private animationSubscription?: Subscription;
-  private routerSubscription?: Subscription;
-  private pendingRoute: string | null = null;
 
   menuLinks: MenuLink[] = [
     { name: 'Startseite', route: '/' },
@@ -56,26 +54,28 @@ export class NavbarComponent implements OnChanges, OnDestroy {
     private navbarAnimationService: NavbarAnimationService
   ) {
     this.setupAnimationListener();
-    this.setupRouterListener();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['showNavbar']) {
-      if (this.showNavbar) {
-        this.revealNavbar();
-      }
+    if (changes['showNavbar'] && this.showNavbar) {
+      this.revealNavbar();
     }
   }
 
   ngOnDestroy(): void {
     this.animationSubscription?.unsubscribe();
-    this.routerSubscription?.unsubscribe();
-    if (this.buttonCooldownTimeout) clearTimeout(this.buttonCooldownTimeout);
+    if (this.buttonCooldownTimeout) {
+      clearTimeout(this.buttonCooldownTimeout);
+    }
+    this.navbarAnimationService.cancelCurrentAnimation();
   }
 
+  /**
+   * Listen to animation state changes from the service
+   */
   private setupAnimationListener(): void {
     this.animationSubscription = this.navbarAnimationService.animationState$.subscribe(state => {
-      debugLog('Animation state:', state.phase, `${(state.progress * 100).toFixed(0)}%`);
+      debugLog('📊 Animation state:', state.phase, `${(state.progress * 100).toFixed(0)}%`);
 
       switch (state.phase) {
         case 'covering':
@@ -109,162 +109,184 @@ export class NavbarComponent implements OnChanges, OnDestroy {
     });
   }
 
-  private setupRouterListener(): void {
-    this.routerSubscription = this.router.events.pipe(
-      filter(event => event instanceof NavigationStart)
-    ).subscribe(() => {
-      if (this.isMenuOpen) {
-        debugLog('🔄 Route change detected while menu open - closing menu');
-      }
-    });
-  }
-
+  /**
+   * Reveal navbar after tile animation completes
+   */
   private revealNavbar(): void {
     const hostElement = this.elementRef.nativeElement;
     this.renderer.addClass(hostElement, 'show-navbar');
-    debugLog('Navbar now visible after tile animation');
+    debugLog('✅ Navbar revealed');
   }
 
+  /**
+   * Toggle menu open/closed
+   */
   toggleMenu(): void {
     if (this.isButtonDisabled || this.isAnimating) {
-      debugLog('Button disabled, ignoring click');
+      debugLog('⚠️ Button disabled, ignoring click');
       return;
     }
 
     this.hamburgerButton = this.elementRef.nativeElement.querySelector('.hamburger-btn');
-    this.disableButtonTemporarily();
 
     if (!this.isMenuOpen) {
-      debugLog('Opening menu');
-      this.startMenuOpenAnimation();
+      debugLog('🔓 Opening menu');
+      this.openMenu();
     } else {
-      debugLog('Closing menu');
-      this.startMenuCloseAnimation();
+      debugLog('🔒 Closing menu');
+      this.closeMenu();
     }
   }
 
+  /**
+   * Open menu with diagonal wipe animation
+   */
+  private openMenu(): void {
+    this.disableButtonTemporarily();
+    this.isAnimating = true;
+    document.body.style.overflow = 'hidden';
+
+    // Preload route components for instant navigation
+    this.preloadRouteComponents();
+
+    // Run the cover → uncover animation
+    this.navbarAnimationService.startNavigation(
+      () => {
+        // When screen is fully covered, show the menu
+        debugLog('📍 Screen covered - displaying menu');
+        this.isMenuOpen = true;
+        this.cdr.detectChanges();
+      },
+      () => {
+        // When animation completes
+        debugLog('✅ Menu open animation complete');
+        this.isAnimating = false;
+        this.cdr.detectChanges();
+      }
+    );
+  }
+
+  /**
+   * Preload lazy-loaded components by navigating without changing location
+   */
+  private preloadRouteComponents(): void {
+    debugLog('🔄 Preloading route components...');
+
+    this.menuLinks.forEach(link => {
+      // Skip home route as it's already loaded
+      if (link.route !== '/') {
+        // Force router to load the component without navigating
+        this.router.navigate([link.route], {
+          skipLocationChange: true,
+          replaceUrl: false
+        }).then(() => {
+          // Navigate back to current route silently
+          this.router.navigate([this.router.url], {
+            skipLocationChange: true,
+            replaceUrl: false
+          });
+        });
+      }
+    });
+
+    debugLog('✅ Route components preloaded');
+  }
+
+  /**
+   * Close menu with diagonal wipe animation
+   */
+  closeMenu(): void {
+    if (this.isButtonDisabled || this.isAnimating || !this.isMenuOpen) {
+      debugLog('⚠️ Cannot close menu');
+      return;
+    }
+
+    this.disableButtonTemporarily();
+    this.isAnimating = true;
+
+    // Run the cover → uncover animation
+    this.navbarAnimationService.startNavigation(
+      () => {
+        // When screen is fully covered, hide the menu
+        debugLog('📍 Screen covered - hiding menu');
+        this.isMenuOpen = false;
+        document.body.style.overflow = '';
+        this.cdr.detectChanges();
+      },
+      () => {
+        // When animation completes
+        debugLog('✅ Menu close animation complete');
+        this.isAnimating = false;
+        this.cdr.detectChanges();
+      }
+    );
+  }
+
+  /**
+   * Handle menu item click and navigation
+   * Route changes when screen is fully covered
+   */
   handleMenuClick(link: MenuLink, event: Event): void {
     event.preventDefault();
 
     if (this.isButtonDisabled || this.isAnimating) {
-      debugLog('Menu item disabled, ignoring click');
+      debugLog('⚠️ Navigation blocked - animation in progress');
       return;
     }
 
-    debugLog('🎯 Navigation to:', link.name, 'at route:', link.route);
-
-    this.pendingRoute = link.route;
-    this.disableButtonTemporarily();
-    this.isMenuOpen = false;
-    document.body.style.overflow = '';
-
-    this.navbarAnimationService.startNavigation(
-      () => {
-        debugLog('🚀 Screen fully covered - executing navigation to:', this.pendingRoute);
-        if (this.pendingRoute) {
-          this.router.navigate([this.pendingRoute]).then(() => {
-            debugLog('✅ Navigation complete - new route loaded');
-            window.scrollTo(0, 0);
-          });
-        }
-      },
-      () => {
-        debugLog('🎬 Full animation cycle finished');
-        this.pendingRoute = null;
-      }
-    );
-  }
-
-  closeMenu(): void {
-    if (this.isButtonDisabled || this.isAnimating) {
-      debugLog('Close button disabled, ignoring click');
-      return;
-    }
-    if (!this.isMenuOpen) {
-      debugLog('Menu already closed, ignoring close');
-      return;
-    }
+    debugLog('🎯 Navigating to:', link.name, '→', link.route);
 
     this.disableButtonTemporarily();
-    debugLog('Closing menu via close button');
-    this.startMenuCloseAnimation();
-  }
-
-  private startMenuOpenAnimation(): void {
-    this.isAnimating = true;
-    this.showMask = true;
-    this.isCovering = false;
-    this.isUncovering = false;
-
-    debugLog('Starting menu open animation');
-    document.body.style.overflow = 'hidden';
-
-    this.ngZone.runOutsideAngular(() => {
-      setTimeout(() => {
-        this.ngZone.run(() => {
-          this.isCovering = true;
-          this.cdr.detectChanges();
-        });
-      }, 50);
-
-      const coverCompleteTime = 50 + this.animationDuration;
-      setTimeout(() => {
-        this.ngZone.run(() => {
-          debugLog('Screen covered - showing menu');
-          this.isMenuOpen = true;
-          this.isAnimating = false;
-          this.cdr.detectChanges();
-        });
-      }, coverCompleteTime);
-
-      const uncoverStartTime = coverCompleteTime + 50;
-      setTimeout(() => {
-        this.ngZone.run(() => {
-          this.isUncovering = true;
-          this.cdr.detectChanges();
-        });
-      }, uncoverStartTime);
-
-      const totalTime = uncoverStartTime + this.animationDuration + 50;
-      setTimeout(() => {
-        this.ngZone.run(() => {
-          this.showMask = false;
-          this.isCovering = false;
-          this.isUncovering = false;
-          debugLog('Menu open animation complete');
-          this.cdr.detectChanges();
-        });
-      }, totalTime);
-    });
-  }
-
-  private startMenuCloseAnimation(): void {
     this.isAnimating = true;
 
+    // Start diagonal wipe animation immediately
     this.navbarAnimationService.startNavigation(
       () => {
-        debugLog('Menu closing - hiding menu');
-        this.isMenuOpen = false;
-        document.body.style.overflow = '';
+        // When screen is FULLY covered, navigate immediately
+        debugLog('📍 Screen fully covered - navigating now');
+
+        this.router.navigateByUrl(link.route).then(() => {
+          window.scrollTo(0, 0);
+          debugLog('✅ Route changed to →', link.route);
+        });
+
+        this.cdr.detectChanges();
       },
       () => {
-        debugLog('Menu close animation complete');
+        debugLog('✅ Wipe animation complete');
+        this.isAnimating = false;
+        this.cdr.detectChanges();
       }
     );
+
+    // Keep menu overlay visible for 250ms, then close it
+    setTimeout(() => {
+      debugLog('📍 Closing menu overlay after 250ms');
+      this.isMenuOpen = false;
+      document.body.style.overflow = '';
+      this.cdr.detectChanges();
+    }, 250);
   }
 
+  /**
+   * Return focus to hamburger button after menu closes
+   */
   private returnFocusToHamburger(): void {
-    if (this.hamburgerButton) {
+    if (this.hamburgerButton && !this.isMenuOpen) {
       setTimeout(() => {
         (this.hamburgerButton as HTMLElement).focus();
-        debugLog('Focus returned to hamburger button');
+        debugLog('🎯 Focus returned to hamburger button');
       }, 100);
     }
   }
 
+  /**
+   * Get CSS classes for the diagonal mask
+   */
   getMaskClasses(): string {
     let classes = 'diagonal-mask';
 
+    // Direction
     switch (this.animationDirection) {
       case 'top-right-to-bottom-left':
         classes += ' tr-bl';
@@ -280,8 +302,10 @@ export class NavbarComponent implements OnChanges, OnDestroy {
         break;
     }
 
+    // Easing
     classes += ` ${this.animationEasing}`;
 
+    // Animation state
     if (this.isCovering && !this.isUncovering) {
       classes += ' mask-covering';
     } else if (this.isUncovering) {
@@ -291,9 +315,12 @@ export class NavbarComponent implements OnChanges, OnDestroy {
     return classes;
   }
 
+  /**
+   * Temporarily disable all interactive buttons
+   */
   private disableButtonTemporarily(): void {
     this.isButtonDisabled = true;
-    debugLog('All buttons disabled for', ANIMATION_DURATION.NAVBAR_COOLDOWN, 'ms');
+    debugLog('🔒 Buttons disabled for', ANIMATION_DURATION.NAVBAR_COOLDOWN, 'ms');
 
     if (this.buttonCooldownTimeout) {
       clearTimeout(this.buttonCooldownTimeout);
@@ -301,7 +328,7 @@ export class NavbarComponent implements OnChanges, OnDestroy {
 
     this.buttonCooldownTimeout = setTimeout(() => {
       this.isButtonDisabled = false;
-      debugLog('All buttons re-enabled');
+      debugLog('🔓 Buttons re-enabled');
       this.cdr.detectChanges();
     }, ANIMATION_DURATION.NAVBAR_COOLDOWN);
   }

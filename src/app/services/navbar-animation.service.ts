@@ -48,12 +48,13 @@ export class NavbarAnimationService {
       this.currentAnimation.coveredTimeout = setTimeout(() => {
         this.ngZone.run(() => {
           this.updateState({ isAnimating: true, phase: 'covered', progress: 0.5 });
-          debugLog('📍 Phase: Screen FULLY covered - executing navigation');
+          debugLog('📍 Phase: Screen FULLY covered - executing callback');
           onCovered();
         });
       }, coverCompleteTime);
 
-      const uncoverStartTime = coverCompleteTime + 300;
+      // INCREASED PAUSE: Wait longer while screen is covered (600ms instead of 300ms)
+      const uncoverStartTime = coverCompleteTime + 250;
       this.currentAnimation.uncoverTimeout = setTimeout(() => {
         this.ngZone.run(() => {
           this.updateState({ isAnimating: true, phase: 'uncovering', progress: 0.75 });
