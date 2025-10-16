@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges, ElementRef, Renderer2 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { debugLog } from '../../enviroments/enviroments';
 
 @Component({
   selector: 'app-footer',
@@ -27,7 +28,7 @@ export class FooterComponent implements OnChanges {
   private revealFooter(): void {
     const hostElement = this.elementRef.nativeElement;
     this.renderer.addClass(hostElement, 'show-footer');
-    console.log('Footer now visible after tile animation');
+    debugLog('Footer now visible after tile animation');
   }
 
   onDatenschutzClick(event: Event): void {

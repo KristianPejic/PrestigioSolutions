@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { EmailCategory } from '../../../models/types';
 
 @Component({
   standalone: true,
@@ -12,7 +13,7 @@ export class Kontakt {
   showToast = false;
   toastMessage = '';
 
-  emailCategories = [
+  emailCategories: EmailCategory[] = [
     {
       category: 'Allgemeine Anfragen',
       icon: 'fa-solid fa-envelope',
@@ -59,18 +60,15 @@ export class Kontakt {
 
   copyToClipboard(email: any): void {
     navigator.clipboard.writeText(email.address).then(() => {
-      email.copied = true; // show check icon
+      email.copied = true;
 
-      // Show toast notification
       this.toastMessage = `${email.address} kopiert!`;
       this.showToast = true;
 
-      // Hide toast after 3 seconds
       setTimeout(() => {
         this.showToast = false;
       }, 3000);
 
-      // Revert icon after 2 seconds
       setTimeout(() => {
         email.copied = false;
       }, 2000);

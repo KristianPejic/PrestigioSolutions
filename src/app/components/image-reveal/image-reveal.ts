@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ANIMATION_DURATION } from '../../constants/animation.constants';
 
 @Component({
   selector: 'app-image-reveal',
@@ -21,8 +22,9 @@ export class ImageRevealComponent implements OnChanges, OnDestroy {
   isLoading = false;
   isRevealed = false;
   isLayoutTransformed = false;
-  private animationTimeout: any;
-  private layoutTimeout: any;
+
+  private animationTimeout: ReturnType<typeof setTimeout> | null = null;
+  private layoutTimeout: ReturnType<typeof setTimeout> | null = null;
 
   constructor(private cdr: ChangeDetectorRef) {}
 
@@ -31,7 +33,7 @@ export class ImageRevealComponent implements OnChanges, OnDestroy {
       if (this.isLineExtended && !this.isLoading && !this.isRevealed) {
         this.animationTimeout = setTimeout(() => {
           this.startLoadingAnimation();
-        }, 2000);
+        }, ANIMATION_DURATION.IMAGE_REVEAL_DELAY);
       } else if (!this.isLineExtended) {
         if (this.animationTimeout) clearTimeout(this.animationTimeout);
         if (this.layoutTimeout) clearTimeout(this.layoutTimeout);
@@ -59,8 +61,8 @@ export class ImageRevealComponent implements OnChanges, OnDestroy {
         this.isLayoutTransformed = true;
         this.layoutTransformed.emit();
         this.cdr.detectChanges();
-      }, 1500);
-    }, 1800);
+      }, ANIMATION_DURATION.LAYOUT_TRANSFORM);
+    }, ANIMATION_DURATION.LOADING_ANIMATION);
   }
 
   ngOnDestroy(): void {

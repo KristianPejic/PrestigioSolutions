@@ -2,6 +2,8 @@ import {Component, OnInit, OnDestroy, AfterViewInit, Output, EventEmitter, Simpl
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TileDropAnimationComponent } from '../tile-drop-animation/tile-drop-animation';
+import { ANIMATION_DURATION } from '../../constants/animation.constants';
+import { debugLog } from '../../enviroments/enviroments';
 
 @Component({
   selector: 'app-hero',
@@ -22,21 +24,21 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
   logoAnimationComplete = false;
   hideFirstSlide = false;
 
-  private slideInterval: any;
-  private heroContentTimeout: any;
+  private slideInterval: ReturnType<typeof setInterval> | null = null;
+  private heroContentTimeout: ReturnType<typeof setTimeout> | null = null;
 
   constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.startAutoSlide();
   }
+
   ngOnChanges(changes: SimpleChanges): void {
-    // If tile animation is disabled, show content immediately
     if (changes['showTileAnimation'] && !this.showTileAnimation) {
       this.showScrollingText = true;
       this.revealText = true;
       this.showHeroContent = true;
-      console.log('Tile animation disabled - showing hero content immediately');
+      debugLog('Tile animation disabled - showing hero content immediately');
     }
   }
 
@@ -45,21 +47,19 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
       this.triggerBubbleSequence();
     }
 
-    // If tile animation is disabled, emit complete immediately
     if (!this.showTileAnimation) {
       setTimeout(() => {
         this.tileAnimationComplete.emit();
-        console.log('Tile animation skipped - emitting complete');
+        debugLog('Tile animation skipped - emitting complete');
       }, 100);
     }
   }
 
   ngOnDestroy(): void {
-    clearInterval(this.slideInterval);
+    if (this.slideInterval) clearInterval(this.slideInterval);
     if (this.heroContentTimeout) clearTimeout(this.heroContentTimeout);
   }
 
-  /** Auto-slide logic */
   startAutoSlide(): void {
     this.slideInterval = setInterval(() => {
       if (this.logoAnimationComplete && this.activeSlide === 0) {
@@ -79,7 +79,7 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
       if (this.activeSlide === 2 && this.showHeroContent) {
         this.triggerBubbleSequence();
       }
-    }, 5000);
+    }, ANIMATION_DURATION.HERO_SLIDE);
   }
 
   onFirstWaveComplete(): void {
@@ -114,14 +114,14 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
       this.heroContentTimeout = null;
     }
 
-    clearInterval(this.slideInterval);
+    if (this.slideInterval) clearInterval(this.slideInterval);
     this.startAutoSlide();
   }
 
   onDiscoverClick(): void {
     if (this.logoAnimationActive || this.logoAnimationComplete) return;
 
-    clearInterval(this.slideInterval);
+    if (this.slideInterval) clearInterval(this.slideInterval);
     this.activeSlide = 0;
     this.logoAnimationActive = true;
 
@@ -144,10 +144,9 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
 
       this.activeSlide = 1;
       this.startAutoSlide();
-    }, 3500); // total duration
+    }, 3500);
   }
 
-  /** Bubble animation sequence (slide 3) */
   triggerBubbleSequence(): void {
     const bubbles = document.querySelectorAll('.bubble');
     const lines = document.querySelectorAll('.line');
@@ -176,7 +175,7 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
 
     setTimeout(() => {
       this.activeSlide = this.logoAnimationComplete ? 1 : 0;
-      clearInterval(this.slideInterval);
+      if (this.slideInterval) clearInterval(this.slideInterval);
       this.startAutoSlide();
     }, delay + 2000);
   }

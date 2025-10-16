@@ -1,13 +1,10 @@
-<!-- Diagonal Mask Animation Overlay -->
 <ng-container *ngIf="showMask">
   <div class="mask-animation-container">
     <div class="diagonal-mask"
          [class]="getMaskClasses()"
-         [style.background]="maskBackground"
-         [style.transition-duration]="animationDuration + 'ms'">
+         [style.background]="maskBackground">
     </div>
 
-    <!-- Optional loading indicator -->
     <div class="loading-indicator" *ngIf="showLoadingIndicator && isCovering && !isUncovering">
       <div class="spinner"></div>
       <p class="loading-text">{{ loadingText }}</p>
@@ -15,15 +12,12 @@
   </div>
 </ng-container>
 
-<!-- Navbar Container -->
 <nav class="navbar-wrapper">
   <div class="navbar-content">
-    <!-- Logo -->
     <div class="navbar-logo">
       <img src="/assets/images/PrestigioStolutionsLogo-removebg-preview.png" alt="Logo" class="logo-image">
     </div>
 
-    <!-- Hamburger Button -->
     <button
       class="hamburger-btn"
       [class.active]="isMenuOpen"
@@ -39,14 +33,12 @@
   </div>
 </nav>
 
-<!-- Full Screen Menu -->
 <div class="fullscreen-menu"
      [class.active]="isMenuOpen"
      [class.animating]="isAnimating"
      (click)="closeMenu()">
   <div class="menu-inner" (click)="$event.stopPropagation()">
 
-    <!-- BIG CLOSE X -->
     <button class="close-btn"
             (click)="closeMenu()"
             [disabled]="isAnimating || isButtonDisabled"

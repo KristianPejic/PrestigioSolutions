@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SocialLink } from '../../../models/types';
 
 @Component({
   selector: 'app-socials',
@@ -9,7 +10,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './socials.css'
 })
 export class Socials {
-  socials = [
+  socials: SocialLink[] = [
     {
       name: 'LinkedIn',
       url: 'https://linkedin.com/company/yourcompany',

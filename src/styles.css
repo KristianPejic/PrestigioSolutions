@@ -1,8 +1,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap');
-/* You can add global styles to this file, and also import other style files */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --primary-color: #87CEEB;
+  --primary-text-color: #87CEEB;
+  --primary-color-rgb: 135, 206, 235;
+  --secondary-color: #5fa8d3;
+  --text-dark: #333333;
+  --text-light: #ffffff;
+
+  --z-base: 1;
+  --z-content: 10;
+  --z-footer: 40;
+  --z-tiles: 50;
+  --z-navbar: 100;
+  --z-navbar-menu: 200;
+  --z-mask: 9999;
+  --z-overlay: 10000;
+}
 
 .hero-slider {
   width: 100%;
@@ -17,28 +35,15 @@
   }
 }
 
-/* Define global color variables */
-:root {
-  --primary-color: #87CEEB; /* Sky Blue */
-  --primary-text-color: #87CEEB;
-  --primary-color-rgb: 135, 206, 235; /* same color as RGB */
-  --secondary-color: #5fa8d3; /* Darker shade for hover */
-  --text-dark: #333333; /* For contrast */
-  --text-light: #ffffff; /* For dark backgrounds */
-}
-
-/* Apply global font and color */
 body {
   font-family: 'Figtree', sans-serif;
-  color: var(--text-dark); /* Default text color */
+  color: var(--text-dark);
 }
 
-/* Global text color class */
 .text-primary {
   color: var(--primary-text-color) !important;
 }
 
-/* Apply to specific elements globally */
 h1, h2, h3, h4, h5, h6 {
   color: var(--primary-text-color);
 }
@@ -50,4 +55,21 @@ a {
 
 a:hover {
   color: var(--secondary-color);
+}
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--primary-color);
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 0 0 4px 0;
+  z-index: var(--z-overlay);
+  transition: top 0.3s;
+}
+
+.skip-link:focus {
+  top: 0;
 }

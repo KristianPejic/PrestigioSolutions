@@ -1,32 +1,28 @@
-<!-- Main App Container -->
-<div class="app-container">
+<app-skip-link></app-skip-link>
+<app-route-loader></app-route-loader>
 
-  <!-- Landing Page Content (shown when no route is active) -->
+<div class="app-container" id="main-content">
+
   <ng-container *ngIf="showLandingPage">
-    <!-- Hero Section (includes tile animation only on first visit) -->
     <app-hero
       [showTileAnimation]="showTileAnimation"
       (tileAnimationComplete)="onTileAnimationComplete()">
     </app-hero>
 
-    <!-- Wer Wir Sind Section (Large Text Section) -->
     <app-wer-wir-sind (lineExtended)="onLineExtended($event)"></app-wer-wir-sind>
 
-    <!-- Image Reveal Section - Now with layout transformation -->
     <app-image-reveal
       [isLineExtended]="isLineExtended"
       [leftLineConnected]="leftLineConnected"
       [rightLineConnected]="rightLineConnected"
       [imageSrc]="'assets/images/hero-section-slider/Pixabay/sonstiges/Earth.png'"
-      [imageAlt]="'Prestigio Solutions Team'"
+      [imageAlt]="'Prestigio Solutions Team - Innovative IT solutions and consulting services'"
       (imageRevealed)="onImageRevealed()"
       (layoutTransformed)="onLayoutTransformed()">
     </app-image-reveal>
 
-    <!-- NEW: Year Animation (2026 zoom effect) -->
     <app-year-animation></app-year-animation>
 
-    <!-- Services Section -->
     <app-short-services></app-short-services>
   </ng-container>
 
@@ -34,8 +30,6 @@
 
 </div>
 
-<!-- Sticky Navbar OUTSIDE app-container -->
 <app-navbar [showNavbar]="showNavbar"></app-navbar>
 
-<!-- Fixed Footer OUTSIDE app-container -->
 <app-footer [showFooter]="showFooter"></app-footer>

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Service } from '../../models/types';
 
 @Component({
   selector: 'app-short-services',
@@ -9,8 +10,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./short-services.css']
 })
 export class ShortServices {
-  // Data for the 4 service cards
-  services = [
+  services: Service[] = [
     {
       key: 'webseiten',
       title: 'Webseiten',

@@ -6,9 +6,14 @@ import { YearAnimationComponent } from './components/year-animation/year-animati
 import { ShortServices } from './components/short-services/short-services';
 import { FooterComponent } from './components/footer/footer';
 import { NavbarComponent } from './components/navbar/navbar';
+import { SkipLinkComponent } from './components/skip-link/skip.link';
+import { RouteLoaderComponent } from './components/route-loader/route-loader';
 import { Router, NavigationEnd, RouterModule } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
+import { SessionService } from './services/session.service';
+import { SeoService } from './services/seo.service';
+import { debugLog } from './enviroments/enviroments';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +26,8 @@ import { CommonModule } from '@angular/common';
     ShortServices,
     FooterComponent,
     NavbarComponent,
+    SkipLinkComponent,
+    RouteLoaderComponent,
     RouterModule,
     CommonModule
   ],
@@ -40,93 +47,80 @@ export class AppComponent implements OnInit {
 
   private readonly SESSION_KEY = 'hasSeenTileAnimation';
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private sessionService: SessionService,
+    private seoService: SeoService
+  ) {}
 
   ngOnInit(): void {
     this.scrollToTop();
+    this.seoService.setDefaults();
 
-    // DEVELOPMENT ONLY: Uncomment this line to always show animation during testing
-    // sessionStorage.removeItem(this.SESSION_KEY);
+    debugLog('=== DEBUGGING TILE ANIMATION ===');
+    debugLog('Current sessionStorage value:', this.sessionService.getItem(this.SESSION_KEY));
 
-    // FIRST: Clear any existing session to test fresh
-    console.log('=== DEBUGGING TILE ANIMATION ===');
-    console.log('Current sessionStorage value:', sessionStorage.getItem(this.SESSION_KEY));
-
-    // Check if we're on a route or landing page
     const currentUrl = this.router.url;
-    console.log('Current URL:', currentUrl);
+    debugLog('Current URL:', currentUrl);
 
     if (currentUrl === '/' || currentUrl === '') {
       this.showLandingPage = true;
-      console.log('✓ On home page - showLandingPage:', this.showLandingPage);
+      debugLog('✓ On home page - showLandingPage:', this.showLandingPage);
 
-      // Check session AFTER we know we're on home
-      const hasSeenAnimation = sessionStorage.getItem(this.SESSION_KEY);
-      console.log('Has seen animation this session?', hasSeenAnimation);
+      const hasSeenAnimation = this.sessionService.getItem(this.SESSION_KEY);
+      debugLog('Has seen animation this session?', hasSeenAnimation);
 
       if (hasSeenAnimation === 'true') {
-        // Already seen animation this session - skip it
         this.showTileAnimation = false;
         this.showFooter = true;
         this.showNavbar = true;
         this.hasAnimationCompleted = true;
-        console.log('❌ Skipping animation - already seen this session');
+        debugLog('❌ Skipping animation - already seen this session');
       } else {
-        // First time this session - show tile animation
         this.showTileAnimation = true;
         this.showFooter = false;
         this.showNavbar = false;
-        console.log('✅ SHOWING TILE ANIMATION - First time this session');
-        console.log('showTileAnimation:', this.showTileAnimation);
-        console.log('showFooter:', this.showFooter);
-        console.log('showNavbar:', this.showNavbar);
-
-        // Mark as seen AFTER animation completes, not before
-        // We'll set this in onTileAnimationComplete() instead
+        debugLog('✅ SHOWING TILE ANIMATION - First time this session');
+        debugLog('showTileAnimation:', this.showTileAnimation);
+        debugLog('showFooter:', this.showFooter);
+        debugLog('showNavbar:', this.showNavbar);
       }
     } else {
       this.showLandingPage = false;
       this.showTileAnimation = false;
       this.showFooter = true;
       this.showNavbar = true;
-      console.log('ℹ Not on home page - skipping animation');
+      debugLog('ℹ Not on home page - skipping animation');
     }
 
-    // Listen to route changes
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: any) => {
-      // Show landing page only on root path
       if (event.url === '/' || event.url === '') {
         this.showLandingPage = true;
 
-        // Check if user has seen animation this session
-        const hasSeenAnimation = sessionStorage.getItem(this.SESSION_KEY);
+        const hasSeenAnimation = this.sessionService.getItem(this.SESSION_KEY);
         if (hasSeenAnimation === 'true') {
-          // Already seen in this session - skip animation
           this.showTileAnimation = false;
           this.showFooter = true;
           this.showNavbar = true;
           this.hasAnimationCompleted = true;
-          console.log('Navigating back to home - animation already seen this session');
+          debugLog('Navigating back to home - animation already seen this session');
         } else {
-          // First time this session - show animation
           this.showTileAnimation = true;
           this.showFooter = false;
           this.showNavbar = false;
           this.hasAnimationCompleted = false;
-          sessionStorage.setItem(this.SESSION_KEY, 'true');
-          console.log('First navigation to home this session - showing tile animation');
+          this.sessionService.setItem(this.SESSION_KEY, 'true');
+          debugLog('First navigation to home this session - showing tile animation');
         }
       } else {
-        // Hide landing page, show routed component
         this.showLandingPage = false;
         this.showTileAnimation = false;
         this.showFooter = true;
         this.showNavbar = true;
       }
 
-      // Scroll to top on route change
       this.scrollToTop();
     });
   }
@@ -141,19 +135,19 @@ export class AppComponent implements OnInit {
 
   onLineExtended(extended: boolean): void {
     this.isLineExtended = extended;
-    console.log('Line extended from wer-wir-sind:', extended);
+    debugLog('Line extended from wer-wir-sind:', extended);
   }
 
   onImageRevealed(): void {
-    console.log('Image revealed!');
+    debugLog('Image revealed!');
   }
 
   onLayoutTransformed(): void {
-    console.log('Layout transformed - connecting additional lines');
+    debugLog('Layout transformed - connecting additional lines');
     setTimeout(() => {
       this.leftLineConnected = true;
       this.rightLineConnected = true;
-      console.log('Left and right lines now connected');
+      debugLog('Left and right lines now connected');
     }, 300);
   }
 
@@ -163,19 +157,16 @@ export class AppComponent implements OnInit {
       this.showNavbar = true;
       this.hasAnimationCompleted = true;
 
-      // NOW mark as seen in session (after animation completes)
-      sessionStorage.setItem(this.SESSION_KEY, 'true');
+      this.sessionService.setItem(this.SESSION_KEY, 'true');
 
-      console.log('✅ Tile animation complete - showing footer and navbar');
-      console.log('Session marked as seen');
+      debugLog('✅ Tile animation complete - showing footer and navbar');
+      debugLog('Session marked as seen');
     }
   }
 
-  // Optional: Method to reset session (useful for testing)
-  // The animation will automatically show again when opening a new tab/window
   resetSession(): void {
-    sessionStorage.removeItem(this.SESSION_KEY);
-    console.log('Session reset - reload page to see animation again');
+    this.sessionService.removeItem(this.SESSION_KEY);
+    debugLog('Session reset - reload page to see animation again');
     window.location.reload();
   }
 }

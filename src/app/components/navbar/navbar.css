@@ -1,25 +1,22 @@
-/* ================= HOST ELEMENT - STICKY NAVBAR ================= */
 :host {
   position: fixed !important;
   top: 0 !important;
   right: 0 !important;
   width: auto !important;
-  z-index: 9998 !important; /* Above footer (40) but below tiles (50) and fullscreen menu */
-  pointer-events: none !important; /* CRITICAL: Allow clicks to pass through host */
+  z-index: var(--z-navbar) !important;
+  pointer-events: none !important;
   display: block;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.8s ease, visibility 0.8s ease;
 }
 
-/* Show navbar after tile animation completes */
 :host.show-navbar {
   opacity: 1;
   visibility: visible;
-  pointer-events: none !important; /* KEEP THIS: Host should never block clicks */
+  pointer-events: none !important;
 }
 
-/* ================= Diagonal Mask Animation ================= */
 .mask-animation-container {
   position: fixed;
   top: 0;
@@ -28,11 +25,11 @@
   bottom: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 99999999 !important; /* Highest z-index for mask */
+  z-index: var(--z-mask) !important;
   overflow: hidden;
   margin: 0;
   padding: 0;
-  pointer-events: auto !important; /* Allow interaction with mask */
+  pointer-events: auto !important;
 }
 
 .diagonal-mask {
@@ -46,10 +43,11 @@
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   transform-style: preserve-3d;
-  pointer-events: none !important; /* CRITICAL: Mask should never block clicks */
+  pointer-events: none !important;
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-/* Direction Classes */
 .diagonal-mask.tr-bl {
   transform: translateX(150%) translateY(-150%) scale(0) rotate(45deg);
 }
@@ -90,7 +88,6 @@
   transform: translateX(-150%) translateY(-150%) scale(0) rotate(-45deg);
 }
 
-/* Easing Types */
 .diagonal-mask.smooth {
   transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
 }
@@ -104,7 +101,11 @@
   transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Loading Indicator */
+.diagonal-mask.mask-covering,
+.diagonal-mask.mask-uncovering {
+  transition-duration: 1200ms;
+}
+
 .loading-indicator {
   position: absolute;
   top: 50%;
@@ -114,7 +115,7 @@
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  z-index: 99999999;
+  z-index: calc(var(--z-mask) + 1);
   pointer-events: none;
 }
 
@@ -122,7 +123,7 @@
   width: 40px;
   height: 40px;
   border: 3px solid rgba(0, 0, 0, 0.1);
-  border-left: 3px solid #10b981;
+  border-left: 3px solid var(--primary-color);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -141,16 +142,15 @@
   100% { transform: rotate(360deg); }
 }
 
-/* ================= Navbar Wrapper ================= */
 .navbar-wrapper {
   position: fixed !important;
   top: 0 !important;
   left: 0 !important;
   right: 0 !important;
-  z-index: 9998 !important;
+  z-index: var(--z-navbar) !important;
   background: transparent;
   padding: 1rem 2rem;
-  pointer-events: auto; /* Enable clicks on navbar */
+  pointer-events: auto;
 }
 
 .navbar-content {
@@ -159,10 +159,9 @@
   align-items: center;
 }
 
-/* ================= Logo ================= */
 .navbar-logo {
   pointer-events: auto;
-  z-index: 9999;
+  z-index: calc(var(--z-navbar) + 1);
 }
 
 .logo-image {
@@ -178,7 +177,6 @@
   filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.5));
 }
 
-/* ================= Hamburger Button ================= */
 .hamburger-btn {
   width: 60px;
   height: 60px;
@@ -186,7 +184,7 @@
   border: none;
   cursor: pointer;
   position: relative;
-  z-index: 9999998;
+  z-index: calc(var(--z-navbar) + 2);
   padding: 12px;
   display: flex;
   flex-direction: column;
@@ -223,7 +221,6 @@
   background: var(--primary-color);
 }
 
-/* Hamburger Animation States */
 .hamburger-btn.active .line1 {
   transform: rotate(45deg) translate(6px, 6px);
 }
@@ -236,7 +233,6 @@
   transform: rotate(-45deg) translate(8px, -7px);
 }
 
-/* ================= Fullscreen Menu ================= */
 .fullscreen-menu {
   position: fixed !important;
   top: 0 !important;
@@ -246,22 +242,22 @@
   background: rgba(0, 0, 0, 0.98);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  z-index: 999999999 !important; /* HIGHEST - Above mask and everything */
+  z-index: var(--z-overlay) !important;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease;
-  pointer-events: none !important; /* Disable clicks when hidden */
+  pointer-events: none !important;
   overflow-y: auto;
 }
 
 .fullscreen-menu.active {
   opacity: 1 !important;
   visibility: visible !important;
-  pointer-events: auto !important; /* Enable ALL clicks when active */
+  pointer-events: auto !important;
 }
 
 .fullscreen-menu.animating {
-  pointer-events: auto !important; /* Keep clickable during animation */
+  pointer-events: auto !important;
 }
 
 .menu-inner {
@@ -272,11 +268,10 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  pointer-events: auto !important; /* Ensure inner content is clickable */
+  pointer-events: auto !important;
   z-index: 10;
 }
 
-/* ================= Close Button ================= */
 .close-btn {
   position: absolute;
   top: 2rem;
@@ -286,11 +281,11 @@
   background: none;
   border: none;
   cursor: pointer;
-  z-index: 10000000 !important; /* Above everything in the menu */
+  z-index: calc(var(--z-overlay) + 1) !important;
   transition: color 0.3s ease, transform 0.4s ease;
   color: white;
   outline: none;
-  pointer-events: auto !important; /* Always clickable */
+  pointer-events: auto !important;
 }
 
 .close-btn:hover:not(:disabled) {
@@ -303,12 +298,11 @@
   opacity: 0.5;
 }
 
-/* ================= Menu Items ================= */
 .menu-nav {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  pointer-events: auto !important; /* Ensure menu items are clickable */
+  pointer-events: auto !important;
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
@@ -327,7 +321,7 @@
   border-radius: 8px;
   outline: none;
   background: transparent;
-  pointer-events: auto !important; /* Ensure each item is clickable */
+  pointer-events: auto !important;
   cursor: pointer;
 }
 
@@ -340,7 +334,7 @@
 }
 
 .menu-item .menu-text {
-  color: white; /* default text color */
+  color: white;
   transition: transform 0.3s ease, color 0.3s ease;
 }
 
@@ -349,7 +343,7 @@
 }
 
 .menu-item:hover:not(.disabled) .menu-text {
-  color: var(--primary-color); /* text changes on hover */
+  color: var(--primary-color);
   transform: translateX(12px);
 }
 
@@ -359,7 +353,6 @@
   cursor: not-allowed;
 }
 
-/* ================= Responsive ================= */
 @media (max-width: 768px) {
   .logo-image {
     height: 50px;
@@ -468,7 +461,6 @@
   }
 }
 
-/* ================= Performance Optimizations ================= */
 .fullscreen-menu,
 .hamburger-btn,
 .line,
@@ -487,14 +479,12 @@
   contain: layout style paint;
 }
 
-/* ================= Browser Compatibility ================= */
 @supports not (backdrop-filter: blur(10px)) {
   .diagonal-mask {
-    background: #87CEEB !important;
+    background: var(--primary-color) !important;
   }
 }
 
-/* Reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
   .diagonal-mask {
     transition-duration: 0.3s !important;

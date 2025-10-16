@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Project } from '../../../models/types';
 
 @Component({
   selector: 'app-portfolio',
@@ -10,9 +11,8 @@ import { CommonModule } from '@angular/common';
 })
 export class Portfolio {
   currentIndex = 0;
-  isAnimating = false;
 
-  projects = [
+  projects: Project[] = [
     {
       title: 'E-Commerce Platform',
       category: 'Web Development',
@@ -86,36 +86,15 @@ export class Portfolio {
   ];
 
   nextSlide(): void {
-    if (this.isAnimating) return;
-
-    this.isAnimating = true;
     this.currentIndex = (this.currentIndex + 1) % this.projects.length;
-
-    setTimeout(() => {
-      this.isAnimating = false;
-    }, 600);
   }
 
   prevSlide(): void {
-    if (this.isAnimating) return;
-
-    this.isAnimating = true;
     this.currentIndex = (this.currentIndex - 1 + this.projects.length) % this.projects.length;
-
-    setTimeout(() => {
-      this.isAnimating = false;
-    }, 600);
   }
 
   goToSlide(index: number): void {
-    if (this.isAnimating || index === this.currentIndex) return;
-
-    this.isAnimating = true;
     this.currentIndex = index;
-
-    setTimeout(() => {
-      this.isAnimating = false;
-    }, 600);
   }
 
   getCardClass(index: number): string {
