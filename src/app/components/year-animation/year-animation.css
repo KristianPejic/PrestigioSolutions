@@ -1,7 +1,7 @@
 .year-animation-container {
   position: relative;
   width: 100%;
-  height: 300vh; /* Tall container for scroll-based animation */
+  height: 300vh;
   background: black;
   overflow: hidden;
   display: flex;
@@ -9,7 +9,6 @@
   justify-content: center;
 }
 
-/* Year Wrapper - sticky positioning during scroll */
 .year-wrapper {
   position: sticky;
   top: 50%;
@@ -27,7 +26,6 @@
   will-change: opacity;
 }
 
-/* Year digits with instant transition */
 .year-digit {
   display: inline-block;
   transition: opacity 0.3s ease, transform 0.1s linear;
@@ -35,14 +33,13 @@
   transform-origin: center center;
 }
 
-/* The zoom target (middle 0) */
 .zoom-target {
   z-index: 3;
   transform-origin: center center;
   transition: transform 0.1s linear;
 }
 
-/* Particles Container - Full Screen */
+/* ================= PARTICLE SYSTEM ================= */
 .particles-container {
   position: fixed;
   top: 0;
@@ -52,9 +49,106 @@
   z-index: 1;
   pointer-events: none;
   overflow: hidden;
+  transition: opacity 0.3s ease;
 }
 
-/* Text that appears inside the "0" with cyan gradient */
+.particle {
+  position: absolute;
+  background: radial-gradient(circle, rgba(135, 206, 235, 0.9) 0%, rgba(95, 168, 211, 0.6) 50%, transparent 100%);
+  border-radius: 50%;
+  animation: particleFloat infinite ease-in-out;
+  box-shadow: 0 0 10px rgba(135, 206, 235, 0.8),
+  0 0 20px rgba(135, 206, 235, 0.5),
+  0 0 30px rgba(135, 206, 235, 0.3);
+  will-change: transform;
+}
+
+@keyframes particleFloat {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  50% {
+    transform: translate(var(--x-offset), var(--y-offset)) scale(1.5);
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translate(calc(var(--x-offset) * 2), calc(var(--y-offset) * 2)) scale(0.5);
+    opacity: 0;
+  }
+}
+
+/* ================= ANIMATED RINGS ================= */
+.rings-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 300px;
+  z-index: 1;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 3px solid rgba(135, 206, 235, 0.6);
+  border-radius: 50%;
+  animation: ringExpand 3s ease-out infinite;
+  box-shadow: 0 0 20px rgba(135, 206, 235, 0.4),
+  inset 0 0 20px rgba(135, 206, 235, 0.2);
+}
+
+.ring-1 {
+  width: 100px;
+  height: 100px;
+  animation-delay: 0s;
+}
+
+.ring-2 {
+  width: 100px;
+  height: 100px;
+  animation-delay: 1s;
+}
+
+.ring-3 {
+  width: 100px;
+  height: 100px;
+  animation-delay: 2s;
+}
+
+@keyframes ringExpand {
+  0% {
+    width: 100px;
+    height: 100px;
+    opacity: 0;
+    border-width: 3px;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    width: 600px;
+    height: 600px;
+    opacity: 0;
+    border-width: 1px;
+  }
+}
+
+/* ================= TEXT STYLING ================= */
 .inner-text {
   position: fixed;
   top: 50%;
@@ -86,25 +180,21 @@
 }
 
 /* ================= RESPONSIVE ================= */
-
-/* Large Desktop - Smaller text */
 @media (min-width: 1441px) {
   .inner-text {
     font-size: clamp(1.8rem, 4vw, 3.5rem);
   }
 }
 
-/* Desktop */
 @media (max-width: 1440px) {
   .inner-text {
     font-size: clamp(2rem, 5vw, 4rem);
   }
 }
 
-/* Tablet */
 @media (max-width: 1024px) {
   .year-animation-container {
-    height: 350vh; /* Taller so 2026 is visible longer */
+    height: 350vh;
   }
 
   .year-wrapper {
@@ -115,12 +205,16 @@
     font-size: clamp(1.8rem, 5vw, 3.5rem);
     top: 60%;
   }
+
+  .rings-container {
+    width: 250px;
+    height: 250px;
+  }
 }
 
-/* Mobile */
 @media (max-width: 768px) {
   .year-animation-container {
-    height: 400vh; /* Much taller - see 2026, then animation */
+    height: 400vh;
   }
 
   .year-wrapper {
@@ -137,15 +231,20 @@
     left: 50%;
   }
 
-  .text-line {
-    font-size: 1em;
+  .rings-container {
+    width: 200px;
+    height: 200px;
+  }
+
+  .particle {
+    box-shadow: 0 0 8px rgba(135, 206, 235, 0.8),
+    0 0 15px rgba(135, 206, 235, 0.5);
   }
 }
 
-/* Small Mobile */
 @media (max-width: 480px) {
   .year-animation-container {
-    height: 400vh; /* Taller container */
+    height: 400vh;
   }
 
   .year-wrapper {
@@ -163,16 +262,16 @@
     filter: drop-shadow(0 0 15px rgba(109, 213, 237, 0.5));
   }
 
-  .text-line {
-    font-size: 1em;
+  .rings-container {
+    width: 150px;
+    height: 150px;
   }
 
   .particle {
-    box-shadow: 0 0 5px rgba(255, 255, 255, 0.6);
+    box-shadow: 0 0 5px rgba(135, 206, 235, 0.6);
   }
 }
 
-/* Extra Small Mobile (320px) */
 @media (max-width: 380px) {
   .year-animation-container {
     height: 400vh;
@@ -188,13 +287,8 @@
     max-width: 75vw;
     top: 65%;
   }
-
-  .text-line {
-    font-size: 1em;
-  }
 }
 
-/* Landscape mobile fix */
 @media (max-width: 768px) and (orientation: landscape) {
   .year-animation-container {
     height: 400vh;
@@ -209,7 +303,7 @@
 /* Performance Optimizations */
 .year-digit,
 .particle,
-.fade-overlay,
+.ring,
 .inner-text {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
@@ -224,8 +318,10 @@
 
   .year-digit,
   .particle,
+  .ring,
   .inner-text {
     transition: none !important;
+    animation: none !important;
   }
 
   .zoom-target {

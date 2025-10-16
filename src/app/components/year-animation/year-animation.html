@@ -27,6 +27,25 @@
     </span>
   </div>
 
+  <!-- Particle System Inside the "0" -->
+  <div class="particles-container" [style.opacity]="getParticleOpacity()">
+    <div class="particle" *ngFor="let particle of particles"
+         [style.left.%]="particle.x"
+         [style.top.%]="particle.y"
+         [style.width.px]="particle.size"
+         [style.height.px]="particle.size"
+         [style.animation-delay]="particle.delay + 's'"
+         [style.animation-duration]="particle.duration + 's'">
+    </div>
+  </div>
+
+  <!-- Animated Rings Inside the "0" -->
+  <div class="rings-container" [style.opacity]="getRingOpacity()">
+    <div class="ring ring-1"></div>
+    <div class="ring ring-2"></div>
+    <div class="ring ring-3"></div>
+  </div>
+
   <!-- Text with cyan gradient styling -->
   <div class="inner-text"
        [style.opacity]="getTextOpacity()"

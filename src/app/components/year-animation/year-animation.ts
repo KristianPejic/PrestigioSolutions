@@ -5,6 +5,16 @@ import { ResizeService } from '../../services/resize.service';
 import { Throttle } from '../../utils/decorators';
 import { Subscription } from 'rxjs';
 
+interface Particle {
+  x: number;
+  y: number;
+  size: number;
+  delay: number;
+  duration: number;
+  xOffset: number;
+  yOffset: number;
+}
+
 @Component({
   selector: 'app-year-animation',
   standalone: true,
@@ -14,6 +24,7 @@ import { Subscription } from 'rxjs';
 })
 export class YearAnimationComponent implements OnInit, OnDestroy {
   scrollProgress = 0;
+  particles: Particle[] = [];
   private isMobile = false;
   private resizeSubscription?: Subscription;
 
@@ -25,6 +36,7 @@ export class YearAnimationComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isMobile = this.resizeService.isMobile();
+    this.generateParticles();
     this.calculateScrollProgress();
 
     this.resizeSubscription = this.resizeService.resize$.subscribe(screenSize => {
@@ -35,6 +47,38 @@ export class YearAnimationComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.resizeSubscription?.unsubscribe();
+  }
+
+  /**
+   * Generate particles for the animation inside the "0"
+   */
+  private generateParticles(): void {
+    const particleCount = 50; // Number of particles
+
+    for (let i = 0; i < particleCount; i++) {
+      // Random position around center (50%, 50%)
+      const angle = (Math.PI * 2 * i) / particleCount;
+      const radius = Math.random() * 15 + 35; // 35-50% from center
+
+      const x = 50 + Math.cos(angle) * radius;
+      const y = 50 + Math.sin(angle) * radius;
+
+      // Random offsets for animation
+      const xOffset = (Math.random() - 0.5) * 200;
+      const yOffset = (Math.random() - 0.5) * 200;
+
+      const particle: Particle = {
+        x: x,
+        y: y,
+        size: Math.random() * 6 + 3, // 3-9px
+        delay: Math.random() * 2, // 0-2s delay
+        duration: Math.random() * 2 + 3, // 3-5s duration
+        xOffset: xOffset,
+        yOffset: yOffset
+      };
+
+      this.particles.push(particle);
+    }
   }
 
   @HostListener('window:scroll', [])
@@ -75,6 +119,22 @@ export class YearAnimationComponent implements OnInit, OnDestroy {
         this.scrollProgress = Math.min(1, scrollAfterCenter / zoomRange);
       }
     }
+
+    // Apply CSS variables for particle animation
+    this.applyParticleOffsets();
+  }
+
+  /**
+   * Apply random offsets to particles as CSS variables
+   */
+  private applyParticleOffsets(): void {
+    const particleElements = this.elementRef.nativeElement.querySelectorAll('.particle');
+    particleElements.forEach((el: HTMLElement, index: number) => {
+      if (this.particles[index]) {
+        el.style.setProperty('--x-offset', `${this.particles[index].xOffset}px`);
+        el.style.setProperty('--y-offset', `${this.particles[index].yOffset}px`);
+      }
+    });
   }
 
   getYearOpacity(): number {
@@ -105,6 +165,38 @@ export class YearAnimationComponent implements OnInit, OnDestroy {
     const maxScale = 30;
     const easedProgress = Math.pow(this.scrollProgress, 0.7);
     return minScale + (easedProgress * (maxScale - minScale));
+  }
+
+  /**
+   * Particle opacity - fade in as zoom increases
+   */
+  getParticleOpacity(): number {
+    if (this.scrollProgress < 0.2) {
+      return 0;
+    }
+    if (this.scrollProgress < 0.4) {
+      return (this.scrollProgress - 0.2) / 0.2;
+    }
+    if (this.scrollProgress < 0.7) {
+      return 1;
+    }
+    return 1 - ((this.scrollProgress - 0.7) / 0.3);
+  }
+
+  /**
+   * Ring opacity - fade in with particles
+   */
+  getRingOpacity(): number {
+    if (this.scrollProgress < 0.25) {
+      return 0;
+    }
+    if (this.scrollProgress < 0.45) {
+      return (this.scrollProgress - 0.25) / 0.2;
+    }
+    if (this.scrollProgress < 0.65) {
+      return 1;
+    }
+    return 1 - ((this.scrollProgress - 0.65) / 0.35);
   }
 
   getTextOpacity(): number {
