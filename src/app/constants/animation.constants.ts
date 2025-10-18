@@ -20,12 +20,12 @@ export const ANIMATION_DELAYS = {
 export const Z_INDEX = {
   BASE: 1,
   CONTENT: 10,
-  FOOTER: 40,
-  TILES: 50,
-  NAVBAR: 100,
-  NAVBAR_MENU: 200,
-  MASK: 9999,
-  OVERLAY: 10000
+  FOOTER: 20,
+  TILES: 30,
+  NAVBAR: 40,
+  NAVBAR_MENU: 50,
+  MASK: 60,
+  OVERLAY: 70
 } as const;
 
 export const TOTAL_NAVIGATION_TIME =
