@@ -268,7 +268,14 @@ export class NavbarComponent implements OnChanges, OnDestroy {
 
     return classes;
   }
+  onLogoClick(event: Event): void {
+    event.preventDefault();
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
 
+  }
   private disableButtonTemporarily(): void {
     this.isButtonDisabled = true;
     debugLog('🔒 Buttons disabled for', ANIMATION_DURATION.NAVBAR_COOLDOWN, 'ms');
