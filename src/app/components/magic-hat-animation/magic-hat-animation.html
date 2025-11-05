@@ -1,0 +1,42 @@
+<!-- Logo in corner (final position) - Clickable to scroll to top -->
+<div *ngIf="logoLanded" class="logo-final" (click)="scrollToTop()">
+  <img src="/assets/images/PrestigioStolutionsLogo-removebg-preview.png"
+       alt="Prestigio Solutions Logo"
+       class="logo-image-final">
+</div>
+
+<!-- Flying logo (during animation) -->
+<div *ngIf="logoFired && !logoLanded" class="logo-flying">
+  <img src="/assets/images/PrestigioStolutionsLogo-removebg-preview.png"
+       alt="Prestigio Solutions Logo"
+       class="logo-image-flying">
+</div>
+
+<!-- Magic Hat - Now opens to the LEFT (top-left direction) -->
+<div *ngIf="showHat && !logoFired"
+     class="magic-hat"
+     [class.hat-rotated]="hatRotate">
+  <svg width="120" height="120" viewBox="0 0 100 100">
+    <!-- Hat brim -->
+    <ellipse cx="50" cy="70" rx="40" ry="8" fill="#2a2a2a"/>
+
+    <!-- Hat body - flipped horizontally for left opening -->
+    <path d="M 30 70 Q 30 30, 50 20 Q 70 30, 70 70 Z"
+          fill="#1a1a1a"
+          stroke="#87CEEB"
+          stroke-width="2"/>
+
+    <!-- Hat band -->
+    <ellipse cx="50" cy="60" rx="22" ry="4" fill="#87CEEB"/>
+
+    <!-- Sparkles when rotating - positioned for left opening -->
+    <ng-container *ngIf="hatRotate">
+      <circle cx="35" cy="35" r="2" fill="#ffd700" class="sparkle sparkle-1"/>
+      <circle cx="40" cy="40" r="2" fill="#ffd700" class="sparkle sparkle-2"/>
+      <circle cx="30" cy="30" r="2" fill="#ffd700" class="sparkle sparkle-3"/>
+    </ng-container>
+  </svg>
+
+  <!-- Cannon smoke effect - now on the LEFT side -->
+  <div *ngIf="hatRotate" class="cannon-smoke"></div>
+</div>
