@@ -11,10 +11,11 @@ import { Router } from '@angular/router';
 export class Datenschutz {
   constructor(private router: Router) {}
 
-  goBack(): void {
-    this.router.navigate(['/'], {
-      skipLocationChange: false,
-      replaceUrl: false
-    });
+goBack(): void {
+  if (window.history.length > 1) {
+    window.history.back();
+  } else {
+    this.router.navigate(['/']);
   }
+}
 }
