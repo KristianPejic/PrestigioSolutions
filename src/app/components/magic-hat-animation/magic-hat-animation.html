@@ -1,42 +1,227 @@
-<!-- Logo in corner (final position) - Clickable to scroll to top -->
-<div *ngIf="logoLanded" class="logo-final" (click)="scrollToTop()">
-  <img src="/assets/images/PrestigioStolutionsLogo-removebg-preview.png"
-       alt="Prestigio Solutions Logo"
-       class="logo-image-final">
-</div>
+<div class="magic-hat-container" *ngIf="(showHat || showCannonball) && isAnimating">
+  <!-- Wizard Hat SVG (starts normal, then rotates 180 degrees) -->
+  <div class="hat-wrapper" *ngIf="showHat" [class.hat-rotated]="isRotated">
+    <svg class="wizard-hat" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- Smooth gradient for hat - dark theme -->
+        <linearGradient id="hatGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" style="stop-color:#1e293b;stop-opacity:1" />
+          <stop offset="50%" style="stop-color:#0f172a;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#020617;stop-opacity:1" />
+        </linearGradient>
 
-<!-- Flying logo (during animation) -->
-<div *ngIf="logoFired && !logoLanded" class="logo-flying">
-  <img src="/assets/images/PrestigioStolutionsLogo-removebg-preview.png"
-       alt="Prestigio Solutions Logo"
-       class="logo-image-flying">
-</div>
+        <!-- Brim gradient -->
+        <radialGradient id="brimGradient">
+          <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#020617;stop-opacity:1" />
+        </radialGradient>
 
-<!-- Magic Hat - Now opens to the LEFT (top-left direction) -->
-<div *ngIf="showHat && !logoFired"
-     class="magic-hat"
-     [class.hat-rotated]="hatRotate">
-  <svg width="120" height="120" viewBox="0 0 100 100">
-    <!-- Hat brim -->
-    <ellipse cx="50" cy="70" rx="40" ry="8" fill="#2a2a2a"/>
+        <!-- Primary color shimmer - cyan/blue -->
+        <linearGradient id="primaryShimmer" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:0.6" />
+          <stop offset="50%" style="stop-color:#0ea5e9;stop-opacity:0.9" />
+          <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.6" />
+        </linearGradient>
 
-    <!-- Hat body - flipped horizontally for left opening -->
-    <path d="M 30 70 Q 30 30, 50 20 Q 70 30, 70 70 Z"
-          fill="#1a1a1a"
-          stroke="#87CEEB"
-          stroke-width="2"/>
+        <!-- Orb glow gradient -->
+        <radialGradient id="orbGlow">
+          <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:1" />
+          <stop offset="50%" style="stop-color:#06b6d4;stop-opacity:0.8" />
+          <stop offset="100%" style="stop-color:#0284c7;stop-opacity:0" />
+        </radialGradient>
+      </defs>
 
-    <!-- Hat band -->
-    <ellipse cx="50" cy="60" rx="22" ry="4" fill="#87CEEB"/>
+      <!-- Hat brim - smooth ellipse -->
+      <ellipse cx="100" cy="158" rx="75" ry="14" fill="url(#brimGradient)" stroke="#0ea5e9" stroke-width="2"/>
 
-    <!-- Sparkles when rotating - positioned for left opening -->
-    <ng-container *ngIf="hatRotate">
-      <circle cx="35" cy="35" r="2" fill="#ffd700" class="sparkle sparkle-1"/>
-      <circle cx="40" cy="40" r="2" fill="#ffd700" class="sparkle sparkle-2"/>
-      <circle cx="30" cy="30" r="2" fill="#ffd700" class="sparkle sparkle-3"/>
-    </ng-container>
-  </svg>
+      <!-- Main hat body - smooth curved path instead of sharp triangle -->
+      <path d="M 45 158
+               Q 50 155, 60 135
+               Q 70 115, 80 90
+               Q 90 65, 95 45
+               Q 98 35, 100 30
+               Q 102 35, 105 45
+               Q 110 65, 120 90
+               Q 130 115, 140 135
+               Q 150 155, 155 158
+               Z"
+            fill="url(#hatGradient)"
+            stroke="#0ea5e9"
+            stroke-width="2"/>
 
-  <!-- Cannon smoke effect - now on the LEFT side -->
-  <div *ngIf="hatRotate" class="cannon-smoke"></div>
+      <!-- Inner shadow - left side softness -->
+      <path d="M 45 158
+               Q 50 155, 60 135
+               Q 70 115, 80 90
+               Q 90 65, 95 45
+               Q 98 35, 100 30
+               L 100 158 Z"
+            fill="#000000"
+            opacity="0.15"/>
+
+      <!-- Highlight - right side softness -->
+      <path d="M 100 30
+               Q 102 35, 105 45
+               Q 110 65, 120 90
+               Q 130 115, 140 135
+               Q 150 155, 155 158
+               L 100 158 Z"
+            fill="#ffffff"
+            opacity="0.08"/>
+
+      <!-- Smooth decorative band with curves - primary color -->
+      <ellipse cx="100" cy="130" rx="45" ry="8" fill="url(#primaryShimmer)" opacity="0.4"/>
+      <ellipse cx="100" cy="130" rx="42" ry="6" fill="#0ea5e9" opacity="0.5"/>
+
+      <!-- Rounded star in center - primary color -->
+      <g transform="translate(100, 85)">
+        <circle cx="0" cy="-8" r="2" fill="#0ea5e9"/>
+        <circle cx="6" cy="-2" r="2" fill="#0ea5e9"/>
+        <circle cx="4" cy="6" r="2" fill="#0ea5e9"/>
+        <circle cx="-4" cy="6" r="2" fill="#0ea5e9"/>
+        <circle cx="-6" cy="-2" r="2" fill="#0ea5e9"/>
+        <circle cx="0" cy="0" r="4" fill="#06b6d4" opacity="0.8"/>
+      </g>
+
+      <!-- Smooth crescent moon - light accent -->
+      <circle cx="70" cy="100" r="8" fill="#e2e8f0" opacity="0.8"/>
+      <circle cx="73" cy="100" r="8" fill="url(#hatGradient)"/>
+
+      <!-- ALL Orbiting Particles Around Hat -->
+      <g class="orbiting-particles">
+        <!-- Large Orb 1 - with glow -->
+        <g class="orb orb-1">
+          <circle cx="100" cy="95" r="8" fill="url(#orbGlow)" opacity="0.4"/>
+          <circle cx="100" cy="95" r="4" fill="#0ea5e9" opacity="0.9"/>
+          <circle cx="99" cy="94" r="1.5" fill="#ffffff" opacity="0.8"/>
+        </g>
+
+        <!-- Large Orb 2 - with glow -->
+        <g class="orb orb-2">
+          <circle cx="100" cy="95" r="8" fill="url(#orbGlow)" opacity="0.4"/>
+          <circle cx="100" cy="95" r="4" fill="#06b6d4" opacity="0.9"/>
+          <circle cx="99" cy="94" r="1.5" fill="#ffffff" opacity="0.8"/>
+        </g>
+
+        <!-- Large Orb 3 - with glow -->
+        <g class="orb orb-3">
+          <circle cx="100" cy="95" r="8" fill="url(#orbGlow)" opacity="0.4"/>
+          <circle cx="100" cy="95" r="4" fill="#0ea5e9" opacity="0.9"/>
+          <circle cx="99" cy="94" r="1.5" fill="#ffffff" opacity="0.8"/>
+        </g>
+
+        <!-- Large Orb 4 - with glow -->
+        <g class="orb orb-4">
+          <circle cx="100" cy="95" r="8" fill="url(#orbGlow)" opacity="0.4"/>
+          <circle cx="100" cy="95" r="4" fill="#06b6d4" opacity="0.9"/>
+          <circle cx="99" cy="94" r="1.5" fill="#ffffff" opacity="0.8"/>
+        </g>
+
+        <!-- Small sparkle 1 -->
+        <g class="orb orb-5">
+          <circle cx="100" cy="95" r="2.5" fill="#06b6d4" opacity="0.8">
+            <animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" repeatCount="indefinite"/>
+          </circle>
+        </g>
+
+        <!-- Small sparkle 2 -->
+        <g class="orb orb-6">
+          <circle cx="100" cy="95" r="2" fill="#0ea5e9" opacity="0.8">
+            <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite"/>
+          </circle>
+        </g>
+
+        <!-- Small sparkle 3 -->
+        <g class="orb orb-7">
+          <circle cx="100" cy="95" r="2" fill="#06b6d4" opacity="0.7">
+            <animate attributeName="opacity" values="0.4;0.9;0.4" dur="1.8s" repeatCount="indefinite"/>
+          </circle>
+        </g>
+
+        <!-- Tiny sparkle 1 -->
+        <g class="orb orb-8">
+          <circle cx="100" cy="95" r="1.5" fill="#ffffff" opacity="0.6">
+            <animate attributeName="opacity" values="0.3;0.8;0.3" dur="2.2s" repeatCount="indefinite"/>
+          </circle>
+        </g>
+
+        <!-- Tiny sparkle 2 -->
+        <g class="orb orb-9">
+          <circle cx="100" cy="95" r="1.5" fill="#ffffff" opacity="0.5">
+            <animate attributeName="opacity" values="0.5;0.9;0.5" dur="1.7s" repeatCount="indefinite"/>
+          </circle>
+        </g>
+
+        <!-- Tiny sparkle 3 -->
+        <g class="orb orb-10">
+          <circle cx="100" cy="95" r="1.5" fill="#ffffff" opacity="0.6">
+            <animate attributeName="opacity" values="0.2;0.8;0.2" dur="2.5s" repeatCount="indefinite"/>
+          </circle>
+        </g>
+      </g>
+
+      <!-- Soft swirl patterns - primary color -->
+      <g stroke="#0ea5e9" stroke-width="1" fill="none" opacity="0.3">
+        <path d="M 75 115 Q 78 112, 80 115" stroke-linecap="round"/>
+        <path d="M 120 115 Q 117 112, 115 115" stroke-linecap="round"/>
+      </g>
+
+      <!-- Smooth highlight on brim -->
+      <ellipse cx="100" cy="156" rx="60" ry="10" fill="none" stroke="#0ea5e9" stroke-width="0.5" opacity="0.4"/>
+    </svg>
+  </div>
+
+  <!-- Cannonball -->
+  <div class="cannonball-wrapper" *ngIf="showCannonball">
+    <svg class="cannonball" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <!-- Main cannonball -->
+      <defs>
+        <radialGradient id="cannonballGradient">
+          <stop offset="0%" style="stop-color:#4a4a4a;stop-opacity:1" />
+          <stop offset="50%" style="stop-color:#2a2a2a;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#1a1a1a;stop-opacity:1" />
+        </radialGradient>
+      </defs>
+      <circle cx="50" cy="50" r="40" fill="url(#cannonballGradient)" stroke="#87CEEB" stroke-width="2"/>
+
+      <!-- Highlight -->
+      <ellipse cx="35" cy="35" rx="15" ry="10" fill="rgba(135, 206, 235, 0.3)"/>
+
+      <!-- Sparkles around cannonball -->
+      <circle cx="20" cy="50" r="3" fill="#87CEEB" opacity="0.8">
+        <animate attributeName="opacity" values="0.8;0.3;0.8" dur="0.5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="80" cy="50" r="3" fill="#87CEEB" opacity="0.8">
+        <animate attributeName="opacity" values="0.3;0.8;0.3" dur="0.5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="50" cy="20" r="3" fill="#87CEEB" opacity="0.8">
+        <animate attributeName="opacity" values="0.8;0.3;0.8" dur="0.7s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="50" cy="80" r="3" fill="#87CEEB" opacity="0.8">
+        <animate attributeName="opacity" values="0.3;0.8;0.3" dur="0.7s" repeatCount="indefinite"/>
+      </circle>
+    </svg>
+  </div>
+
+  <!-- Smoke Particles - Only show when shooting -->
+  <div class="smoke-container" *ngIf="showSmoke">
+    <div
+      *ngFor="let particle of smokeParticles; trackBy: trackBySmokeId"
+      class="smoke-particle"
+      [style.left.%]="particle.x"
+      [style.bottom.%]="particle.y"
+      [style.width.px]="particle.size"
+      [style.height.px]="particle.size"
+      [style.animation-delay]="particle.delay + 's'"
+      [style.animation-duration]="particle.duration + 's'"
+      [style.opacity]="particle.opacity">
+    </div>
+  </div>
+
+  <!-- Impact Effect (shown when cannonball hits top) -->
+  <div class="impact-effect" *ngIf="showCannonball">
+    <div class="impact-ring"></div>
+    <div class="impact-ring" style="animation-delay: 0.1s;"></div>
+    <div class="impact-ring" style="animation-delay: 0.2s;"></div>
+  </div>
 </div>

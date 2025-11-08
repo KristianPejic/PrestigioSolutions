@@ -12,13 +12,9 @@
     </div>
   </div>
 
-  <div *ngIf="logoAnimationComplete" class="fixed top-8 left-8 z-[300] logo-final">
-    <h1 class="font-black text-3xl sm:text-4xl md:text-5xl text-white">
-      <span class="text-primary">P</span><span class="text-primary">S</span>
-    </h1>
-  </div>
+  <!-- PS logo in top-left removed -->
 
-  <div class="hero-slide" [class.active]="activeSlide === 0 && !logoAnimationComplete">
+  <div class="hero-slide" [class.active]="activeSlide === 0">
     <div class="absolute inset-0 z-0 flex flex-col items-center justify-center">
 
       <div *ngIf="showHeroContent" class="hero-content-wrapper mb-8 flex justify-center text-center">
@@ -34,7 +30,7 @@
         </div>
       </div>
 
-      <div *ngIf="showHeroContent && !logoAnimationActive && !logoAnimationComplete" class="relative z-[200] group cursor-pointer">
+      <div *ngIf="showHeroContent && showDiscoverButton" class="relative z-[200] group cursor-pointer">
         <div
           class="hero-button relative z-10 px-4 py-2 sm:px-8 sm:py-4 border-2 bg-transparent font-bold text-base sm:text-lg rounded-lg
                  transform transition-all duration-300 group-hover:translate-y-1 group-hover:translate-x-1
@@ -105,4 +101,11 @@
     (animationComplete)="onTileAnimationComplete()"
     (animationReset)="onHeroReset()">
   </app-tile-drop-animation>
+
+  <!-- Magic Hat Animation -->
+  <app-magic-hat-animation
+    *ngIf="showMagicHat"
+    [hatRotating]="hatRotating"
+    (animationComplete)="onMagicHatComplete()">
+  </app-magic-hat-animation>
 </div>

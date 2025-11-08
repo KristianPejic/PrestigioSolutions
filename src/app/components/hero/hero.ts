@@ -2,13 +2,16 @@ import {Component, OnInit, OnDestroy, AfterViewInit, Output, EventEmitter, Simpl
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TileDropAnimationComponent } from '../tile-drop-animation/tile-drop-animation';
+import { MagicHatAnimation } from '../magic-hat-animation/magic-hat-animation';
 import { ANIMATION_DURATION } from '../../constants/animation.constants';
 import { debugLog } from '../../enviroments/enviroments';
+// SessionService import commented out for testing
+// import { SessionService } from '../../services/session.service';
 
 @Component({
   selector: 'app-hero',
   standalone: true,
-  imports: [CommonModule, TileDropAnimationComponent],
+  imports: [CommonModule, TileDropAnimationComponent, MagicHatAnimation],
   templateUrl: './hero.html',
   styleUrls: ['./hero.css']
 })
@@ -20,17 +23,27 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
   revealText = false;
   showHeroContent = false;
   activeSlide = 0;
-  logoAnimationActive = false;
-  logoAnimationComplete = false;
-  hideFirstSlide = false;
+
+  // Magic hat properties
+  showMagicHat = false;
+  showDiscoverButton = true;
+  hatRotating = false;
+  // Session storage commented out for testing
+  // private readonly MAGIC_HAT_SESSION_KEY = 'hasSeenMagicHat';
 
   private slideInterval: ReturnType<typeof setInterval> | null = null;
   private heroContentTimeout: ReturnType<typeof setTimeout> | null = null;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    // SessionService commented out for testing
+    // private sessionService: SessionService
+  ) {}
 
   ngOnInit(): void {
     this.startAutoSlide();
+    // Session storage check commented out for testing
+    // this.checkMagicHatSession();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -60,21 +73,23 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.heroContentTimeout) clearTimeout(this.heroContentTimeout);
   }
 
+  // Session storage check commented out for testing
+  /*
+  private checkMagicHatSession(): void {
+    const hasSeenMagicHat = this.sessionService.getItem(this.MAGIC_HAT_SESSION_KEY);
+    if (hasSeenMagicHat === 'true') {
+      this.showDiscoverButton = false;
+      debugLog('Magic hat already seen this session - hiding discover button');
+    }
+  }
+  */
+
   startAutoSlide(): void {
     this.slideInterval = setInterval(() => {
-      if (this.logoAnimationComplete && this.activeSlide === 0) {
-        this.activeSlide = 1;
-      }
-
       if (this.activeSlide === 2) return;
 
       const nextSlide = (this.activeSlide + 1) % 3;
-
-      if (this.logoAnimationComplete && nextSlide === 0) {
-        this.activeSlide = 1;
-      } else {
-        this.activeSlide = nextSlide;
-      }
+      this.activeSlide = nextSlide;
 
       if (this.activeSlide === 2 && this.showHeroContent) {
         this.triggerBubbleSequence();
@@ -104,9 +119,6 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
     this.showScrollingText = false;
     this.revealText = false;
     this.showHeroContent = false;
-    this.logoAnimationActive = false;
-    this.logoAnimationComplete = false;
-    this.hideFirstSlide = false;
     this.activeSlide = 0;
 
     if (this.heroContentTimeout) {
@@ -119,15 +131,31 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onDiscoverClick(): void {
-    if (this.logoAnimationActive || this.logoAnimationComplete) return;
+    if (this.showMagicHat) return;
 
-    if (this.slideInterval) clearInterval(this.slideInterval);
-    this.activeSlide = 0;
-    this.logoAnimationActive = true;
+    // Show magic hat immediately - no transition
+    this.showMagicHat = true;
+    this.showDiscoverButton = false;
 
-    setTimeout(() => this.triggerLogoAnimation(), 500);
+    // Rotate hat immediately
+    setTimeout(() => {
+      this.hatRotating = true;
+    }, 100);
+
+    // Session storage commented out for testing
+    // this.sessionService.setItem(this.MAGIC_HAT_SESSION_KEY, 'true');
+
+    debugLog('🎩 Magic hat animation triggered!');
   }
 
+  onMagicHatComplete(): void {
+    this.showMagicHat = false;
+    this.hatRotating = false;
+    debugLog('🎩 Magic hat animation complete');
+  }
+
+  // Logo animation removed for now
+  /*
   triggerLogoAnimation(): void {
     const prestigioText = document.querySelector('.prestigio-text') as HTMLElement;
     const softwareText = document.querySelector('.software-text') as HTMLElement;
@@ -146,6 +174,7 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
       this.startAutoSlide();
     }, 3500);
   }
+  */
 
   triggerBubbleSequence(): void {
     const bubbles = document.querySelectorAll('.bubble');
@@ -174,7 +203,7 @@ export class HeroComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     setTimeout(() => {
-      this.activeSlide = this.logoAnimationComplete ? 1 : 0;
+      this.activeSlide = 0;
       if (this.slideInterval) clearInterval(this.slideInterval);
       this.startAutoSlide();
     }, delay + 2000);
