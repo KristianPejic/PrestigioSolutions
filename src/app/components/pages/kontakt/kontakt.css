@@ -248,9 +248,6 @@
 }
 
 @media (max-width: 480px) {
-  .page-container {
-    padding: 1rem;
-  }
 
   .hero-section {
     padding: 4rem 0.5rem 2rem;

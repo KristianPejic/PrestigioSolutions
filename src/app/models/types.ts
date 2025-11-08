@@ -28,7 +28,6 @@ export interface Project {
   title: string;
   category: string;
   description: string;
-  tags: string[];
   color: string;
 }
 
