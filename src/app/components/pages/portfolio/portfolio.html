@@ -18,14 +18,13 @@
              [ngClass]="getCardClass(i)"
              (click)="isCardVisible(i) ? goToSlide(i) : null"
              [style.cursor]="isCardVisible(i) ? 'pointer' : 'default'">
-          <div class="project-image" [style.background]="project.color"></div>
+          <div class="project-image"
+               [style.backgroundImage]="'url(' + getProjectImage(i) + ')'">
+          </div>
           <div class="project-info">
             <h3>{{ project.title }}</h3>
             <p class="project-category">{{ project.category }}</p>
             <p class="project-description">{{ project.description }}</p>
-            <div class="project-tags">
-              <span *ngFor="let tag of project.tags" class="tag">{{ tag }}</span>
-            </div>
           </div>
         </div>
       </div>

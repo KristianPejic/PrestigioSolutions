@@ -17,33 +17,45 @@ export class Portfolio {
       title: 'E-Commerce Platform',
       category: 'Web Development',
       description: 'Moderne E-Commerce-Lösung mit integriertem Payment-System',
-      color: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+      color: '#667eea'
     },
     {
       title: 'Corporate Website',
       category: 'Web Design',
       description: 'Responsive Unternehmenswebsite mit CMS-Integration',
-      color: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+      color: '#f5576c'
     },
     {
       title: 'Dashboard Analytics',
       category: 'Data Visualization',
       description: 'Echtzeit-Dashboard für Business Intelligence',
-      color: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)'
+      color: '#43e97b'
     },
     {
       title: 'AI Chatbot',
       category: 'Machine Learning',
       description: 'KI-gestützter Chatbot mit Natural Language Processing',
-      color: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'
+      color: '#fa709a'
     },
     {
       title: 'Booking System',
       category: 'SaaS Platform',
       description: 'Cloud-basiertes Buchungssystem für Hotels,Restaurants,Events und vieles mehr!',
-      color: 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)'
+      color: '#30cfd0'
     },
   ];
+
+  projectImages = [
+    'https://images.unsplash.com/photo-1557821552-17105176677c?w=800&q=80',
+    'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80',
+    'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
+    'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80',
+    'https://images.unsplash.com/photo-1455587734955-081b22074882?w=800&q=80'
+  ];
+
+  getProjectImage(index: number): string {
+    return this.projectImages[index] || '';
+  }
 
   nextSlide(): void {
     this.currentIndex = (this.currentIndex + 1) % this.projects.length;
