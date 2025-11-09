@@ -1,14 +1,14 @@
 .year-animation-container {
   position: relative;
   width: 100%;
-  height: 300vh;
+  height: 250vh;
   background: black;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: -100vh;
 }
-
 .year-wrapper {
   position: sticky;
   top: 50%;
@@ -190,7 +190,7 @@
 
 @media (max-width: 1024px) {
   .year-animation-container {
-    height: 350vh;
+    height: 400vh;
   }
 
   .year-wrapper {

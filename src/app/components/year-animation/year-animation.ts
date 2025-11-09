@@ -85,13 +85,13 @@ export class YearAnimationComponent implements OnInit, OnDestroy {
     const distanceFromCenter = elementCenter - screenCenter;
 
     if (this.isMobile) {
-      const mobileDelay = windowHeight * 0.5;
+      const mobileDelay = windowHeight * 0.15;
 
       if (distanceFromCenter > -mobileDelay) {
         this.scrollProgress = 0;
       } else {
         const scrollAfterDelay = Math.abs(distanceFromCenter) - mobileDelay;
-        const zoomRange = windowHeight * 1.5;
+        const zoomRange = windowHeight * 1.0;
         this.scrollProgress = Math.min(1, scrollAfterDelay / zoomRange);
       }
     } else {
