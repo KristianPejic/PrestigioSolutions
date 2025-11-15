@@ -2,14 +2,7 @@
 
 <app-wer-wir-sind (lineExtended)="onLineExtended($event)"></app-wer-wir-sind>
 
-<app-image-reveal
-  [isLineExtended]="isLineExtended"
-  [leftLineConnected]="leftLineConnected"
-  [rightLineConnected]="rightLineConnected"
-  [imageSrc]="'assets/images/hero-section-slider/Pixabay/sonstiges/Earth.png'"
-  [imageAlt]="'Prestigio Solutions Team'"
-  (imageRevealed)="onImageRevealed()"
-  (layoutTransformed)="onLayoutTransformed()">
+<app-image-reveal>
 </app-image-reveal>
 
 <app-short-services></app-short-services>

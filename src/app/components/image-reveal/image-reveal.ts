@@ -1,6 +1,6 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnDestroy, ElementRef, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ANIMATION_DURATION } from '../../constants/animation.constants';
+import { Debounce } from '../../utils/decorators';
 
 @Component({
   selector: 'app-image-reveal',
@@ -13,60 +13,87 @@ export class ImageRevealComponent implements OnChanges, OnDestroy {
   @Input() imageSrc: string = 'assets/images/reveal-image.jpg';
   @Input() imageAlt: string = 'Reveal Image';
   @Input() isLineExtended: boolean = false;
-  @Input() leftLineConnected: boolean = false;
-  @Input() rightLineConnected: boolean = false;
 
   @Output() imageRevealed = new EventEmitter<void>();
   @Output() layoutTransformed = new EventEmitter<void>();
 
-  isLoading = false;
-  isRevealed = false;
-  isLayoutTransformed = false;
+  isPortalActive = false;
+  isImageActive = false;
+  isContentActive = false;
 
-  private animationTimeout: ReturnType<typeof setTimeout> | null = null;
-  private layoutTimeout: ReturnType<typeof setTimeout> | null = null;
+  private animationTimeout: any = null;
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(private elementRef: ElementRef) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['isLineExtended']) {
-      if (this.isLineExtended && !this.isLoading && !this.isRevealed) {
-        this.animationTimeout = setTimeout(() => {
-          this.startLoadingAnimation();
-        }, ANIMATION_DURATION.IMAGE_REVEAL_DELAY);
-      } else if (!this.isLineExtended) {
-        if (this.animationTimeout) clearTimeout(this.animationTimeout);
-        if (this.layoutTimeout) clearTimeout(this.layoutTimeout);
-        this.isLoading = false;
-        this.isRevealed = false;
-        this.isLayoutTransformed = false;
-        this.cdr.detectChanges();
+      if (this.isLineExtended) {
+        this.startPortalAnimation();
+      } else {
+        this.resetPortalAnimation();
       }
     }
   }
 
-  private startLoadingAnimation(): void {
-    if (this.isLoading || this.isRevealed) return;
+  @HostListener('window:scroll', [])
+  @Debounce(16)
+  onWindowScroll(): void {
+    if (this.isLineExtended) {
+      this.checkScrollPosition();
+    }
+  }
 
-    this.isLoading = true;
-    this.cdr.detectChanges();
+  private checkScrollPosition(): void {
+    const element = this.elementRef.nativeElement;
+    const rect = element.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
 
-    setTimeout(() => {
-      this.isLoading = false;
-      this.isRevealed = true;
+    const isVisible = rect.top < windowHeight * 0.6;
+
+    if (isVisible && !this.isPortalActive) {
+      this.startPortalAnimation();
+    }
+  }
+
+  private startPortalAnimation(): void {
+    if (this.isPortalActive) return;
+
+    // Clear any existing timeout
+    if (this.animationTimeout) {
+      clearTimeout(this.animationTimeout);
+    }
+
+    // Start portal ring and rotating lines
+    this.animationTimeout = setTimeout(() => {
+      this.isPortalActive = true;
+    }, 100);
+
+    // Reveal image
+    this.animationTimeout = setTimeout(() => {
+      this.isImageActive = true;
       this.imageRevealed.emit();
-      this.cdr.detectChanges();
+    }, 700);
 
-      this.layoutTimeout = setTimeout(() => {
-        this.isLayoutTransformed = true;
-        this.layoutTransformed.emit();
-        this.cdr.detectChanges();
-      }, ANIMATION_DURATION.LAYOUT_TRANSFORM);
-    }, ANIMATION_DURATION.LOADING_ANIMATION);
+    // Show content card
+    this.animationTimeout = setTimeout(() => {
+      this.isContentActive = true;
+      this.layoutTransformed.emit();
+    }, 1200);
+  }
+
+  private resetPortalAnimation(): void {
+    if (this.animationTimeout) {
+      clearTimeout(this.animationTimeout);
+    }
+
+    this.isPortalActive = false;
+    this.isImageActive = false;
+    this.isContentActive = false;
   }
 
   ngOnDestroy(): void {
-    if (this.animationTimeout) clearTimeout(this.animationTimeout);
-    if (this.layoutTimeout) clearTimeout(this.layoutTimeout);
+    if (this.animationTimeout) {
+      clearTimeout(this.animationTimeout);
+    }
   }
 }

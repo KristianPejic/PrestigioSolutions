@@ -1,66 +1,54 @@
-<div class="image-reveal-container" [class.layout-transformed]="isLayoutTransformed">
-  <div class="connecting-line center-line" [class.line-extended]="isLineExtended"></div>
+<div class="portal-reveal-section">
+  <div class="portal-container">
+    <div class="rotating-line" [class.active]="isPortalActive"></div>
+    <div class="rotating-line" [class.active]="isPortalActive"></div>
+    <div class="rotating-line" [class.active]="isPortalActive"></div>
+    <div class="rotating-line" [class.active]="isPortalActive"></div>
 
-  <div class="connecting-line left-line"
-       [class.line-connected]="leftLineConnected && isLayoutTransformed">
-  </div>
+    <div class="portal-ring" [class.active]="isPortalActive"></div>
+    <div class="portal-inner" [class.active]="isPortalActive"></div>
 
-  <div class="connecting-line right-line"
-       [class.line-connected]="rightLineConnected && isLayoutTransformed">
-  </div>
-
-  <div class="content-wrapper" [class.split-layout]="isLayoutTransformed">
-
-    <div class="image-wrapper"
-         [class.loading]="isLoading"
-         [class.revealed]="isRevealed"
-         [class.shifted-left]="isLayoutTransformed"
-         [class.start-animation]="isLineExtended && isLoading">
-
-      <div class="loading-overlay" *ngIf="isLoading">
-        <div class="loading-bar loading-bar-left"></div>
-        <div class="loading-bar loading-bar-right"></div>
-        <div class="loading-bar loading-bar-bottom"></div>
-        <div class="loading-bar loading-bar-left-side"></div>
-        <div class="loading-spinner"></div>
-      </div>
-
+    <div class="image-container" [class.active]="isImageActive">
       <img [src]="imageSrc"
            [alt]="imageAlt"
-           class="reveal-image"
-           [class.image-visible]="isRevealed">
-
-      <div class="click-hint" *ngIf="!isLoading && !isRevealed && !isLineExtended">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-          <circle cx="12" cy="12" r="10"></circle>
-          <path d="M12 8v8M8 12h8"></path>
-        </svg>
-        <p>Waiting for connection...</p>
-      </div>
+           class="portal-image">
     </div>
+  </div>
 
-    <div class="text-container"
-         [class.text-visible]="isLayoutTransformed"
-         *ngIf="isRevealed">
-      <div class="text-content">
-        <h2 class="text-heading">Maßgeschneiderte Lösungen</h2>
-        <p class="text-paragraph">
-          Wir entwickeln innovative Software-Lösungen, die perfekt auf Ihre individuellen Anforderungen zugeschnitten sind.
-        </p>
-        <p class="text-paragraph">
-          Von modernen Webseiten über komplexe Web-Apps bis hin zur strategischen IT-Beratung –
-          unser Team steht für Qualität, Effizienz und nachhaltige Digitalisierung.
-        </p>
-        <div class="text-highlight">
-          <div class="highlight-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#87CEEB" stroke-width="2">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-              <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-          </div>
-          <span>Ihre Vision, unsere Expertise</span>
-        </div>
-      </div>
-    </div>
+  <div class="content-card" [class.active]="isContentActive">
+    <h2>Maßgeschneiderte Lösungen</h2>
+    <p>
+      Wir entwickeln innovative Software-Lösungen, die perfekt auf Ihre individuellen Anforderungen zugeschnitten sind.
+    </p>
+    <p>
+      Von modernen Webseiten über komplexe Web-Apps bis hin zur strategischen IT-Beratung –
+      unser Team steht für Qualität, Effizienz und nachhaltige Digitalisierung.
+    </p>
+    <ul class="feature-list">
+      <li class="feature-item">
+        <span class="feature-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </span>
+        <span>Innovative Technologien</span>
+      </li>
+      <li class="feature-item">
+        <span class="feature-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </span>
+        <span>Maßgeschneiderte Lösungen</span>
+      </li>
+      <li class="feature-item">
+        <span class="feature-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </span>
+        <span>Nachhaltige Ergebnisse</span>
+      </li>
+    </ul>
   </div>
 </div>

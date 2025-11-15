@@ -1,28 +1,18 @@
-<div class="container">
-  <div
-    *ngFor="let line of lines; let i = index"
-    class="line"
-    [class.highlight-line]="line.highlight"
-    [style.left]="line.position">
+<div class="portal-title-section">
+  <div class="title-wrapper">
+    <span class="title-word" [class.active]="activeWordIndex === 0">WER</span>
+    <span class="title-word" [class.active]="activeWordIndex === 1">WIR</span>
+    <span class="title-word" [class.active]="activeWordIndex === 2">SIND</span>
   </div>
 
-  <div class="text-container">
-    <div class="text-section text-left">
-      <div class="overflow">
-        <h3 class="portfolio-heading">WER</h3>
-      </div>
-    </div>
-
-    <div class="text-section text-center wir-highlighted">
-      <div class="overflow">
-        <h3 class="portfolio-heading highlight-text">WIR</h3>
-      </div>
-    </div>
-
-    <div class="text-section text-right">
-      <div class="overflow">
-        <h3 class="portfolio-heading">SIND</h3>
-      </div>
+  <div class="particle-field" [class.active]="isAnimated">
+    <div class="energy-particle"
+         *ngFor="let particle of particles"
+         [style.left.%]="particle.x"
+         [style.top.%]="particle.y"
+         [style.--float-x]="particle.floatX"
+         [style.--float-y]="particle.floatY"
+         [style.animation-delay]="particle.delay">
     </div>
   </div>
 </div>
