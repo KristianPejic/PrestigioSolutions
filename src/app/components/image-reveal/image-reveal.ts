@@ -1,6 +1,14 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnDestroy, ElementRef, HostListener } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnDestroy, ElementRef, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Debounce } from '../../utils/decorators';
+
+interface Particle {
+  x: number;
+  y: number;
+  floatX: string;
+  floatY: string;
+  delay: string;
+}
 
 @Component({
   selector: 'app-image-reveal',
@@ -9,7 +17,7 @@ import { Debounce } from '../../utils/decorators';
   templateUrl: './image-reveal.html',
   styleUrls: ['./image-reveal.css']
 })
-export class ImageRevealComponent implements OnChanges, OnDestroy {
+export class ImageRevealComponent implements OnInit, OnChanges, OnDestroy {
   @Input() imageSrc: string = 'assets/images/reveal-image.jpg';
   @Input() imageAlt: string = 'Reveal Image';
   @Input() isLineExtended: boolean = false;
@@ -20,10 +28,15 @@ export class ImageRevealComponent implements OnChanges, OnDestroy {
   isPortalActive = false;
   isImageActive = false;
   isContentActive = false;
+  particles: Particle[] = [];
 
   private animationTimeout: any = null;
 
   constructor(private elementRef: ElementRef) {}
+
+  ngOnInit(): void {
+    this.generateParticles();
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['isLineExtended']) {
@@ -40,6 +53,18 @@ export class ImageRevealComponent implements OnChanges, OnDestroy {
   onWindowScroll(): void {
     if (this.isLineExtended) {
       this.checkScrollPosition();
+    }
+  }
+
+  private generateParticles(): void {
+    for (let i = 0; i < 50; i++) {
+      this.particles.push({
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        floatX: `${(Math.random() - 0.5) * 100}px`,
+        floatY: `${(Math.random() - 0.5) * 100}px`,
+        delay: `${Math.random() * 3}s`
+      });
     }
   }
 

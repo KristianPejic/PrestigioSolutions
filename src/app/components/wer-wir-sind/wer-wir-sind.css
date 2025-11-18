@@ -6,6 +6,7 @@
   justify-content: center;
   position: relative;
   overflow: visible;
+  isolation: isolate; /* Creates a new stacking context */
 }
 
 .title-wrapper {
@@ -34,9 +35,9 @@
                0 0 80px rgba(59, 130, 246, 0.5);
 }
 
-/* Energy Particles */
+/* Energy Particles - Contained within component */
 .particle-field {
-  position: fixed;
+  position: absolute; /* Changed from fixed to absolute */
   top: 0;
   left: 0;
   width: 100%;
@@ -45,6 +46,7 @@
   opacity: 0;
   transition: opacity 0.5s ease;
   z-index: 5;
+  overflow: hidden;
 }
 
 .particle-field.active {

@@ -7,6 +7,8 @@
   padding: 4rem 2rem;
   position: relative;
   gap: 4rem;
+  isolation: isolate; /* Creates a new stacking context */
+  overflow: hidden; /* Prevents particles from escaping */
 }
 
 .portal-container {
@@ -16,6 +18,45 @@
   max-width: 90vw;
   max-height: 90vw;
   flex-shrink: 0;
+}
+
+/* Energy Particles - Contained within component */
+.particle-field {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.particle-field.active {
+  opacity: 1;
+}
+
+.energy-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #3b82f6;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #3b82f6;
+  animation: float 3s infinite ease-in-out;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate(var(--float-x), var(--float-y)) scale(1.5);
+    opacity: 1;
+  }
 }
 
 /* Portal Ring */
@@ -294,7 +335,8 @@
   .portal-inner,
   .image-container,
   .content-card,
-  .rotating-line {
+  .rotating-line,
+  .energy-particle {
     transition: none !important;
     animation: none !important;
   }

@@ -1,4 +1,16 @@
 <div class="portal-reveal-section">
+  <!-- Particle Field -->
+  <div class="particle-field" [class.active]="isPortalActive">
+    <div class="energy-particle"
+         *ngFor="let particle of particles"
+         [style.left.%]="particle.x"
+         [style.top.%]="particle.y"
+         [style.--float-x]="particle.floatX"
+         [style.--float-y]="particle.floatY"
+         [style.animation-delay]="particle.delay">
+    </div>
+  </div>
+
   <div class="portal-container">
     <div class="rotating-line" [class.active]="isPortalActive"></div>
     <div class="rotating-line" [class.active]="isPortalActive"></div>
