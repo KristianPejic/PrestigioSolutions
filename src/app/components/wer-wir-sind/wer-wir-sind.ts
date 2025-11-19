@@ -30,6 +30,7 @@ export class WerWirSindComponent implements OnInit, OnDestroy, AfterViewInit {
   showStar = false;
   starIsBlue = false;
   starTransform = '';
+  animationComplete = false;
 
   private wordTimers: any[] = [];
   private starAnimationFrame: any = null;
@@ -90,6 +91,7 @@ export class WerWirSindComponent implements OnInit, OnDestroy, AfterViewInit {
       this.activeWordIndex = -1;
       this.showStar = false;
       this.starIsBlue = false;
+      this.animationComplete = false;
       this.clearWordTimers();
       this.lineExtended.emit(false);
     }
@@ -97,6 +99,7 @@ export class WerWirSindComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private startWordAnimation(): void {
     this.clearWordTimers();
+    this.animationComplete = false;
 
     // WER becomes blue
     const timer1 = setTimeout(() => {
@@ -162,19 +165,36 @@ export class WerWirSindComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isAutoScrolling = true;
     this.smoothScrollToPortal();
 
-    // Emit event when star reaches portal
+    // Emit event when star reaches portal and start continuous wave animation
     setTimeout(() => {
       this.starReachedPortal.emit();
       this.isAutoScrolling = false;
+      this.activeWordIndex = -1; // Reset to grey
+      this.animationComplete = true; // Start continuous wave effect
     }, 2000);
   }
 
   private smoothScrollToPortal(): void {
     const imageRevealSection = document.querySelector('.portal-reveal-section');
-    if (!imageRevealSection) return;
+    if (!imageRevealSection) {
+      // Fallback: scroll with zoom-aware calculation
+      this.fallbackScroll();
+      return;
+    }
 
-    const targetY = imageRevealSection.getBoundingClientRect().top + window.scrollY - window.innerHeight / 3;
-    const startY = window.scrollY;
+    // Get zoom level for accurate positioning
+    const zoomLevel = this.getZoomLevel();
+
+    // Calculate precise target position
+    const targetRect = imageRevealSection.getBoundingClientRect();
+    const currentScrollY = window.scrollY;
+
+    // Target: top of portal section with some offset for better view
+    const viewportOffset = window.innerHeight * 0.25; // Show portal at 25% from top
+    const scrollBoost = 100; // Extra push for stronger scroll
+
+    const targetY = targetRect.top + currentScrollY - viewportOffset + scrollBoost;
+    const startY = currentScrollY;
     const distance = targetY - startY;
     const duration = 2000; // 2 seconds
     let startTime: number | null = null;
@@ -184,7 +204,7 @@ export class WerWirSindComponent implements OnInit, OnDestroy, AfterViewInit {
       const timeElapsed = currentTime - startTime;
       const progress = Math.min(timeElapsed / duration, 1);
 
-      // Easing function
+      // Easing function for smooth acceleration and deceleration
       const easeProgress = progress < 0.5
         ? 4 * progress * progress * progress
         : 1 - Math.pow(-2 * progress + 2, 3) / 2;
@@ -197,6 +217,46 @@ export class WerWirSindComponent implements OnInit, OnDestroy, AfterViewInit {
     };
 
     this.starAnimationFrame = requestAnimationFrame(animation);
+  }
+
+  private fallbackScroll(): void {
+    // Fallback when portal section is not found
+    const viewportHeight = window.innerHeight;
+    const zoomLevel = this.getZoomLevel();
+
+    // Stronger base scroll power
+    const baseScrollDistance = viewportHeight * 1.5;
+    const adjustedScrollDistance = baseScrollDistance / zoomLevel;
+
+    const startY = window.scrollY;
+    const targetY = startY + adjustedScrollDistance;
+    const distance = adjustedScrollDistance;
+    const duration = 2000;
+    let startTime: number | null = null;
+
+    const animation = (currentTime: number) => {
+      if (startTime === null) startTime = currentTime;
+      const timeElapsed = currentTime - startTime;
+      const progress = Math.min(timeElapsed / duration, 1);
+
+      const easeProgress = progress < 0.5
+        ? 4 * progress * progress * progress
+        : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+      window.scrollTo(0, startY + distance * easeProgress);
+
+      if (progress < 1) {
+        this.starAnimationFrame = requestAnimationFrame(animation);
+      }
+    };
+
+    this.starAnimationFrame = requestAnimationFrame(animation);
+  }
+
+  private getZoomLevel(): number {
+    // Detect browser zoom level using devicePixelRatio
+    // Values: 1 = 100%, 1.25 = 125%, 1.5 = 150%, etc.
+    return window.devicePixelRatio || 1;
   }
 
   private clearWordTimers(): void {

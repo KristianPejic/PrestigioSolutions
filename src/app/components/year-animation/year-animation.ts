@@ -85,13 +85,13 @@ export class YearAnimationComponent implements OnInit, OnDestroy {
     const distanceFromCenter = elementCenter - screenCenter;
 
     if (this.isMobile) {
-      const mobileDelay = windowHeight * 0.15;
+      const mobileDelay = windowHeight * 0.1;
 
       if (distanceFromCenter > -mobileDelay) {
         this.scrollProgress = 0;
       } else {
         const scrollAfterDelay = Math.abs(distanceFromCenter) - mobileDelay;
-        const zoomRange = windowHeight * 1.0;
+        const zoomRange = windowHeight * 0.8; // Faster zoom on mobile
         this.scrollProgress = Math.min(1, scrollAfterDelay / zoomRange);
       }
     } else {
@@ -99,7 +99,7 @@ export class YearAnimationComponent implements OnInit, OnDestroy {
         this.scrollProgress = 0;
       } else {
         const scrollAfterCenter = Math.abs(distanceFromCenter);
-        const zoomRange = windowHeight * 1.2;
+        const zoomRange = windowHeight * 0.9; // Faster zoom on desktop
         this.scrollProgress = Math.min(1, scrollAfterCenter / zoomRange);
       }
     }
@@ -108,18 +108,17 @@ export class YearAnimationComponent implements OnInit, OnDestroy {
   }
 
   private applyParticleOffsets(): void {
-    const particleElements = this.elementRef.nativeElement.querySelectorAll('.particle');
-    particleElements.forEach((el: HTMLElement, index: number) => {
-      if (this.particles[index]) {
-        el.style.setProperty('--x-offset', `${this.particles[index].xOffset}px`);
-        el.style.setProperty('--y-offset', `${this.particles[index].yOffset}px`);
-      }
-    });
+    // Particles are now static - no animation offsets needed
+    // Keeping method for future use if needed
   }
 
   getYearOpacity(): number {
-    if (this.scrollProgress < 0.3) return 1;
-    return 1 - ((this.scrollProgress - 0.3) / 0.7);
+    // Year digits fade out as text appears and zero zooms
+    if (this.scrollProgress < 0.15) return 1;
+    if (this.scrollProgress < 0.35) {
+      return 1 - ((this.scrollProgress - 0.15) / 0.2);
+    }
+    return 0; // Completely gone by 35% progress
   }
 
   getDigitOffset(position: 'first' | 'second' | 'third'): number {
@@ -137,50 +136,90 @@ export class YearAnimationComponent implements OnInit, OnDestroy {
   getZeroScale(): number {
     const minScale = 1;
     const maxScale = 30;
-    const easedProgress = Math.pow(this.scrollProgress, 0.7);
+    // More aggressive easing for faster, more dramatic zoom
+    const easedProgress = Math.pow(this.scrollProgress, 0.5);
     return minScale + (easedProgress * (maxScale - minScale));
   }
 
   getParticleOpacity(): number {
-    if (this.scrollProgress < 0.2) return 0;
-    if (this.scrollProgress < 0.4) return (this.scrollProgress - 0.2) / 0.2;
-    if (this.scrollProgress < 0.7) return 1;
-    return 1 - ((this.scrollProgress - 0.7) / 0.3);
+    // Particles appear and fade out with the portal animation
+    if (this.scrollProgress < 0.25) return 0;
+    if (this.scrollProgress < 0.4) return (this.scrollProgress - 0.25) / 0.15;
+    if (this.scrollProgress < 0.92) return 1;
+    // Fade out with the text as zero goes off screen
+    return 1 - ((this.scrollProgress - 0.92) / 0.08);
   }
 
   getRingOpacity(): number {
-    if (this.scrollProgress < 0.25) return 0;
-    if (this.scrollProgress < 0.45) return (this.scrollProgress - 0.25) / 0.2;
-    if (this.scrollProgress < 0.65) return 1;
-    return 1 - ((this.scrollProgress - 0.65) / 0.35);
+    // Rings are hidden - return 0
+    return 0;
   }
 
   getTextOpacity(): number {
+    // Text appears immediately as zoom starts, then fades as zero goes off screen
     const isMobile = window.innerWidth < 768;
-    const fadeInStart = isMobile ? 0.25 : 0.2;
-    const fadeInEnd = isMobile ? 0.45 : 0.4;
 
+    // Fade in timing - starts right away with the zoom
+    const fadeInStart = isMobile ? 0.1 : 0.15;
+    const fadeInEnd = isMobile ? 0.35 : 0.4;
+
+    // Fade out timing - text disappears as zero goes off screen
+    const fadeOutStart = 0.92;
+    const fadeOutEnd = 1.0;
+
+    // Fade in phase - text emerges as zoom begins
     if (this.scrollProgress < fadeInStart) return 0;
     if (this.scrollProgress < fadeInEnd) {
       return (this.scrollProgress - fadeInStart) / (fadeInEnd - fadeInStart);
     }
-    if (this.scrollProgress < 0.8) return 1;
-    return 1 - ((this.scrollProgress - 0.8) / 0.2);
+
+    // Stay visible phase - throughout the zoom
+    if (this.scrollProgress < fadeOutStart) return 1;
+
+    // Fade out phase - text disappears with the zero
+    if (this.scrollProgress < fadeOutEnd) {
+      return 1 - ((this.scrollProgress - fadeOutStart) / (fadeOutEnd - fadeOutStart));
+    }
+
+    return 0; // Completely gone when animation ends
   }
 
   getTextScale(): number {
+    // Text scales up from the start of the zoom animation
     const isMobile = window.innerWidth < 768;
     const isSmallMobile = window.innerWidth < 480;
-    const minScale = isSmallMobile ? 0.2 : (isMobile ? 0.25 : 0.3);
+
+    // Start smaller and grow throughout the zoom
+    const minScale = isSmallMobile ? 0.3 : (isMobile ? 0.4 : 0.5);
     const maxScale = isSmallMobile ? 1.2 : (isMobile ? 1.5 : 1.8);
-    const easedProgress = Math.pow(this.scrollProgress, 0.6);
+
+    // Scale throughout the entire visible range (10-92%)
+    const textStartProgress = isMobile ? 0.1 : 0.15;
+    const textEndProgress = 0.92;
+
+    if (this.scrollProgress < textStartProgress) return minScale;
+    if (this.scrollProgress > textEndProgress) return maxScale;
+
+    const relativeProgress = (this.scrollProgress - textStartProgress) / (textEndProgress - textStartProgress);
+    const easedProgress = Math.pow(relativeProgress, 0.6);
+
     return minScale + (easedProgress * (maxScale - minScale));
   }
 
   getTextTransform(): string {
     const isMobile = window.innerWidth < 768;
-    const verticalMove = isMobile ? this.scrollProgress * 10 : -this.scrollProgress * 20;
+
+    // Subtle vertical movement throughout the zoom
+    const textStartProgress = isMobile ? 0.1 : 0.15;
+    const textEndProgress = 0.92;
+
+    const relativeProgress = Math.max(0, Math.min(1,
+      (this.scrollProgress - textStartProgress) / (textEndProgress - textStartProgress)
+    ));
+
+    const verticalMove = isMobile ? relativeProgress * 10 : -relativeProgress * 20;
     const scale = this.getTextScale();
+
     return `translate(-50%, calc(-50% + ${verticalMove}px)) scale(${scale})`;
   }
 }

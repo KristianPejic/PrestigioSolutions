@@ -1,40 +1,124 @@
 <div class="portal-reveal-section">
-  <!-- Particle Field -->
-  <div class="particle-field" [class.active]="isPortalActive">
-    <div class="energy-particle"
-         *ngFor="let particle of particles"
-         [style.left.%]="particle.x"
-         [style.top.%]="particle.y"
-         [style.--float-x]="particle.floatX"
-         [style.--float-y]="particle.floatY"
-         [style.animation-delay]="particle.delay">
-    </div>
-  </div>
+  <div class="drawing-container">
+    <!-- Microchip Drawing SVG -->
+    <svg class="circuit-svg" [class.active]="isDrawingActive" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
 
-  <div class="portal-container">
-    <div class="rotating-line" [class.active]="isPortalActive"></div>
-    <div class="rotating-line" [class.active]="isPortalActive"></div>
-    <div class="rotating-line" [class.active]="isPortalActive"></div>
-    <div class="rotating-line" [class.active]="isPortalActive"></div>
+      <!-- Center square (rotated 45deg / diamond shape) -->
+      <rect class="center-square" x="200" y="200" width="100" height="100" rx="8" transform="rotate(45 250 250)" />
 
-    <div class="portal-ring" [class.active]="isPortalActive"></div>
-    <div class="portal-inner" [class.active]="isPortalActive"></div>
+      <!-- Main vertical line - top -->
+      <path class="circuit-path delay-1" d="M 250 100 L 250 180" />
 
-    <div class="image-container" [class.active]="isImageActive">
-      <img [src]="imageSrc"
-           [alt]="imageAlt"
-           class="portal-image">
+      <!-- Main vertical line - bottom -->
+      <path class="circuit-path delay-1" d="M 250 320 L 250 400" />
+
+      <!-- Main horizontal line - left -->
+      <path class="circuit-path delay-1" d="M 100 250 L 180 250" />
+
+      <!-- Main horizontal line - right -->
+      <path class="circuit-path delay-1" d="M 320 250 L 400 250" />
+
+      <!-- Diagonal branches - top left -->
+      <path class="circuit-path delay-2" d="M 180 180 L 120 120" />
+      <path class="circuit-path delay-3" d="M 120 120 L 100 100" />
+
+      <!-- Diagonal branches - top right -->
+      <path class="circuit-path delay-2" d="M 320 180 L 380 120" />
+      <path class="circuit-path delay-3" d="M 380 120 L 400 100" />
+
+      <!-- Diagonal branches - bottom left -->
+      <path class="circuit-path delay-2" d="M 180 320 L 120 380" />
+      <path class="circuit-path delay-3" d="M 120 380 L 100 400" />
+
+      <!-- Diagonal branches - bottom right -->
+      <path class="circuit-path delay-2" d="M 320 320 L 380 380" />
+      <path class="circuit-path delay-3" d="M 380 380 L 400 400" />
+
+      <!-- Side branches - top -->
+      <path class="circuit-path delay-4" d="M 250 150 L 200 100" />
+      <path class="circuit-path delay-4" d="M 250 150 L 300 100" />
+
+      <!-- Side branches - bottom -->
+      <path class="circuit-path delay-4" d="M 250 350 L 200 400" />
+      <path class="circuit-path delay-4" d="M 250 350 L 300 400" />
+
+      <!-- Side branches - left -->
+      <path class="circuit-path delay-4" d="M 150 250 L 100 200" />
+      <path class="circuit-path delay-4" d="M 150 250 L 100 300" />
+
+      <!-- Side branches - right -->
+      <path class="circuit-path delay-4" d="M 350 250 L 400 200" />
+      <path class="circuit-path delay-4" d="M 350 250 L 400 300" />
+
+      <!-- Corner connectors to center -->
+      <path class="circuit-path delay-5" d="M 180 180 L 200 200" />
+      <path class="circuit-path delay-5" d="M 320 180 L 300 200" />
+      <path class="circuit-path delay-5" d="M 180 320 L 200 300" />
+      <path class="circuit-path delay-5" d="M 320 320 L 300 300" />
+
+      <!-- Transistor lines on center square frame - Top edge -->
+      <path class="transistor-line" d="M 225 180 L 225 165" stroke-dasharray="4,4" />
+      <path class="transistor-line" d="M 250 165 L 250 150" stroke-dasharray="4,4" />
+      <path class="transistor-line" d="M 275 180 L 275 165" stroke-dasharray="4,4" />
+
+      <!-- Transistor lines on center square frame - Bottom edge -->
+      <path class="transistor-line" d="M 225 320 L 225 335" stroke-dasharray="4,4" />
+      <path class="transistor-line" d="M 250 335 L 250 350" stroke-dasharray="4,4" />
+      <path class="transistor-line" d="M 275 320 L 275 335" stroke-dasharray="4,4" />
+
+      <!-- Circuit nodes - main cardinal points -->
+      <circle class="circuit-node node-1" cx="250" cy="100" r="6" />
+      <circle class="circuit-node node-1" cx="250" cy="400" r="6" />
+      <circle class="circuit-node node-1" cx="100" cy="250" r="6" />
+      <circle class="circuit-node node-1" cx="400" cy="250" r="6" />
+
+      <!-- Circuit nodes - diagonal corners -->
+      <circle class="circuit-node node-2" cx="100" cy="100" r="5" />
+      <circle class="circuit-node node-2" cx="400" cy="100" r="5" />
+      <circle class="circuit-node node-2" cx="100" cy="400" r="5" />
+      <circle class="circuit-node node-2" cx="400" cy="400" r="5" />
+
+      <!-- Circuit nodes - branch points -->
+      <circle class="circuit-node node-3" cx="200" cy="100" r="4" />
+      <circle class="circuit-node node-3" cx="300" cy="100" r="4" />
+      <circle class="circuit-node node-3" cx="200" cy="400" r="4" />
+      <circle class="circuit-node node-3" cx="300" cy="400" r="4" />
+      <circle class="circuit-node node-3" cx="100" cy="200" r="4" />
+      <circle class="circuit-node node-3" cx="100" cy="300" r="4" />
+      <circle class="circuit-node node-3" cx="400" cy="200" r="4" />
+      <circle class="circuit-node node-3" cx="400" cy="300" r="4" />
+
+      <!-- Circuit nodes - inner connection points -->
+      <circle class="circuit-node node-4" cx="180" cy="180" r="5" />
+      <circle class="circuit-node node-4" cx="320" cy="180" r="5" />
+      <circle class="circuit-node node-4" cx="180" cy="320" r="5" />
+      <circle class="circuit-node node-4" cx="320" cy="320" r="5" />
+
+      <!-- Pulsing nodes at extremities -->
+      <circle class="pulse-node" cx="250" cy="100" r="5" />
+      <circle class="pulse-node" cx="400" cy="250" r="5" />
+      <circle class="pulse-node" cx="250" cy="400" r="5" />
+      <circle class="pulse-node" cx="100" cy="250" r="5" />
+
+      <!-- Center chip fill -->
+      <rect class="chip-fill" x="200" y="200" width="100" height="100" rx="8" transform="rotate(45 250 250)" />
+    </svg>
+
+    <!-- Logo Container -->
+    <div class="ps-container" [class.active]="isImageActive">
+      <img src="/assets/images/PrestigioStolutionsLogo-removebg-preview.png"
+           alt="Prestigio Solutions Logo"
+           class="ps-logo">
     </div>
   </div>
 
   <div class="content-card" [class.active]="isContentActive">
-    <h2>Maßgeschneiderte Lösungen</h2>
+    <h2>Intelligente Systeme</h2>
     <p>
-      Wir entwickeln innovative Software-Lösungen, die perfekt auf Ihre individuellen Anforderungen zugeschnitten sind.
+      Modernste Technologie trifft auf durchdachte Architektur. Wir entwickeln skalierbare und zukunftssichere Lösungen für Ihr Unternehmen.
     </p>
     <p>
-      Von modernen Webseiten über komplexe Web-Apps bis hin zur strategischen IT-Beratung –
-      unser Team steht für Qualität, Effizienz und nachhaltige Digitalisierung.
+      Von Microservices bis Cloud-Infrastruktur – unser Team bringt Ihre digitale Vision zum Leben.
     </p>
     <ul class="feature-list">
       <li class="feature-item">
@@ -43,7 +127,7 @@
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
         </span>
-        <span>Innovative Technologien</span>
+        <span>Microservice Architecture</span>
       </li>
       <li class="feature-item">
         <span class="feature-icon">
@@ -51,7 +135,7 @@
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
         </span>
-        <span>Maßgeschneiderte Lösungen</span>
+        <span>Cloud-Native Solutions</span>
       </li>
       <li class="feature-item">
         <span class="feature-icon">
@@ -59,7 +143,15 @@
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
         </span>
-        <span>Nachhaltige Ergebnisse</span>
+        <span>Scalable Infrastructure</span>
+      </li>
+      <li class="feature-item">
+        <span class="feature-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </span>
+        <span>Real-time Processing</span>
       </li>
     </ul>
   </div>

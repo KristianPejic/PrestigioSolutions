@@ -1,5 +1,5 @@
 <div class="portal-title-section" #titleSection>
-  <div class="title-wrapper">
+  <div class="title-wrapper" [class.wave-active]="animationComplete">
     <span class="title-word" [class.active]="activeWordIndex === 0">WER</span>
     <span class="title-word" [class.active]="activeWordIndex === 1">WIR</span>
     <span class="title-word" [class.active]="activeWordIndex === 2" #sindWord>SIND</span>

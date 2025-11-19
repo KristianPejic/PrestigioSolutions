@@ -20,6 +20,7 @@ interface SmokeParticle {
 })
 export class MagicHatAnimation implements OnDestroy, OnChanges {
   @Input() hatRotating: boolean = false;
+  @Input() nextSectionSelector: string = '.wer-wir-sind-section'; // Selector for target section
   @Output() animationComplete = new EventEmitter<void>();
 
   showHat = true;
@@ -127,13 +128,90 @@ export class MagicHatAnimation implements OnDestroy, OnChanges {
       body.classList.remove('shake-impact');
     }, 600);
 
-    // Strong push to reach next component
+    // Calculate precise scroll distance to next section
     setTimeout(() => {
-      window.scrollBy({
-        top: 1000, // Increased to 1000px for stronger push
+      this.scrollToNextSection();
+    }, 200);
+  }
+
+  private scrollToNextSection(): void {
+    // Try multiple possible selectors for the next section
+    const possibleSelectors = [
+      this.nextSectionSelector,
+      '.wer-wir-sind-section',
+      '#wer-wir-sind',
+      '[data-section="wer-wir-sind"]',
+      'app-wer-wir-sind',
+      '.about-section',
+      '.next-section'
+    ];
+
+    let targetElement: Element | null = null;
+
+    // Find the first matching element
+    for (const selector of possibleSelectors) {
+      targetElement = document.querySelector(selector);
+      if (targetElement) break;
+    }
+
+    if (targetElement) {
+      // Get the element's position relative to viewport
+      const targetRect = targetElement.getBoundingClientRect();
+      const currentScrollY = window.scrollY || window.pageYOffset;
+
+      // Calculate exact scroll distance needed
+      // targetRect.top is relative to viewport, so add current scroll position
+      const scrollDistance = targetRect.top + currentScrollY;
+
+      // Account for any header offset (adjust this value if you have a fixed header)
+      const headerOffset = 0; // Change to your header height if needed (e.g., 80)
+
+      // Add a small boost to ensure we reach the section comfortably
+      const scrollBoost = 50; // Extra pixels to push past the target slightly
+
+      const finalScrollPosition = scrollDistance - headerOffset + scrollBoost;
+
+      // Scroll to the exact position
+      window.scrollTo({
+        top: finalScrollPosition,
         behavior: 'smooth'
       });
-    }, 200);
+    } else {
+      // Fallback: Use dynamic viewport-based calculation
+      const viewportHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      const currentScroll = window.scrollY || window.pageYOffset;
+
+      // Get zoom level to adjust scroll strength
+      const zoomLevel = this.getZoomLevel();
+
+      // Calculate scroll distance: use viewport height adjusted for zoom
+      const baseScrollDistance = viewportHeight * 1.5; // Increased from 1.2 to 1.5 for stronger push
+      const adjustedScrollDistance = baseScrollDistance / zoomLevel;
+
+      // Make sure we don't scroll past the document
+      const maxScroll = documentHeight - viewportHeight;
+      const targetScroll = Math.min(currentScroll + adjustedScrollDistance, maxScroll);
+
+      window.scrollTo({
+        top: targetScroll,
+        behavior: 'smooth'
+      });
+    }
+  }
+
+  private getZoomLevel(): number {
+    // Method 1: Using devicePixelRatio (most reliable for browser zoom)
+    const devicePixelRatio = window.devicePixelRatio || 1;
+
+    // Method 2: Compare window.innerWidth to document.documentElement.clientWidth
+    const screenWidth = window.screen.width;
+    const windowWidth = window.innerWidth;
+    const ratio = screenWidth / windowWidth;
+
+    // Use devicePixelRatio as it's more accurate for zoom detection
+    // Values: 1 = 100%, 1.25 = 125%, 1.5 = 150%, etc.
+    return devicePixelRatio;
   }
 
   trackBySmokeId(index: number, particle: SmokeParticle): number {

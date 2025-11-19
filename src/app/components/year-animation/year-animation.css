@@ -1,14 +1,15 @@
 .year-animation-container {
   position: relative;
   width: 100%;
-  height: 250vh;
+  height: 200vh;
   background: black;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: -100vh;
+  margin-bottom: -25vh;
 }
+
 .year-wrapper {
   position: sticky;
   top: 50%;
@@ -45,7 +46,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 1;
+  z-index: 4;
   pointer-events: none;
   overflow: hidden;
   transition: opacity 0.3s ease;
@@ -55,7 +56,6 @@
   position: absolute;
   background: radial-gradient(circle, rgba(135, 206, 235, 0.9) 0%, rgba(95, 168, 211, 0.6) 50%, transparent 100%);
   border-radius: 50%;
-  animation: particleFloat infinite ease-in-out;
   box-shadow: 0 0 10px rgba(135, 206, 235, 0.8),
   0 0 20px rgba(135, 206, 235, 0.5),
   0 0 30px rgba(135, 206, 235, 0.3);
@@ -90,9 +90,10 @@
   transform: translate(-50%, -50%);
   width: 300px;
   height: 300px;
-  z-index: 1;
+  z-index: 5;
   pointer-events: none;
   transition: opacity 0.3s ease;
+  display: none; /* Hide rings completely */
 }
 
 .ring {
@@ -102,27 +103,25 @@
   transform: translate(-50%, -50%);
   border: 3px solid rgba(135, 206, 235, 0.6);
   border-radius: 50%;
-  animation: ringExpand 3s ease-out infinite;
   box-shadow: 0 0 20px rgba(135, 206, 235, 0.4),
   inset 0 0 20px rgba(135, 206, 235, 0.2);
 }
 
 .ring-1 {
-  width: 100px;
-  height: 100px;
-  animation-delay: 0s;
+  width: 200px;
+  height: 200px;
 }
 
 .ring-2 {
-  width: 100px;
-  height: 100px;
-  animation-delay: 1s;
+  width: 350px;
+  height: 350px;
+  opacity: 0.7;
 }
 
 .ring-3 {
-  width: 100px;
-  height: 100px;
-  animation-delay: 2s;
+  width: 500px;
+  height: 500px;
+  opacity: 0.4;
 }
 
 @keyframes ringExpand {
@@ -151,7 +150,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 4;
+  z-index: 10;
   text-align: center;
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-weight: 700;
@@ -190,7 +189,7 @@
 
 @media (max-width: 1024px) {
   .year-animation-container {
-    height: 400vh;
+    height: 300vh;
   }
 
   .year-wrapper {
@@ -210,7 +209,7 @@
 
 @media (max-width: 768px) {
   .year-animation-container {
-    height: 400vh;
+    height: 300vh;
   }
 
   .year-wrapper {
@@ -240,7 +239,7 @@
 
 @media (max-width: 480px) {
   .year-animation-container {
-    height: 400vh;
+    height: 300vh;
   }
 
   .year-wrapper {
@@ -270,7 +269,7 @@
 
 @media (max-width: 380px) {
   .year-animation-container {
-    height: 400vh;
+    height: 300vh;
   }
 
   .year-wrapper {
@@ -287,7 +286,7 @@
 
 @media (max-width: 768px) and (orientation: landscape) {
   .year-animation-container {
-    height: 400vh;
+    height: 300vh;
   }
 
   .inner-text {
