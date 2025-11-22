@@ -69,6 +69,7 @@
   align-items: center;
   gap: 1.5rem;
   text-align: center;
+  padding: 0 1rem;
 }
 
 .gallery-wrapper {
@@ -532,7 +533,18 @@
 
 .prestigio-text {
   position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3em;
+  justify-content: center;
+  align-items: center;
+  max-width: 100%;
+}
+
+.prestigio-word,
+.solutions-word {
   display: inline-block;
+  white-space: nowrap;
 }
 
 .prestigio-text .letter {
@@ -542,8 +554,38 @@
 }
 
 .prestigio-text .letter-space {
-  display: inline-block;
-  width: 0.3em;
+  display: none;
+}
+
+/* Better text wrapping for mobile */
+@media(max-width: 768px) {
+  .prestigio-text {
+    gap: 0.4em;
+  }
+}
+
+@media(max-width: 640px) {
+  .hero-content-wrapper {
+    padding: 0 1.5rem;
+  }
+
+  .prestigio-text {
+    max-width: 95vw;
+    line-height: 1.1;
+    gap: 0.3em;
+  }
+}
+
+@media(max-width: 480px) {
+  .hero-content-wrapper {
+    padding: 0 1rem;
+  }
+
+  .prestigio-text {
+    max-width: 90vw;
+    line-height: 1.15;
+    gap: 0.25em;
+  }
 }
 
 .software-text {
@@ -664,13 +706,6 @@
 }
 
 @media (max-width: 768px) {
-  .prestigio-text {
-    white-space: normal;
-    display: inline;
-  }
-
-  .prestigio-text .letter-space { display: none; }
-
   @keyframes movePToCenter {
     0% { transform: translateX(0) translateY(0) scale(1); }
     100% { transform: translateX(30%) translateY(0) scale(1.1); }

@@ -1,7 +1,9 @@
 :host {
   display: block;
   width: 100%;
-  padding: 2rem 1rem;
+  padding: 4rem 1rem 2rem 1rem; /* Increased top padding */
+  position: relative; /* Ensure proper stacking context */
+  z-index: 1; /* Ensure it's above other content */
 }
 
 .section-heading {
@@ -9,9 +11,11 @@
   font-weight: 800;
   text-align: center;
   margin-bottom: 4rem;
+  margin-top: 15rem; /* Increased from 0.5rem */
   color: white;
   letter-spacing: -0.02em;
-  margin-top: 0.5rem;
+  position: relative; /* Ensure proper stacking */
+  z-index: 10; /* Bring to front */
 }
 
 .services-grid {
@@ -24,6 +28,7 @@
   max-width: 900px;
   margin: 0 auto;
   padding: 1rem;
+  position: relative; /* Ensure proper stacking */
 }
 
 .service-card {
@@ -60,6 +65,14 @@
 }
 
 @media (max-width: 768px) {
+  :host {
+    padding: 3rem 1rem 1rem 1rem; /* Adjusted for mobile */
+  }
+
+  .section-heading {
+    margin-top: 1rem;
+  }
+
   .services-grid {
     grid-template-columns: repeat(2, minmax(240px, 1fr));
     gap: 1rem;
@@ -74,7 +87,11 @@
 
 @media (max-width: 640px) {
   :host {
-    padding: 1rem 0.5rem;
+    padding: 2rem 0.5rem 1rem 0.5rem;
+  }
+
+  .section-heading {
+    margin-top: 0.5rem;
   }
 
   .services-grid {
